@@ -1,133 +1,48 @@
+2004-09-23   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Release 1.00.
+
+	* New code file versions are: KeyedText.pm v1.00.
+
+	* I hereby assert that Locale::KeyedText is complete, tested, and ready to
+	be used in production environments.  No further updates are planned during
+	the short term except in response to user requests.  Any future releases
+	should be fully backwards-compatible with this release.
+
+	* Any other changes to this distribution since v0.07, aside from the
+	version change and the truncation of this ChangeLog file, follow below.
+
+	* In KeyedText.pm, minor updates to the DESCRIPTION and SEE ALSO docs.
+
+	* Updated the TODO file.
+
+2004-09-23   Darren Duncan <perl@DarrenDuncan.net>
+
+	The next version of the Module List will list the following module:
+
+	  modid:       Locale::KeyedText
+	  DSLIP:       RdpOl
+	  description: Refer to user messages in programs by keys
+	  userid:      DUNCAND (Darren Duncan)
+	  chapterid:   13 (Internationalization_Locale)
+	  enteredby:   KSTAR (Kurt D. Starsinic)
+	  enteredon:   Thu Sep 23 18:35:01 2004 GMT
+
+	The resulting entry will be:
+
+	Locale::
+	::KeyedText       RdpOl Refer to user messages in programs by keys   DUNCAND
+
 2004-08-31   Darren Duncan <perl@DarrenDuncan.net>
 
-	* Release 0.07.
-
-	* New code file versions are: KeyedText.pm v0.07.
-
-	* Updated KeyedText.pm to use the modern syntax "our $VERSION = ..."
-	instead of "use vars qw($VERSION); $VERSION = ...".
-
-	* Moved this distribution's t_*.pm files from the /lib directory to a new
-	/t/lib directory, so that they don't pollute the user's install
-	directories, and so the distribution is better organized on the whole. 
-	Added a "use lib 't/lib';" to Locale_KeyedText.t in order to make the move
-	work.  No changes to the tests themselves.  Updated the MANIFEST.
-
-2004-08-05   Darren Duncan <perl@DarrenDuncan.net>
-
-	* Release 0.06.
-
-	* This is a small code bug fix release.  No POD or API changes were made.
-
-	* Updated all distribution code that makes use of UNIVERSAL::isa() to test
-	for valid objects so that it no longer incorrectly "passes" literal strings
-	whose string values match the class names of valid objects.  For each test,
-	"UNIVERSAL::isa($obj,'<class-name>')" was replaced with "ref($obj) and
-	UNIVERSAL::isa($obj,'<class-name>')".  Before the fixes, code that
-	UNIVERSAL::isa() was supposed to guard would eventually die with the
-	standard Perl error "Can't use string ('<class-name>') as a HASH ref",
-	rather than elegantly dealing with the bad input value.
-
-	* Updated KeyedText.pm (now v0.06) to fix one UNIVERSAL::isa() occurance in
-	Translator.translate_message().  Also added 1 test in Locale_KeyedText.t to
-	confirm that the bug was fixed.  
-
-	* Note that KeyedText 0.05 would die on (fail) 1 of the current 103 tests.
-
-2004-07-26   Darren Duncan <perl@DarrenDuncan.net>
-
-	* Release 0.05.
-
-	* This is a feature addition release; it is completely backwards compatible.
-
-	* Updated KeyedText.pm (now v0.05) to add a new feature to
-	Translator.translate_message() so that it first tests to see if a TEMPLATE
-	class package is already loaded before trying to load it with "require". 
-	As a result of this change, Locale::KeyedText should now work for
-	situations where you want to embed Template class package declarations in
-	your standard code files, rather than in separate files of their own.  Also
-	added new POD section AN ALTERNATIVE TO SEPARATED TEMPLATE FILES.  Thanks
-	to Jason Martin (jhmartin@toger.us) for suggesting the new feature.  Also 
-	added 4 more tests to Locale_KeyedText.t, for a total of 102.
-
-2004-06-26   Darren Duncan <perl@DarrenDuncan.net>
-
-	* Release 0.04.
-
-	* This is a small code bug fix release.  No POD or API changes were made.
-
-	* Updated KeyedText.pm (now v0.04) to fix Message.as_string() and
-	Translator.translate_message() so that each outputs interpolated message
-	key values of zero as '0' and not ''.  Also updated 4 tests in
-	Locale_KeyedText.t to confirm that the bugs were fixed.
-
-	* Note that KeyedText 0.03 would fail 2 of the current 98 tests.
-
-2004-03-05   Darren Duncan <perl@DarrenDuncan.net>
-
-	* Release 0.03.
-
-	* This is a small but incompatible maintenance release.  Or more
-	specifically, it is only incompatible if your use of it involves reading
-	the package names, such as with "UNIVERSAL::isa" (and the tests do); if you
-	don't do that, then it is backwards compatible.
-
-	* Updated lib/Locale/KeyedText.pm (now v0.03) to reorganize and more
-	properly document its component class/package set. 
-	Locale::KeyedText::_::Message was renamed to Locale::KeyedText::Message and
-	Locale::KeyedText::_::Translator was renamed to
-	Locale::KeyedText::Translator.  The stateless new_message() and
-	new_translator() functions were each moved into the packages of the objects
-	that they create, and each was renamed to new(), and each now uses its
-	first argument as the package name to bless into as is usual with Perl
-	classes, and unlike the hard-coded bless it had before; two new functions
-	having the old names now exist in their place and simply call the moved
-	functions, so you can still invoke them like you did before.
-
-	* Added new POD documentation section CLASSES IN THIS MODULE to
-	KeyedText.pm which outlines the reality of the multiple package/classes in
-	the single module, and their relation.  It also says that you should never
-	make your own modules with any of the same package or module names.
-
-	* The multiple package declarations in KeyedText.pm are no longer
-	obfuscated (split over 2 lines each) to prevent PAUSE from indexing them.
-
-	* Updated t/Locale_KeyedText.t so the correct class names are tested for.
-
-	* No other files were changed.
-
-2004-01-18   Darren Duncan <perl@DarrenDuncan.net>
-
-	* Release 0.02.
-
-	* This is a small bug fix release.
-
-	* Added 2 more tests to Locale_KeyedText.t (for 98 total) that check for
-	correct behaviour when Message Variables are given undefined hash values;
-	the tests would produce warnings when run against release 0.01.
-
-	* Made a couple small code updates to Locale::KeyedText, and incremented
-	its version from 0.01 to 0.02.  Updated the methods Message->as_string()
-	and Translator->translate_message() to substitute "" for any undefined
-	Message variable values when building their output strings; now the 2 new
-	tests will not throw warnings.
-
-	* Fixed a few small mistakes in, and made small changes to,
-	Locale::KeyedText's POD.  SYNOPSIS had bug fixes.  DESCRIPTION and SEE ALSO
-	had some small additions.  Other areas had indenting fixes.
+	* Locale-KeyedText-0.07, the last version of the distribution prior to the
+	official registration of Locale::KeyedText on the Perl 5 Module List, was
+	released on CPAN.
 
 2004-01-15   Darren Duncan <perl@DarrenDuncan.net>
 
-	* Release 0.01.
-
-	* This is the initial release of Locale::KeyedText.  The module is feature
-	complete and has complete POD documentation and a complete test suite.  The
-	module is officially in beta development status, but should move quickly to
-	Released status once it starts getting used in production.  The module is 
-	licensed under the GNU Lesser General Public License Version 2.1.
-
-	* This distribution is the first one that I am creating with MakeMaker's 
-	"make dist" command; previously I used "tar -cz ..." to make distros.
+	* Locale-KeyedText-0.01, the first version of any distribution to contain
+	Locale::KeyedText, was released on CPAN.
 
 2003-09-29   Darren Duncan <perl@DarrenDuncan.net>
 
@@ -137,14 +52,6 @@
 
 2000-05-17 thru 2003-09-26
 
-	* Worked on precursor to, and CPAN release versions of, modules such as
-	'Rosetta' and 'SQL::SyntaxModel', which as part of their functioning may
-	generate human-readable messages, such as for error conditions.  While
-	working on these, it was intended to create a proper separation of the
-	human-readable text from the code, and that text would go in one or more of
-	its own files, with a separate version for each human language (such as
-	with Mac OS X localized resource files).  A module dedicated to making this
-	task easy was to be developed and called 'Locale::KeyedText'.  Some design
-	details were thought up and included in the 'Rosetta' distribution file
-	'Rosetta::Framework'.  It will be released independantly, due to its 
-	expected usefulness outside of the aforementioned database modules.
+	* Worked on precursor code and documentation, some posted on CPAN, which
+	described an upcoming new module to make it easy to separate human-readable
+	messages from code; some details were published in 'Rosetta::Framework'.

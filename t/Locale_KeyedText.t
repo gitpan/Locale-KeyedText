@@ -6,7 +6,7 @@
 BEGIN { $| = 1; print "1..103\n"; }
 END {print "not ok 1\n" unless $loaded;}
 use lib 't/lib';
-use Locale::KeyedText 0.06;
+use Locale::KeyedText 1.00;
 # see end of this file for loading of test Template modules
 $loaded = 1;
 print "ok 1\n";

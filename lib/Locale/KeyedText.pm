@@ -10,7 +10,7 @@ package Locale::KeyedText;
 use 5.006;
 use strict;
 use warnings;
-our $VERSION = '0.07';
+our $VERSION = '1.00';
 
 ######################################################################
 
@@ -447,6 +447,9 @@ variables, which can be used in any order, or not used at all, or used multiple
 times.  Locale::KeyedText is generally a simpler solution than alternatives,
 and doesn't know about language specific details like encodings or plurality.
 
+For some practical examples of Locale::KeyedText in use, see my dependent CPAN
+modules whose problem domain is databases and/or SQL.
+
 =head1 CLASSES IN THIS MODULE
 
 This module is implemented by several object-oriented Perl 5 packages, each of
@@ -876,6 +879,6 @@ current solution seems best to me.
 
 =head1 SEE ALSO
 
-SQL::SyntaxModel, Rosetta, Locale::Maketext, Locale::gettext, Locale::PGetText, DBIx::BabelKit.
+Locale::Maketext, Locale::gettext, Locale::PGetText, DBIx::BabelKit.
 
 =cut
