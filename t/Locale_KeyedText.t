@@ -5,7 +5,7 @@
 
 BEGIN { $| = 1; print "1..98\n"; }
 END {print "not ok 1\n" unless $loaded;}
-use Locale::KeyedText 0.02;
+use Locale::KeyedText 0.03;
 # see end of this file for loading of test Template modules
 $loaded = 1;
 print "ok 1\n";
@@ -67,7 +67,7 @@ message( "START TESTING Locale::KeyedText" );
 
 {
 	message( "testing new_message() and Message object methods" );
-	
+
 	my ($did, $should, $msg1);
 
 	$did = serialize( Locale::KeyedText->new_message() );
@@ -95,14 +95,14 @@ message( "START TESTING Locale::KeyedText" );
 	result( $did eq $should, "Locale::KeyedText->new_message( 'x:' ) returns '$did'" );
 
 	$msg1 = Locale::KeyedText->new_message( '0' );
-	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::_::Message" ), 
+	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::Message" ), 
 		"msg1 = new_message( '0' ) ret MSG obj" );
 	$did = $msg1->as_string();
 	$should = "0: ";
 	result( $did eq $should, "on init msg1->as_string() returns '$did'" );
 
 	$msg1 = Locale::KeyedText->new_message( 'zZ9' );
-	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::_::Message" ), 
+	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::Message" ), 
 		"msg1 = new_message( 'zZ9' ) ret MSG obj" );
 	$did = $msg1->as_string();
 	$should = "zZ9: ";
@@ -121,28 +121,28 @@ message( "START TESTING Locale::KeyedText" );
 	result( $did eq $should, "Locale::KeyedText->new_message( 'foo', { ':'=>'g' } ) returns '$did'" );
 
 	$msg1 = Locale::KeyedText->new_message( 'foo', undef );
-	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::_::Message" ), 
+	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::Message" ), 
 		"msg1 = new_message( 'foo', undef ) ret MSG obj" );
 	$did = $msg1->as_string();
 	$should = "foo: ";
 	result( $did eq $should, "on init msg1->as_string() returns '$did'" );
 
 	$msg1 = Locale::KeyedText->new_message( 'foo', {} );
-	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::_::Message" ), 
+	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::Message" ), 
 		"msg1 = new_message( 'foo', {} ) ret MSG obj" );
 	$did = $msg1->as_string();
 	$should = "foo: ";
 	result( $did eq $should, "on init msg1->as_string() returns '$did'" );
 
 	$msg1 = Locale::KeyedText->new_message( 'foo', { 'bar' => 'baz' } );
-	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::_::Message" ), 
+	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::Message" ), 
 		"msg1 = new_message( 'foo', { 'bar' => 'baz' } ) ret MSG obj" );
 	$did = $msg1->as_string();
 	$should = "foo: bar=baz";
 	result( $did eq $should, "on init msg1->as_string() returns '$did'" );
 
 	$msg1 = Locale::KeyedText->new_message( 'foo', { 'bar'=>'baz','c'=>'-','0'=>'1' } );
-	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::_::Message" ), 
+	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::Message" ), 
 		"msg1 = new_message( 'foo', { 'bar'=>'baz','c'=>'d','0'=>'1' } ) ret MSG obj" );
 	$did = $msg1->as_string();
 	$should = "foo: 0=1, bar=baz, c=-";
@@ -185,7 +185,7 @@ message( "START TESTING Locale::KeyedText" );
 
 {
 	message( "testing new_translator() and most Translator object methods" );
-	
+
 	my ($did, $should, $trn1);
 
 	$did = serialize( Locale::KeyedText->new_translator() );
@@ -205,7 +205,7 @@ message( "START TESTING Locale::KeyedText" );
 	result( $did eq $should, "Locale::KeyedText->new_translator( undef, [] ) returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( [], [] );
-	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::_::Translator" ), 
+	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( [], [] ) ret TRN obj" );
 	$did = $trn1->as_string();
 	$should = "SETS: ; MEMBERS: ";
@@ -224,28 +224,28 @@ message( "START TESTING Locale::KeyedText" );
 	result( $did eq $should, "Locale::KeyedText->new_translator( 'x-', [] ) returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( '0', [] );
-	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::_::Translator" ), 
+	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( '0', [] ) ret TRN obj" );
 	$did = $trn1->as_string();
 	$should = "SETS: 0; MEMBERS: ";
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( 'zZ9', [] );
-	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::_::Translator" ), 
+	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( 'zZ9', [] ) ret TRN obj" );
 	$did = $trn1->as_string();
 	$should = "SETS: zZ9; MEMBERS: ";
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( ['zZ9'], [] );
-	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::_::Translator" ), 
+	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( ['zZ9'], [] ) ret TRN obj" );
 	$did = $trn1->as_string();
 	$should = "SETS: zZ9; MEMBERS: ";
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( ['zZ9','aaa'], [] );
-	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::_::Translator" ), 
+	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( ['zZ9','aaa'], [] ) ret TRN obj" );
 	$did = $trn1->as_string();
 	$should = "SETS: zZ9, aaa; MEMBERS: ";
@@ -264,35 +264,35 @@ message( "START TESTING Locale::KeyedText" );
 	result( $did eq $should, "Locale::KeyedText->new_translator( [], 'x-' ) returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( [], '0' );
-	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::_::Translator" ), 
+	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( [], '0' ) ret TRN obj" );
 	$did = $trn1->as_string();
 	$should = "SETS: ; MEMBERS: 0";
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( [], 'zZ9' );
-	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::_::Translator" ), 
+	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( [], 'zZ9' ) ret TRN obj" );
 	$did = $trn1->as_string();
 	$should = "SETS: ; MEMBERS: zZ9";
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( [], ['zZ9'] );
-	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::_::Translator" ), 
+	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( [], ['zZ9'] ) ret TRN obj" );
 	$did = $trn1->as_string();
 	$should = "SETS: ; MEMBERS: zZ9";
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( [], ['zZ9','aaa'] );
-	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::_::Translator" ), 
+	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( [], ['zZ9','aaa'] ) ret TRN obj" );
 	$did = $trn1->as_string();
 	$should = "SETS: ; MEMBERS: zZ9, aaa";
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( ['goo','har'], ['wer','thr'] );
-	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::_::Translator" ), 
+	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( ['goo','har'], ['wer','thr'] ) ret TRN obj" );
 	$did = $trn1->as_string();
 	$should = "SETS: goo, har; MEMBERS: wer, thr";
@@ -307,7 +307,7 @@ message( "START TESTING Locale::KeyedText" );
 	result( $did eq $should, "on init trn1->get_template_member_names() returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( ['go::o','::har'], ['w::er','thr::'] );
-	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::_::Translator" ), 
+	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( ['go::o','::har'], ['w::er','thr::'] ) ret TRN obj" );
 	$did = $trn1->as_string();
 	$should = "SETS: go::o, ::har; MEMBERS: w::er, thr::";
@@ -321,7 +321,7 @@ message( "START TESTING Locale::KeyedText" );
 
 	my $AS = 't_Locale_KeyedText_A_L_';
 	my $BS = 't_Locale_KeyedText_B_L_';
-	
+
 	my ($did, $should, $msg1, $msg2, $msg3, $trn1, $trn2, $trn3, $trn4);
 
 	# First test that anything does or doesn't work, and test variable substitution.

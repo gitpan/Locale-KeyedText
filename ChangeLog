@@ -1,3 +1,36 @@
+2004-03-05   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Release 0.03.
+
+	* This is a small but incompatible maintenance release.  Or more
+	specifically, it is only incompatible if your use of it involves reading
+	the package names, such as with "UNIVERSAL::isa" (and the tests do); if you
+	don't do that, then it is backwards compatible.
+
+	* Updated lib/Locale/KeyedText.pm (now v0.03) to reorganize and more
+	properly document its component class/package set. 
+	Locale::KeyedText::_::Message was renamed to Locale::KeyedText::Message and
+	Locale::KeyedText::_::Translator was renamed to
+	Locale::KeyedText::Translator.  The stateless new_message() and
+	new_translator() functions were each moved into the packages of the objects
+	that they create, and each was renamed to new(), and each now uses its
+	first argument as the package name to bless into as is usual with Perl
+	classes, and unlike the hard-coded bless it had before; two new functions
+	having the old names now exist in their place and simply call the moved
+	functions, so you can still invoke them like you did before.
+
+	* Added new POD documentation section CLASSES IN THIS MODULE to
+	KeyedText.pm which outlines the reality of the multiple package/classes in
+	the single module, and their relation.  It also says that you should never
+	make your own modules with any of the same package or module names.
+
+	* The multiple package declarations in KeyedText.pm are no longer
+	obfuscated (split over 2 lines each) to prevent PAUSE from indexing them.
+
+	* Updated t/Locale_KeyedText.t so the correct class names are tested for.
+
+	* No other files were changed.
+
 2004-01-18   Darren Duncan <perl@DarrenDuncan.net>
 
 	* Release 0.02.

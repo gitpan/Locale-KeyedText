@@ -11,7 +11,7 @@ use 5.006;
 use strict;
 use warnings;
 use vars qw($VERSION);
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 ######################################################################
 
@@ -54,18 +54,35 @@ practical way of suggesting improvements to the standard version.
 ######################################################################
 ######################################################################
 
-# Names of properties for objects of the Locale::KeyedText::_::Message class are declared here:
+# Names of properties for objects of the Locale::KeyedText::Message class are declared here:
 my $MPROP_MSG_KEY = 'msg_key'; # str - the machine-readable key that uniquely identifies this message
 my $MPROP_MSG_VARS = 'msg_vars'; # hash (str,str) - named variables for messages, if any, go here
 
-# Names of properties for objects of the Locale::KeyedText::_::Translator class are declared here:
+# Names of properties for objects of the Locale::KeyedText::Translator class are declared here:
 my $TPROP_TMPL_SET_NMS = 'tmpl_set_nms'; # array of str - list of Template module Set Names to search
 my $TPROP_TMPL_MEM_NMS = 'tmpl_mem_nms'; # array of str - list of Template module Member Names to search
 
 ######################################################################
 
 sub new_message {
-	my (undef, $msg_key, $msg_vars) = @_;
+	return( Locale::KeyedText::Message->new( $_[1], $_[2] ) );
+}
+
+######################################################################
+
+sub new_translator {
+	return( Locale::KeyedText::Translator->new( $_[1], $_[2] ) );
+}
+
+######################################################################
+######################################################################
+
+package Locale::KeyedText::Message;
+
+######################################################################
+
+sub new {
+	my ($class, $msg_key, $msg_vars) = @_;
 
 	defined( $msg_key ) and $msg_key ne '' and $msg_key !~ m/\W/ or return( undef );
 	defined( $msg_vars ) or $msg_vars = {};
@@ -74,41 +91,13 @@ sub new_message {
 		$var_name ne '' and $var_name !~ m/\W/ or return( undef ); # hash key never undef (?)
 	}
 
-	my $message = bless( {}, "Locale::KeyedText::_::Message" );
+	my $message = bless( {}, ref($class) || $class );
 
 	$message->{$MPROP_MSG_KEY} = $msg_key;
 	$message->{$MPROP_MSG_VARS} = {%{$msg_vars}};
 
 	return( $message );
 }
-
-######################################################################
-
-sub new_translator {
-	my (undef, $set_names, $member_names) = @_;
-
-	$set_names = ref($set_names) eq 'ARRAY' ? [@{$set_names}] : [$set_names];
-	foreach my $set_name (@{$set_names}) {
-		defined( $set_name ) and $set_name ne '' and $set_name !~ m/[^a-zA-Z0-9_:]/ or return( undef );
-	}
-	$member_names = (ref($member_names) eq 'ARRAY') ? [@{$member_names}] : [$member_names];
-	foreach my $member_name (@{$member_names}) {
-		defined( $member_name ) and $member_name ne '' and $member_name !~ m/[^a-zA-Z0-9_:]/ or return( undef );
-	}
-
-	my $translator = bless( {}, "Locale::KeyedText::_::Translator" );
-
-	$translator->{$TPROP_TMPL_SET_NMS} = $set_names;
-	$translator->{$TPROP_TMPL_MEM_NMS} = $member_names;
-
-	return( $translator );
-}
-
-######################################################################
-######################################################################
-
-package # hide this class name from PAUSE indexer
-Locale::KeyedText::_::Message;
 
 ######################################################################
 
@@ -139,8 +128,29 @@ sub as_string {
 ######################################################################
 ######################################################################
 
-package # hide this class name from PAUSE indexer
-Locale::KeyedText::_::Translator;
+package Locale::KeyedText::Translator;
+
+######################################################################
+
+sub new {
+	my ($class, $set_names, $member_names) = @_;
+
+	$set_names = ref($set_names) eq 'ARRAY' ? [@{$set_names}] : [$set_names];
+	foreach my $set_name (@{$set_names}) {
+		defined( $set_name ) and $set_name ne '' and $set_name !~ m/[^a-zA-Z0-9_:]/ or return( undef );
+	}
+	$member_names = (ref($member_names) eq 'ARRAY') ? [@{$member_names}] : [$member_names];
+	foreach my $member_name (@{$member_names}) {
+		defined( $member_name ) and $member_name ne '' and $member_name !~ m/[^a-zA-Z0-9_:]/ or return( undef );
+	}
+
+	my $translator = bless( {}, ref($class) || $class );
+
+	$translator->{$TPROP_TMPL_SET_NMS} = $set_names;
+	$translator->{$TPROP_TMPL_MEM_NMS} = $member_names;
+
+	return( $translator );
+}
 
 ######################################################################
 
@@ -157,7 +167,7 @@ sub get_template_member_names {
 sub translate_message {
 	my ($translator, $message) = @_;
 
-	UNIVERSAL::isa( $message, 'Locale::KeyedText::_::Message' ) or return( undef );
+	UNIVERSAL::isa( $message, 'Locale::KeyedText::Message' ) or return( undef );
 
 	my $msg_key = $message->{$MPROP_MSG_KEY};
 	my $msg_vars = $message->{$MPROP_MSG_VARS};
@@ -431,6 +441,22 @@ variables, which can be used in any order, or not used at all, or used multiple
 times.  Locale::KeyedText is generally a simpler solution than alternatives,
 and doesn't know about language specific details like encodings or plurality.
 
+=head1 CLASSES IN THIS MODULE
+
+This module is implemented by several object-oriented Perl 5 packages, each of
+which is referred to as a class.  They are: B<Locale::KeyedText> (the module's
+name-sake), B<Locale::KeyedText::Message> (aka B<Message>), and
+B<Locale::KeyedText::Translator> (aka B<Translator>).
+
+I<While all 3 of the above classes are implemented in one module for
+convenience, you should consider all 3 names as being "in use"; do not create
+any modules or packages yourself that have the same names.>
+
+The Message and Translator classes do most of the work and are what you mainly
+use.  The name-sake class mainly exists to guide CPAN in indexing the whole
+module, but it also provides a few wrapper functions over the other classes for
+your convenience; you never instantiate an object of Locale::KeyedText itself.
+
 =head1 MESSAGE OBJECT PROPERTIES
 
 One object type that this module implements is the B<Message>.  It is a simple
@@ -557,37 +583,44 @@ using object notation.  This means using B<Class-E<gt>function()> for functions
 and B<$object-E<gt>method()> for methods.  If you are inheriting this class for
 your own modules, then that often means something like B<$self-E<gt>method()>.  
 
-=head1 CONSTRUCTOR FUNCTIONS
+=head1 CONSTRUCTOR WRAPPER FUNCTIONS
 
-These functions are for creating new Message or Translator objects.  You can 
-only invoke them off of the class name, and not off of any object.
+These functions are stateless and can be invoked only off of the module name;
+they are thin wrappers over other methods and exist strictly for convenience.
 
 =head2 new_message( MSG_KEY[, MSG_VARS] )
 
-	my $message = Locale::KeyedText->new_message( 'FOO_GOT_NO_ARGS' );
 	my $message = Locale::KeyedText->new_message( 'INVALID_FOO_ARG', 
 		{ 'ARG_NAME' => 'BAR', 'GIVEN_VAL' => $bar_value } );
-	my $message = Locale::KeyedText->new_message( 'TABLE_NO_EXIST', 
-		{ 'GIVEN_TABLE_NAME' => $table_name } );
-	my $message = Locale::KeyedText->new_message( 'TABLE_COL_NO_EXIST', 
-		{ 'GIVEN_TABLE_NAME' => $table_name, 'GIVEN_COL_NAME' => $col_name } );
 
-This function creates a new Locale::KeyedText Message object and returns it, 
-assuming the method arguments are valid; if they are not, it returns undef. 
-The Message Key property of the new object is set from the MSG_KEY string
-argument; the optional MSG_VARS hash ref argument sets the "Message Variables"
-property if provided (it defaults to empty if the argument is undefined).
+This function wraps Locale::KeyedText::Message->new( MSG_KEY[, MSG_VARS] ).
 
 =head2 new_translator( SET_NAMES, MEMBER_NAMES )
 
 	my $translator = Locale::KeyedText->new_translator( 
 		['Foo::L::','Bar::L::'], ['Eng', 'Fre', 'Ger'] );
-	my $translator = Locale::KeyedText->new_translator( 'Foo::L::', 'Eng' );
 
-This function creates a new Locale::KeyedText Translator object and returns it,
-assuming the method arguments are valid; if they are not, it returns undef. 
-The Template Sets property of the new object is set from the SET_NAMES array
-ref (or string) argument, and Template Members is set from MEMBER_NAMES.
+This function wraps Locale::KeyedText::Translator->new( SET_NAMES, MEMBER_NAMES ).
+
+=head1 MESSAGE CONSTRUCTOR FUNCTIONS AND METHODS
+
+This function/method is stateless and can be invoked off of either the Message
+class name or an existing Message object, with the same result.
+
+=head2 new( MSG_KEY[, MSG_VARS] )
+
+	my $message = Locale::KeyedText::Message->new( 'FOO_GOT_NO_ARGS' );
+	my $message2 = Locale::KeyedText::Message->new( 'INVALID_FOO_ARG', 
+		{ 'ARG_NAME' => 'BAR', 'GIVEN_VAL' => $bar_value } );
+	my $message3 = $message->new( 'TABLE_NO_EXIST', { 'GIVEN_TABLE_NAME' => $table_name } );
+	my $message4 = Locale::KeyedText::Message->new( 'TABLE_COL_NO_EXIST', 
+		{ 'GIVEN_TABLE_NAME' => $table_name, 'GIVEN_COL_NAME' => $col_name } );
+
+This function creates a new Locale::KeyedText::Message object and returns it,
+assuming the method arguments are valid; if they are not, it returns undef. The
+Message Key property of the new object is set from the MSG_KEY string argument;
+the optional MSG_VARS hash ref argument sets the "Message Variables" property
+if provided (it defaults to empty if the argument is undefined).
 
 =head1 MESSAGE OBJECT METHODS
 
@@ -612,6 +645,22 @@ name specified in VAR_NAME.
 
 This method returns all Message Variable names and values in this object as a
 hash ref.
+
+=head1 TRANSLATOR CONSTRUCTOR FUNCTIONS AND METHODS
+
+This function/method is stateless and can be invoked off of either the
+Translator class name or an existing Translator object, with the same result.
+
+=head2 new_translator( SET_NAMES, MEMBER_NAMES )
+
+	my $translator = Locale::KeyedText::Translator->new( 
+		['Foo::L::','Bar::L::'], ['Eng', 'Fre', 'Ger'] );
+	my $translator2 = $translator->new( 'Foo::L::', 'Eng' );
+
+This function creates a new Locale::KeyedText::Translator object and returns
+it, assuming the method arguments are valid; if they are not, it returns undef.
+The Template Sets property of the new object is set from the SET_NAMES array
+ref (or string) argument, and Template Members is set from MEMBER_NAMES.
 
 =head1 TRANSLATOR OBJECT METHODS
 
