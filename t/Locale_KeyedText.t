@@ -1,31 +1,27 @@
-# Before `make install' is performed this script should be runnable with
-# `make test'. After `make install' it should work as `perl Locale_KeyedText.t'
+#!perl
 
-######################### We start with some black magic to print on failure.
+use 5.008001; use utf8; use strict; use warnings;
 
-BEGIN { $| = 1; print "1..103\n"; }
-END {print "not ok 1\n" unless $loaded;}
+BEGIN { $| = 1; print "1..102\n"; }
+
+######################################################################
+# First ensure the modules to test will compile, are correct versions:
+
 use lib 't/lib';
-use Locale::KeyedText 1.00;
+use Locale::KeyedText '1.01_1';
 # see end of this file for loading of test Template modules
-$loaded = 1;
-print "ok 1\n";
-use strict;
-use warnings;
-
-######################### End of black magic.
-
-# Set this to 1 to see complete result text for each test
-my $verbose = shift( @ARGV ) ? 1 : 0;  # set from command line
 
 ######################################################################
 # Here are some utility methods:
 
-my $test_num = 1;  # same as the first test, above
+# Set this to 1 to see complete result text for each test
+my $verbose = shift( @ARGV ) ? 1 : 0;  # set from command line
+
+my $test_num = 0;
 
 sub result {
-	$test_num++;
 	my ($worked, $detail) = @_;
+	$test_num++;
 	$verbose or 
 		$detail = substr( $detail, 0, 50 ).
 		(length( $detail ) > 47 ? "..." : "");	print "@{[$worked ? '' : 'not ']}ok $test_num $detail\n";
@@ -61,6 +57,7 @@ sub serialize {
 }
 
 ######################################################################
+# Now perform the actual tests:
 
 message( "START TESTING Locale::KeyedText" );
 

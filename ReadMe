@@ -37,7 +37,7 @@ changed.
 
 DEPENDENCIES
 
-Perl Version: 5.006
+Perl Version: 5.008001
 
 This module doesn't require anything else.
 

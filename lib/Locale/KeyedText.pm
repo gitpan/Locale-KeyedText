@@ -1,22 +1,21 @@
+#!perl
+
+use 5.008001; use utf8; use strict; use warnings;
+
+package Locale::KeyedText;
+our $VERSION = '1.01_1';
+
+######################################################################
+
+=encoding utf8
+
 =head1 NAME
 
 Locale::KeyedText - Refer to user messages in programs by keys
 
-=cut
-
-######################################################################
-
-package Locale::KeyedText;
-use 5.006;
-use strict;
-use warnings;
-our $VERSION = '1.00';
-
-######################################################################
-
 =head1 DEPENDENCIES
 
-Perl Version: 5.006
+Perl Version: 5.008001
 
 Standard Modules: I<none>
 
@@ -272,7 +271,7 @@ the one with the program also adds support to the library.
 	main( grep { $_ =~ m/^[a-zA-Z]+$/ } @ARGV ); # user indicates language as command line argument
 
 	sub main {
-		my @user_lang_prefs = @_ || 'Eng';
+		my @user_lang_prefs = @_ ? @_ : 'Eng';
 		my $translator = Locale::KeyedText->new_translator( 
 			['MyApp::L::', 'MyLib::L::'], \@user_lang_prefs );
 
@@ -879,6 +878,6 @@ current solution seems best to me.
 
 =head1 SEE ALSO
 
-Locale::Maketext, Locale::gettext, Locale::PGetText, DBIx::BabelKit.
+L<Locale::Maketext>, L<Locale::gettext>, L<Locale::PGetText>, L<DBIx::BabelKit>.
 
 =cut

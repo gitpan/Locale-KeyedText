@@ -1,9 +1,11 @@
+#!perl
+
+use 5.008001; use utf8; use strict; use warnings;
+
 # This is a Template module that exists only for Locale_KeyedText.t to use.
 
 package # hide this class name from PAUSE indexer
 t_Locale_KeyedText_A_L_Eng;
-use strict;
-use warnings;
 
 ######################################################################
 
