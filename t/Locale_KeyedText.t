@@ -3,9 +3,9 @@
 
 ######################### We start with some black magic to print on failure.
 
-BEGIN { $| = 1; print "1..96\n"; }
+BEGIN { $| = 1; print "1..98\n"; }
 END {print "not ok 1\n" unless $loaded;}
-use Locale::KeyedText 0.01;
+use Locale::KeyedText 0.02;
 # see end of this file for loading of test Template modules
 $loaded = 1;
 print "ok 1\n";
@@ -332,6 +332,9 @@ message( "START TESTING Locale::KeyedText" );
 	$msg2 = Locale::KeyedText->new_message( 'one', {'spoon'=>'lift','fork'=>'poke'} );
 	result( 1, "msg2 = new_message( 'one', {'spoon'=>'lift','fork'=>'poke'} ) contains '".$msg2->as_string()."'" );
 
+	$msg3 = Locale::KeyedText->new_message( 'one', {'spoon'=> undef,'fork'=>''} );
+	result( 1, "msg3 = new_message( 'one', {'spoon'=> undef,'fork'=>''} ) contains '".$msg3->as_string()."'" );
+
 	$trn1 = Locale::KeyedText->new_translator( [$AS],['Eng'] );
 	result( 1, "trn1 = new_translator( [$AS],['Eng'] ) contains '".$trn1->as_string()."'" );
 
@@ -353,6 +356,10 @@ message( "START TESTING Locale::KeyedText" );
 	$did = $trn1->translate_message( $msg2 );
 	$should = "AE - word poke { fork } lift {poke}";
 	result( $did eq $should, "trn1->translate_message( msg2 ) returns '$did'" );
+
+	$did = $trn1->translate_message( $msg3 );
+	$should = "AE - word  { fork }  {}";
+	result( $did eq $should, "trn1->translate_message( msg3 ) returns '$did'" );
 
 	$did = serialize( $trn2->translate_message( $msg2 ) );
 	$should = "undef, ";

@@ -1,3 +1,23 @@
+2004-01-18   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Release 0.02.
+
+	* This is a small bug fix release.
+
+	* Added 2 more tests to Locale_KeyedText.t (for 98 total) that check for
+	correct behaviour when Message Variables are given undefined hash values;
+	the tests would produce warnings when run against release 0.01.
+
+	* Made a couple small code updates to Locale::KeyedText, and incremented
+	its version from 0.01 to 0.02.  Updated the methods Message->as_string()
+	and Translator->translate_message() to substitute "" for any undefined
+	Message variable values when building their output strings; now the 2 new
+	tests will not throw warnings.
+
+	* Fixed a few small mistakes in, and made small changes to,
+	Locale::KeyedText's POD.  SYNOPSIS had bug fixes.  DESCRIPTION and SEE ALSO
+	had some small additions.  Other areas had indenting fixes.
+
 2004-01-15   Darren Duncan <perl@DarrenDuncan.net>
 
 	* Release 0.01.

@@ -11,7 +11,7 @@ use 5.006;
 use strict;
 use warnings;
 use vars qw($VERSION);
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 ######################################################################
 
@@ -133,7 +133,7 @@ sub as_string {
 	my ($message) = @_;
 	my $msg_key = $message->{$MPROP_MSG_KEY};
 	my $msg_vars = $message->{$MPROP_MSG_VARS};
-	return( $msg_key.': '.join( ', ', map { $_.'='.$msg_vars->{$_} } sort keys %{$msg_vars} ) );
+	return( $msg_key.': '.join( ', ', map { $_.'='.($msg_vars->{$_}||'') } sort keys %{$msg_vars} ) );
 }
 
 ######################################################################
@@ -176,7 +176,7 @@ sub translate_message {
 			$@ and next SET;
 			$text or next SET;
 			foreach my $var_name (keys %{$msg_vars}) {
-				my $var_value = $msg_vars->{$var_name};
+				my $var_value = $msg_vars->{$var_name} || '';
 				$text =~ s/\{$var_name\}/$var_value/g; # assumes msg props cleaned on input
 			}
 			last MEMBER;
@@ -256,7 +256,7 @@ the one with the program also adds support to the library.
 	main( grep { $_ =~ m/^[a-zA-Z]+$/ } @ARGV ); # user indicates language as command line argument
 
 	sub main {
-		my @user_lang_prefs = @_ or @user_lang_prefs = 'Eng';
+		my @user_lang_prefs = @_ || 'Eng';
 		my $translator = Locale::KeyedText->new_translator( 
 			['MyApp::L::', 'MyLib::L::'], \@user_lang_prefs );
 
@@ -273,7 +273,7 @@ the one with the program also adds support to the library.
 				show_message( $translator, Locale::KeyedText->new_message( 'MYAPP_RESULT', 
 					{ 'ORIGINAL' => $user_input, 'INVERTED' => $result } ) );
 			};
-			$@ and show_message( $translator, $message ); # input error, detected by library
+			$@ and show_message( $translator, $@ ); # input error, detected by library
 		}
 
 		show_message( $translator, Locale::KeyedText->new_message( 'MYAPP_GOODBYE' ) );
@@ -414,18 +414,22 @@ Generally, when a program module would return a code-key to indicate a
 condition, often it will also provide some variable values to be interpolated
 into the user strings; Locale::KeyedText would also handle this.
 
-Locale::KeyedText never outputs anything by itself to the user, and only
-implements deterministic functionality, returning its results.
+Locale::KeyedText never outputs anything by itself to the user, but rather
+returns its results for calling code to output as it sees fit.
 
 One of the main distinctions of this approach over similar modules is that text
-is always looked up by a key which is not meant to be meaningful for a user. 
+is always looked up by a key which is not meant to be meaningful for a user.
 Whereas, with the other modules like "gettext" it looks like you are supposed
 to pass in english text and they translate it, which could produce ambiguous
 results or associations.  Or alternately, the other modules require your text
 data to be stored in a format other than Perl files.  Or alternately they have
 a compiled C component or otherwise have external dependencies;
 Locale::KeyedText has no external dependencies (it is very simple).  There are
-other differences.
+other differences.  Where other solutions take variables, they seem to be
+positional (like with 'sprintf'); whereas, Locale::KeyedText has named
+variables, which can be used in any order, or not used at all, or used multiple
+times.  Locale::KeyedText is generally a simpler solution than alternatives,
+and doesn't know about language specific details like encodings or plurality.
 
 =head1 MESSAGE OBJECT PROPERTIES
 
@@ -591,20 +595,20 @@ These methods are stateful and may only be invoked off of Message objects.
 
 =head2 get_message_key()
 
-my $msg_key = $message->get_message_key();
+	my $msg_key = $message->get_message_key();
 
 This method returns the Message Key property of this object.
 
 =head2 get_message_variable( VAR_NAME )
 
-my $value = $message->get_message_variable( 'GIVEN_COL_NAME' );
+	my $value = $message->get_message_variable( 'GIVEN_COL_NAME' );
 
 This method returns the Message Variable value associated with the variable
 name specified in VAR_NAME.
 
 =head2 get_message_variables()
 
-my $rh_msg_vars = $message->get_message_variables();
+	my $rh_msg_vars = $message->get_message_variables();
 
 This method returns all Message Variable names and values in this object as a
 hash ref.
@@ -615,19 +619,19 @@ These methods are stateful and may only be invoked off of Message objects.
 
 =head2 get_template_set_names()
 
-my $ra_set_names = $translator->get_template_set_names();
+	my $ra_set_names = $translator->get_template_set_names();
 
 This method returns all Template Sets elements in this object as an array ref.
 
 =head2 get_template_member_names()
 
-my $ra_set_names = $translator->get_template_member_names();
+	my $ra_set_names = $translator->get_template_member_names();
 
 This method returns all Template Members elements in this object as an array ref.
 
 =head2 translate_message( MESSAGE )
 
-my $user_text_string = $translator->translate_message( $message );
+	my $user_text_string = $translator->translate_message( $message );
 
 This method takes a (machine-readable) Message object as its MESSAGE argument
 and returns an equivalent human readable text message string; this assumes that
@@ -643,8 +647,8 @@ Translator objects.
 
 =head2 as_string()
 
-my $dump_string = $message->as_string();
-my $dump_string = $translator->as_string();
+	my $dump_string = $message->as_string();
+	my $dump_string = $translator->as_string();
 
 This method returns a stringified version of this object which is suitable for
 debugging purposes (such as to test that the object's contents look good at a
@@ -681,6 +685,6 @@ current solution seems best to me.
 
 =head1 SEE ALSO
 
-SQL::SyntaxModel, Rosetta, Locale::gettext, Locale::PGetText, DBIx::BabelKit.
+SQL::SyntaxModel, Rosetta, Locale::Maketext, Locale::gettext, Locale::PGetText, DBIx::BabelKit.
 
 =cut
