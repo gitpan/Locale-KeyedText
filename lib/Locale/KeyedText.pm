@@ -10,8 +10,7 @@ package Locale::KeyedText;
 use 5.006;
 use strict;
 use warnings;
-use vars qw($VERSION);
-$VERSION = '0.06';
+our $VERSION = '0.07';
 
 ######################################################################
 

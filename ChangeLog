@@ -1,3 +1,18 @@
+2004-08-31   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Release 0.07.
+
+	* New code file versions are: KeyedText.pm v0.07.
+
+	* Updated KeyedText.pm to use the modern syntax "our $VERSION = ..."
+	instead of "use vars qw($VERSION); $VERSION = ...".
+
+	* Moved this distribution's t_*.pm files from the /lib directory to a new
+	/t/lib directory, so that they don't pollute the user's install
+	directories, and so the distribution is better organized on the whole. 
+	Added a "use lib 't/lib';" to Locale_KeyedText.t in order to make the move
+	work.  No changes to the tests themselves.  Updated the MANIFEST.
+
 2004-08-05   Darren Duncan <perl@DarrenDuncan.net>
 
 	* Release 0.06.
