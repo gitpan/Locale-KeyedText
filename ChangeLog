@@ -1,3 +1,71 @@
+2005-03-13   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Release 1.02.
+
+	* New code file versions are: KeyedText.pm v1.02.
+
+	* This release primarily fixes bugs or makes code style improvements in this
+	current Perl 5 version that were simultaneously performed on the brand new
+	Perl 6 version, for the .
+
+	* Corrected a few spelling mistakes in the KeyedText.pm documentation.
+
+	* Corrected a couple bugs in Locale_KeyedText.t: 1. The last 3 tests contained 
+	the wrong text in their output strings, suggesting that the last 4 all did the 
+	same thing. 2. Removed the vis() function, which was never used.
+
+	* In order to help ease the transition to Perl 6, updated every in-code (in
+	the test suite) or in-POD (in KeyedText.pm) Template class declaration to
+	make all user text message strings bound in non-interpolating single quotes
+	rather than interpolating double-quotes.  The reason is because these text
+	strings frequently use literal braces ({}) and Perl 6 would have incorrectly
+	interpreted those as containing embedded Perl code to execute and
+	interpolate the result value of.
+
+	* Following a suggestion given to me by Larry Wall on p6l, replaced the
+	input checking negative assertions in Message.new() and Translator.new()
+	with positive assertions that do the same thing; for example, rather than
+	testing the input for being either an empty string or containing bad
+	characters, it tests that input consists entirely of one or more good
+	character; the new versions are much more concise and easier to understand.
+
+	* Following a style suggestion given to me by Larry Wall on p6l, updated
+	every occurance of a "return" statement in the distribution to remove the
+	parenthesis around its value list, since it is a an operator rather than a
+	function; this also makes my code more consistent since I never used parens
+	for the likes of "sort" or "keys" or "next" or "last".  Also updated every
+	"return" to not explicitly return undefs (that's what "return" does by
+	default), and also to not return a generic truth value ("1") when any caller
+	would ignore it.
+
+	* Updated any DEPENDENCIES documentation to use sub-headings "[|Non-] Core
+	Modules" rather than "[|Non]standard Modules".
+
+	* Updated the TODO file re supporting plain-text Template files.
+
+2005-03-13   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Perl6-Pugs-6.0.11, the first version of any distribution to contain the
+	Perl 6 version of Locale::KeyedText, was released on CPAN.  It lives under
+	the /modules directory in that distribution.  This Perl 6 port has a release
+	number of v0.0.1, and corresponds to the Perl 5 release number of v1.02.
+
+2005-03-07 thru 2005-03-10
+
+	* Created a new development branch of Locale::KeyedText that is written
+	entirely in Perl 6 (rather than Perl 5), including the module proper, all of
+	its POD, and its entire test suite; it matches the current mainline Perl 5
+	distribution feature-wise.  This new Perl 6 version has been committed into
+	the version control system (under /modules) for Autrijus Tang's new "Pugs"
+	distribution, which will be the runtime engine that it runs under; later it
+	will run under the "Parrot" engine.  The Perl 6 Locale::KeyedText is
+	currently at version 0.0.1 and has not actually been executed yet, due to
+	Pugs currently not supporting some of the Perl 6 language features that it
+	needs; it probably contains a few bugs, and also may stand to be revised as
+	the not yet finalized Perl 6 spec shifts underneath it.  The new LKT port
+	can be used by the developers of Pugs as a feature integration test that
+	helps them know they are implementing the Perl 6 spec correctly.
+
 2004-12-15   Darren Duncan <perl@DarrenDuncan.net>
 
 	* Release 1.01.
@@ -39,7 +107,7 @@
 	them.  Within the *.t files, there is no longer any BEGIN/END $loaded test,
 	so the test count has been decremented by one.
 
-	* Updated any TODO module references to be L<>.
+	* Updated any SEE ALSO module references to be L<>.
 
 	* New code file versions are: KeyedText.pm v1.01_1.
 

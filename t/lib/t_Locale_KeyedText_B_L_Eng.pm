@@ -11,14 +11,14 @@ t_Locale_KeyedText_B_L_Eng;
 
 my $xy = 'BE';
 my %text_strings = (
-	'two' => "$xy - sky pie rye",
-	'three' => "$xy - eat {knife}",
+	'two' => $xy.' - sky pie rye',
+	'three' => $xy.' - eat {knife}',
 );
 
 ######################################################################
 
 sub get_text_by_key {
-	return( $text_strings{$_[1]} );
+	return $text_strings{$_[1]};
 }
 
 ######################################################################

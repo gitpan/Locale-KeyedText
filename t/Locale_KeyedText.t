@@ -8,7 +8,7 @@ BEGIN { $| = 1; print "1..102\n"; }
 # First ensure the modules to test will compile, are correct versions:
 
 use lib 't/lib';
-use Locale::KeyedText '1.01';
+use Locale::KeyedText '1.02';
 # see end of this file for loading of test Template modules
 
 ######################################################################
@@ -24,7 +24,8 @@ sub result {
 	$test_num++;
 	$verbose or 
 		$detail = substr( $detail, 0, 50 ).
-		(length( $detail ) > 47 ? "..." : "");	print "@{[$worked ? '' : 'not ']}ok $test_num $detail\n";
+		(length( $detail ) > 47 ? "..." : "");
+	print "@{[$worked ? '' : 'not ']}ok $test_num $detail\n";
 }
 
 sub message {
@@ -32,16 +33,9 @@ sub message {
 	print "-- $detail\n";
 }
 
-sub vis {
-	my ($str) = @_;
-	$str =~ s/\n/\\n/g;  # make newlines visible
-	$str =~ s/\t/\\t/g;  # make tabs visible
-	return( $str );
-}
-
 sub serialize {
 	my ($input,$is_key) = @_;
-	return( join( '', 
+	return join( '', 
 		ref($input) eq 'HASH' ? 
 			( '{ ', ( map { 
 				( serialize( $_, 1 ), serialize( $input->{$_} ) ) 
@@ -51,9 +45,9 @@ sub serialize {
 				( serialize( $_ ) ) 
 			} @{$input} ), '], ' ) 
 		: defined($input) ?
-			"'$input'".($is_key ? ' => ' : ', ')
-		: "undef".($is_key ? ' => ' : ', ')
-	) );
+			'\''.$input.'\''.($is_key ? ' => ' : ', ')
+		: 'undef'.($is_key ? ' => ' : ', ')
+	);
 }
 
 ######################################################################
@@ -69,113 +63,113 @@ message( "START TESTING Locale::KeyedText" );
 	my ($did, $should, $msg1);
 
 	$did = serialize( Locale::KeyedText->new_message() );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_message() returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_message( undef ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_message( undef ) returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_message( '' ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_message( '' ) returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_message( '0 ' ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_message( '0 ' ) returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_message( 'x-' ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_message( 'x-' ) returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_message( 'x:' ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_message( 'x:' ) returns '$did'" );
 
 	$msg1 = Locale::KeyedText->new_message( '0' );
 	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::Message" ), 
 		"msg1 = new_message( '0' ) ret MSG obj" );
 	$did = $msg1->as_string();
-	$should = "0: ";
+	$should = '0: ';
 	result( $did eq $should, "on init msg1->as_string() returns '$did'" );
 
 	$msg1 = Locale::KeyedText->new_message( 'zZ9' );
 	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::Message" ), 
 		"msg1 = new_message( 'zZ9' ) ret MSG obj" );
 	$did = $msg1->as_string();
-	$should = "zZ9: ";
+	$should = 'zZ9: ';
 	result( $did eq $should, "on init msg1->as_string() returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_message( 'foo', [] ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_message( 'foo', [] ) returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_message( 'foo', { ' '=>'g' } ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_message( 'foo', { ' '=>'g' } ) returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_message( 'foo', { ':'=>'g' } ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_message( 'foo', { ':'=>'g' } ) returns '$did'" );
 
 	$msg1 = Locale::KeyedText->new_message( 'foo', undef );
 	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::Message" ), 
 		"msg1 = new_message( 'foo', undef ) ret MSG obj" );
 	$did = $msg1->as_string();
-	$should = "foo: ";
+	$should = 'foo: ';
 	result( $did eq $should, "on init msg1->as_string() returns '$did'" );
 
 	$msg1 = Locale::KeyedText->new_message( 'foo', {} );
 	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::Message" ), 
 		"msg1 = new_message( 'foo', {} ) ret MSG obj" );
 	$did = $msg1->as_string();
-	$should = "foo: ";
+	$should = 'foo: ';
 	result( $did eq $should, "on init msg1->as_string() returns '$did'" );
 
 	$msg1 = Locale::KeyedText->new_message( 'foo', { 'bar' => 'baz' } );
 	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::Message" ), 
 		"msg1 = new_message( 'foo', { 'bar' => 'baz' } ) ret MSG obj" );
 	$did = $msg1->as_string();
-	$should = "foo: bar=baz";
+	$should = 'foo: bar=baz';
 	result( $did eq $should, "on init msg1->as_string() returns '$did'" );
 
 	$msg1 = Locale::KeyedText->new_message( 'foo', { 'bar'=>'baz','c'=>'-','0'=>'1','z'=>'','y'=>'0' } );
 	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::Message" ), 
 		"msg1 = new_message( 'foo', { 'bar'=>'baz','c'=>'d','0'=>'1','z'=>'','y'=>'0' } ) ret MSG obj" );
 	$did = $msg1->as_string();
-	$should = "foo: 0=1, bar=baz, c=-, y=0, z=";
+	$should = 'foo: 0=1, bar=baz, c=-, y=0, z=';
 	result( $did eq $should, "on init msg1->as_string() returns '$did'" );
 
 	$did = serialize( $msg1->get_message_key() );
-	$should = "'foo', ";
+	$should = '\'foo\', ';
 	result( $did eq $should, "on init msg1->get_message_key() returns '$did'" );
 
 	$did = serialize( $msg1->get_message_variable() );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "on init msg1->get_message_variable() returns '$did'" );
 
 	$did = serialize( $msg1->get_message_variable( undef ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "on init msg1->get_message_variable( undef ) returns '$did'" );
 
 	$did = serialize( $msg1->get_message_variable( '' ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "on init msg1->get_message_variable( '' ) returns '$did'" );
 
 	$did = serialize( $msg1->get_message_variable( '0' ) );
-	$should = "'1', ";
+	$should = '\'1\', ';
 	result( $did eq $should, "on init msg1->get_message_variable( '0' ) returns '$did'" );
 
 	$did = serialize( $msg1->get_message_variable( 'zzz' ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "on init msg1->get_message_variable( 'zzz' ) returns '$did'" );
 
 	$did = serialize( $msg1->get_message_variable( 'bar' ) );
-	$should = "'baz', ";
+	$should = '\'baz\', ';
 	result( $did eq $should, "on init msg1->get_message_variable( 'bar' ) returns '$did'" );
 
 	$did = serialize( $msg1->get_message_variables() );
-	$should = "{ '0' => '1', 'bar' => 'baz', 'c' => '-', 'y' => '0', 'z' => '', }, ";
+	$should = '{ \'0\' => \'1\', \'bar\' => \'baz\', \'c\' => \'-\', \'y\' => \'0\', \'z\' => \'\', }, ';
 	result( $did eq $should, "on init msg1->get_message_variables() returns '$did'" );
 }
 
@@ -187,128 +181,128 @@ message( "START TESTING Locale::KeyedText" );
 	my ($did, $should, $trn1);
 
 	$did = serialize( Locale::KeyedText->new_translator() );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_translator() returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_translator( undef, undef ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_translator( undef, undef ) returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_translator( [], undef ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_translator( [], undef ) returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_translator( undef, [] ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_translator( undef, [] ) returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( [], [] );
 	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( [], [] ) ret TRN obj" );
 	$did = $trn1->as_string();
-	$should = "SETS: ; MEMBERS: ";
+	$should = 'SETS: ; MEMBERS: ';
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_translator( '', [] ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_translator( '', [] ) returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_translator( '0 ', [] ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_translator( '0 ', [] ) returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_translator( 'x-', [] ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_translator( 'x-', [] ) returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( '0', [] );
 	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( '0', [] ) ret TRN obj" );
 	$did = $trn1->as_string();
-	$should = "SETS: 0; MEMBERS: ";
+	$should = 'SETS: 0; MEMBERS: ';
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( 'zZ9', [] );
 	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( 'zZ9', [] ) ret TRN obj" );
 	$did = $trn1->as_string();
-	$should = "SETS: zZ9; MEMBERS: ";
+	$should = 'SETS: zZ9; MEMBERS: ';
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( ['zZ9'], [] );
 	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( ['zZ9'], [] ) ret TRN obj" );
 	$did = $trn1->as_string();
-	$should = "SETS: zZ9; MEMBERS: ";
+	$should = 'SETS: zZ9; MEMBERS: ';
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( ['zZ9','aaa'], [] );
 	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( ['zZ9','aaa'], [] ) ret TRN obj" );
 	$did = $trn1->as_string();
-	$should = "SETS: zZ9, aaa; MEMBERS: ";
+	$should = 'SETS: zZ9, aaa; MEMBERS: ';
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_translator( [], '' ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_translator( [], '' ) returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_translator( [], '0 ' ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_translator( [], '0 ' ) returns '$did'" );
 
 	$did = serialize( Locale::KeyedText->new_translator( [], 'x-' ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "Locale::KeyedText->new_translator( [], 'x-' ) returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( [], '0' );
 	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( [], '0' ) ret TRN obj" );
 	$did = $trn1->as_string();
-	$should = "SETS: ; MEMBERS: 0";
+	$should = 'SETS: ; MEMBERS: 0';
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( [], 'zZ9' );
 	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( [], 'zZ9' ) ret TRN obj" );
 	$did = $trn1->as_string();
-	$should = "SETS: ; MEMBERS: zZ9";
+	$should = 'SETS: ; MEMBERS: zZ9';
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( [], ['zZ9'] );
 	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( [], ['zZ9'] ) ret TRN obj" );
 	$did = $trn1->as_string();
-	$should = "SETS: ; MEMBERS: zZ9";
+	$should = 'SETS: ; MEMBERS: zZ9';
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( [], ['zZ9','aaa'] );
 	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( [], ['zZ9','aaa'] ) ret TRN obj" );
 	$did = $trn1->as_string();
-	$should = "SETS: ; MEMBERS: zZ9, aaa";
+	$should = 'SETS: ; MEMBERS: zZ9, aaa';
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( ['goo','har'], ['wer','thr'] );
 	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( ['goo','har'], ['wer','thr'] ) ret TRN obj" );
 	$did = $trn1->as_string();
-	$should = "SETS: goo, har; MEMBERS: wer, thr";
+	$should = 'SETS: goo, har; MEMBERS: wer, thr';
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 
 	$did = serialize( $trn1->get_template_set_names() );
-	$should = "[ 'goo', 'har', ], ";
+	$should = '[ \'goo\', \'har\', ], ';
 	result( $did eq $should, "on init trn1->get_template_set_names() returns '$did'" );
 
 	$did = serialize( $trn1->get_template_member_names() );
-	$should = "[ 'wer', 'thr', ], ";
+	$should = '[ \'wer\', \'thr\', ], ';
 	result( $did eq $should, "on init trn1->get_template_member_names() returns '$did'" );
 
 	$trn1 = Locale::KeyedText->new_translator( ['go::o','::har'], ['w::er','thr::'] );
 	result( UNIVERSAL::isa( $trn1, "Locale::KeyedText::Translator" ), 
 		"trn1 = new_translator( ['go::o','::har'], ['w::er','thr::'] ) ret TRN obj" );
 	$did = $trn1->as_string();
-	$should = "SETS: go::o, ::har; MEMBERS: w::er, thr::";
+	$should = 'SETS: go::o, ::har; MEMBERS: w::er, thr::';
 	result( $did eq $should, "on init trn1->as_string() returns '$did'" );
 }
 
@@ -341,31 +335,31 @@ message( "START TESTING Locale::KeyedText" );
 	result( 1, "trn2 = new_translator( [$BS],['Eng'] ) contains '".$trn2->as_string()."'" );
 
 	$did = serialize( $trn1->translate_message() );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "trn1->translate_message() returns '$did'" );
 
 	$did = serialize( $trn1->translate_message( 'foo' ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "trn1->translate_message( 'foo' ) returns '$did'" );
 
 	$did = serialize( $trn1->translate_message( 'Locale::KeyedText::Message' ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "trn1->translate_message( 'Locale::KeyedText::Message' ) returns '$did'" );
 
 	$did = $trn1->translate_message( $msg1 );
-	$should = "AE - word {fork} { fork } {spoon} {{fork}}";
+	$should = 'AE - word {fork} { fork } {spoon} {{fork}}';
 	result( $did eq $should, "trn1->translate_message( msg1 ) returns '$did'" );
 
 	$did = $trn1->translate_message( $msg2 );
-	$should = "AE - word 0 { fork } lift {0}";
+	$should = 'AE - word 0 { fork } lift {0}';
 	result( $did eq $should, "trn1->translate_message( msg2 ) returns '$did'" );
 
 	$did = $trn1->translate_message( $msg3 );
-	$should = "AE - word  { fork }  {}";
+	$should = 'AE - word  { fork }  {}';
 	result( $did eq $should, "trn1->translate_message( msg3 ) returns '$did'" );
 
 	$did = serialize( $trn2->translate_message( $msg2 ) );
-	$should = "undef, ";
+	$should = 'undef, ';
 	result( $did eq $should, "trn2->translate_message( msg2 ) returns '$did'" );
 
 	# Next test multiple module searching.
@@ -392,66 +386,66 @@ message( "START TESTING Locale::KeyedText" );
 	result( 1, "trn4 = new_translator( [$AS],['Eng'] ) contains '".$trn4->as_string()."'" );
 
 	$did = serialize( $trn1->translate_message( $msg1 ) );
-	$should = "'AE - word poke { fork } lift {poke}', ";
+	$should = '\'AE - word poke { fork } lift {poke}\', ';
 	result( $did eq $should, "trn1->translate_message( msg1 ) returns '$did'" );
 
 	$did = serialize( $trn1->translate_message( $msg2 ) );
-	$should = "'AE - sky pie rye', ";
+	$should = '\'AE - sky pie rye\', ';
 	result( $did eq $should, "trn1->translate_message( msg2 ) returns '$did'" );
 
 	$did = serialize( $trn1->translate_message( $msg3 ) );
-	$should = "'BE - eat sharp', ";
+	$should = '\'BE - eat sharp\', ';
 	result( $did eq $should, "trn1->translate_message( msg3 ) returns '$did'" );
 
 	$did = serialize( $trn2->translate_message( $msg1 ) );
-	$should = "'AF - word poke { fork } lift {poke}', ";
+	$should = '\'AF - word poke { fork } lift {poke}\', ';
 	result( $did eq $should, "trn2->translate_message( msg1 ) returns '$did'" );
 
 	$did = serialize( $trn2->translate_message( $msg2 ) );
-	$should = "'AF - sky pie rye', ";
+	$should = '\'AF - sky pie rye\', ';
 	result( $did eq $should, "trn2->translate_message( msg2 ) returns '$did'" );
 
 	$did = serialize( $trn2->translate_message( $msg3 ) );
-	$should = "'BF - eat sharp', ";
+	$should = '\'BF - eat sharp\', ';
 	result( $did eq $should, "trn2->translate_message( msg3 ) returns '$did'" );
 
 	$did = serialize( $trn3->translate_message( $msg1 ) );
-	$should = "'AE - word poke { fork } lift {poke}', ";
+	$should = '\'AE - word poke { fork } lift {poke}\', ';
 	result( $did eq $should, "trn3->translate_message( msg1 ) returns '$did'" );
 
 	$did = serialize( $trn3->translate_message( $msg2 ) );
-	$should = "'BE - sky pie rye', ";
+	$should = '\'BE - sky pie rye\', ';
 	result( $did eq $should, "trn3->translate_message( msg2 ) returns '$did'" );
 
 	$did = serialize( $trn3->translate_message( $msg3 ) );
-	$should = "'BE - eat sharp', ";
+	$should = '\'BE - eat sharp\', ';
 	result( $did eq $should, "trn3->translate_message( msg3 ) returns '$did'" );
 
 	$did = serialize( $trn4->translate_message( $msg1 ) );
-	$should = "'AF - word poke { fork } lift {poke}', ";
+	$should = '\'AF - word poke { fork } lift {poke}\', ';
 	result( $did eq $should, "trn4->translate_message( msg1 ) returns '$did'" );
 
 	$did = serialize( $trn4->translate_message( $msg2 ) );
-	$should = "'BF - sky pie rye', ";
+	$should = '\'BF - sky pie rye\', ';
 	result( $did eq $should, "trn4->translate_message( msg2 ) returns '$did'" );
 
 	$did = serialize( $trn4->translate_message( $msg3 ) );
-	$should = "'BF - eat sharp', ";
+	$should = '\'BF - eat sharp\', ';
 	result( $did eq $should, "trn4->translate_message( msg3 ) returns '$did'" );
 
 	$trn11 = Locale::KeyedText->new_translator( [$CS],['Eng'] );
 	result( 1, "trn11 = new_translator( [$CS],['Eng'] ) contains '".$trn11->as_string()."'" );
 
 	$did = serialize( $trn11->translate_message( $msg1 ) );
-	$should = "'poke shore lift', ";
+	$should = '\'poke shore lift\', ';
 	result( $did eq $should, "trn11->translate_message( msg1 ) returns '$did'" );
 
 	$did = serialize( $trn11->translate_message( $msg2 ) );
-	$should = "'sky fly high', ";
+	$should = '\'sky fly high\', ';
 	result( $did eq $should, "trn11->translate_message( msg2 ) returns '$did'" );
 
 	$did = serialize( $trn11->translate_message( $msg3 ) );
-	$should = "'sharp zot', ";
+	$should = '\'sharp zot\', ';
 	result( $did eq $should, "trn11->translate_message( msg3 ) returns '$did'" );
 }
 
@@ -473,19 +467,19 @@ message( "START TESTING Locale::KeyedText" );
 		require t_Locale_KeyedText_A_L_Fre;
 		t_Locale_KeyedText_A_L_Fre->get_text_by_key( 'foo' );
 	};
-	result( $@ eq "", "load and invoke t_Locale_KeyedText_A_L_Eng; \$\@ contains '$@'" );
+	result( $@ eq "", "load and invoke t_Locale_KeyedText_A_L_Fre; \$\@ contains '$@'" );
 
 	eval {
 		require t_Locale_KeyedText_B_L_Eng;
 		t_Locale_KeyedText_B_L_Eng->get_text_by_key( 'foo' );
 	};
-	result( $@ eq "", "load and invoke t_Locale_KeyedText_A_L_Eng; \$\@ contains '$@'" );
+	result( $@ eq "", "load and invoke t_Locale_KeyedText_B_L_Eng; \$\@ contains '$@'" );
 
 	eval {
 		require t_Locale_KeyedText_B_L_Fre;
 		t_Locale_KeyedText_B_L_Fre->get_text_by_key( 'foo' );
 	};
-	result( $@ eq "", "load and invoke t_Locale_KeyedText_A_L_Eng; \$\@ contains '$@'" );
+	result( $@ eq "", "load and invoke t_Locale_KeyedText_B_L_Fre; \$\@ contains '$@'" );
 }
 
 ######################################################################
@@ -500,11 +494,11 @@ t_Locale_KeyedText_C_L_Eng;
 
 sub get_text_by_key {
 	my %text_strings = (
-		'one' => "{fork} shore {spoon}",
-		'two' => "sky fly high",
-		'three' => "{knife} zot",
+		'one' => '{fork} shore {spoon}',
+		'two' => 'sky fly high',
+		'three' => '{knife} zot',
 	);
-	return( $text_strings{$_[1]} );
+	return $text_strings{$_[1]};
 }
 
 ######################################################################

@@ -11,14 +11,14 @@ t_Locale_KeyedText_A_L_Eng;
 
 my $xy = 'AE';
 my %text_strings = (
-	'one' => "$xy - word {fork} { fork } {spoon} {{fork}}",
-	'two' => "$xy - sky pie rye",
+	'one' => $xy.' - word {fork} { fork } {spoon} {{fork}}',
+	'two' => $xy.' - sky pie rye',
 );
 
 ######################################################################
 
 sub get_text_by_key {
-	return( $text_strings{$_[1]} );
+	return $text_strings{$_[1]};
 }
 
 ######################################################################
