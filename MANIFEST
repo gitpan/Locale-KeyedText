@@ -8,7 +8,7 @@ lib/t_Locale_KeyedText_B_L_Fre.pm
 LICENSE
 Makefile.PL
 MANIFEST
+META.yml                                Module meta-data (added by MakeMaker)
 ReadMe
 t/Locale_KeyedText.t
 TODO
-META.yml                                Module meta-data (added by MakeMaker)

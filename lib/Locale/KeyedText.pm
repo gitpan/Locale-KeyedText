@@ -11,7 +11,7 @@ use 5.006;
 use strict;
 use warnings;
 use vars qw($VERSION);
-$VERSION = '0.04';
+$VERSION = '0.05';
 
 ######################################################################
 
@@ -181,8 +181,13 @@ sub translate_message {
 		SET: foreach my $set_name (@{$set_names}) {
 			my $template_module_name = $set_name.$member_name;
 			eval {
-				# a bare "require $template_module_name;" yields "can't find module in @INC" error in Perl 5.6
-				eval "require $template_module_name;"; $@ and die;
+				no strict 'refs';
+				my $package_is_loaded = defined %{$template_module_name.'::'};
+				use strict 'refs';
+				unless( $package_is_loaded ) {
+					# a bare "require $template_module_name;" yields "can't find module in @INC" error in Perl 5.6
+					eval "require $template_module_name;"; $@ and die;
+				}
 				$text = $template_module_name->get_text_by_key( $msg_key );
 			};
 			$@ and next SET;
@@ -704,6 +709,142 @@ Translator objects.
 This method returns a stringified version of this object which is suitable for
 debugging purposes (such as to test that the object's contents look good at a
 glance); no property values are escaped and you shouldn't try to extract them.
+
+=head1 AN ALTERNATIVE TO SEPARATED TEMPLATE FILES
+
+A feature extension to Locale::KeyedText allows you to store your Template
+class packages inside the same files as your other program code, rather than
+the Templates being in their own files.  This feature is in recognition to
+developers that want to reduce as much as possible the number of separate files
+in their program distribution, at the cost of not being able to update user
+text or add support for new languages separately from updating the program code
+files themselves (one of Locale::KeyedText's original design principles).
+
+Keep in mind that both methods of storing Template class packages can be used
+at the same time.  Translator.translate_message() will first check for an
+embedded package by the appropriate name and use that if it exists; if one does
+not then it will try to use the external file, as is standard practice.
+
+The following is an altered version of the SYNOPSIS documentation that shows
+Template class packages for MyLib and MyApp embedded in the code files rather
+than being separate; this example totals 3 files instead of the old 7 files.  
+Actually, it shows both methods together, with 4 embedded, 1 separate.
+
+=head2 Content of shared library file 'MyLib.pm':
+
+	package MyLib;
+
+	use Locale::KeyedText;
+
+	sub my_invert {
+		my (undef, $number) = @_;
+		defined( $number ) or die Locale::KeyedText->new_message( 'MYLIB_MYINV_NO_ARG' );
+		$number =~ m/\d/ or die Locale::KeyedText->new_message( 
+			'MYLIB_MYINV_BAD_ARG', { 'GIVEN_VALUE' => $number } );
+		$number == 0 and die Locale::KeyedText->new_message( 'MYLIB_MYINV_RES_INF' );
+		return( 1 / $number );
+	}
+
+	package MyLib::L::Eng;
+
+	my %text_strings = (
+		'MYLIB_MYINV_NO_ARG' => "my_invert(): argument NUMBER is missing",
+		'MYLIB_MYINV_BAD_ARG' => "my_invert(): argument NUMBER is not a number, it is '{GIVEN_VALUE}'",
+		'MYLIB_MYINV_RES_INF' => "my_invert(): result is infinite because argument NUMBER is zero",
+	);
+
+	sub get_text_by_key { return( $text_strings{$_[1]} ); }
+
+	package MyLib::L::Fre;
+
+	my %text_strings = (
+		'MYLIB_MYINV_NO_ARG' => "my_invert(): parametre NUMBER est manquant",
+		'MYLIB_MYINV_BAD_ARG' => "my_invert(): parametre NUMBER est ne nombre, il est '{GIVEN_VALUE}'",
+		'MYLIB_MYINV_RES_INF' => "my_invert(): aboutir a est infini parce que parametre NUMBER est zero",
+	);
+
+	sub get_text_by_key { return( $text_strings{$_[1]} ); }
+
+=head2 Content of main program 'MyApp.pl':
+
+	use MyLib;
+	use Locale::KeyedText;
+
+	main( grep { $_ =~ m/^[a-zA-Z]+$/ } @ARGV ); # user indicates language as command line argument
+
+	sub main {
+		my @user_lang_prefs = @_ || 'Eng';
+		my $translator = Locale::KeyedText->new_translator( 
+			['MyApp::L::', 'MyLib::L::'], \@user_lang_prefs );
+
+		show_message( $translator, Locale::KeyedText->new_message( 'MYAPP_HELLO' ) );
+
+		LOOP: {
+			show_message( $translator, Locale::KeyedText->new_message( 'MYAPP_PROMPT' ) );
+			my $user_input = <STDIN>; chomp ($user_input);
+
+			$user_input or last LOOP; # user chose to exit program
+
+			eval {
+				my $result = MyLib->my_invert( $user_input );
+				show_message( $translator, Locale::KeyedText->new_message( 'MYAPP_RESULT', 
+					{ 'ORIGINAL' => $user_input, 'INVERTED' => $result } ) );
+			};
+			$@ and show_message( $translator, $@ ); # input error, detected by library
+		}
+
+		show_message( $translator, Locale::KeyedText->new_message( 'MYAPP_GOODBYE' ) );
+	}
+
+	sub show_message {
+		my ($translator, $message) = @_;
+		my $user_text = $translator->translate_message( $message );
+		unless( $user_text ) {
+			print STDERR "internal error: can't find user text for a message: \n".
+				"   ".$message->as_string()."\n".
+				"   ".$translator->as_string()."\n";
+			exit;
+		}
+		print STDOUT $user_text."\n";
+	}
+
+	package MyApp::L::Eng;
+
+	my %text_strings = (
+		'MYAPP_HELLO' => 'Welcome to MyApp.',
+		'MYAPP_GOODBYE' => 'Goodbye!',
+		'MYAPP_PROMPT' => 'Enter a number to be inverted, or press ENTER to quit.',
+		'MYAPP_RESULT' => "The inverse of '{ORIGINAL}' is '{INVERTED}'.",
+	);
+
+	sub get_text_by_key { return( $text_strings{$_[1]} ); }
+
+	package MyApp::L::Fre;
+
+	my %text_strings = (
+		'MYAPP_HELLO' => 'Bienvenue alle MyApp.',
+		'MYAPP_GOODBYE' => 'Salut!',
+		'MYAPP_PROMPT' => 'Fournir nombre etre inverser, ou appuyer sur ENTER etre arreter.',
+		'MYAPP_RESULT' => "Renversement '{ORIGINAL}' est '{INVERTED}'.",
+	);
+
+	sub get_text_by_key { return( $text_strings{$_[1]} ); }
+
+=head2 Content of alternate text Template file 'MyApp/L/Homer.pm':
+
+	package MyApp::L::Homer;
+
+	my %text_strings = (
+		'MYAPP_HELLO' => 'Light goes on!',
+		'MYAPP_GOODBYE' => 'Light goes off!',
+		'MYAPP_PROMPT' => 'Give me a county thingy, or push that big button instead.',
+		'MYAPP_RESULT' => "Turn '{ORIGINAL}' upside down and get '{INVERTED}', not '{ORIGINAL}'.",
+		'MYLIB_MYINV_NO_ARG' => "Why you little ...!",
+		'MYLIB_MYINV_BAD_ARG' => "'{GIVEN_VALUE}' isn't a county thingy!",
+		'MYLIB_MYINV_RES_INF' => "Don't you give me a big donut!",
+	);
+
+	sub get_text_by_key { return( $text_strings{$_[1]} ); }
 
 =head1 BUGS
 

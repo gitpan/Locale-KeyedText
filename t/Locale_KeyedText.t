@@ -3,9 +3,9 @@
 
 ######################### We start with some black magic to print on failure.
 
-BEGIN { $| = 1; print "1..98\n"; }
+BEGIN { $| = 1; print "1..102\n"; }
 END {print "not ok 1\n" unless $loaded;}
-use Locale::KeyedText 0.04;
+use Locale::KeyedText 0.05;
 # see end of this file for loading of test Template modules
 $loaded = 1;
 print "ok 1\n";
@@ -321,8 +321,9 @@ message( "START TESTING Locale::KeyedText" );
 
 	my $AS = 't_Locale_KeyedText_A_L_';
 	my $BS = 't_Locale_KeyedText_B_L_';
+	my $CS = 't_Locale_KeyedText_C_L_';
 
-	my ($did, $should, $msg1, $msg2, $msg3, $trn1, $trn2, $trn3, $trn4);
+	my ($did, $should, $msg1, $msg2, $msg3, $trn1, $trn2, $trn3, $trn4, $trn11);
 
 	# First test that anything does or doesn't work, and test variable substitution.
 
@@ -435,6 +436,21 @@ message( "START TESTING Locale::KeyedText" );
 	$did = serialize( $trn4->translate_message( $msg3 ) );
 	$should = "'BF - eat sharp', ";
 	result( $did eq $should, "trn4->translate_message( msg3 ) returns '$did'" );
+
+	$trn11 = Locale::KeyedText->new_translator( [$CS],['Eng'] );
+	result( 1, "trn11 = new_translator( [$CS],['Eng'] ) contains '".$trn11->as_string()."'" );
+
+	$did = serialize( $trn11->translate_message( $msg1 ) );
+	$should = "'poke shore lift', ";
+	result( $did eq $should, "trn11->translate_message( msg1 ) returns '$did'" );
+
+	$did = serialize( $trn11->translate_message( $msg2 ) );
+	$should = "'sky fly high', ";
+	result( $did eq $should, "trn11->translate_message( msg2 ) returns '$did'" );
+
+	$did = serialize( $trn11->translate_message( $msg3 ) );
+	$should = "'sharp zot', ";
+	result( $did eq $should, "trn11->translate_message( msg3 ) returns '$did'" );
 }
 
 ######################################################################
@@ -473,6 +489,21 @@ message( "START TESTING Locale::KeyedText" );
 ######################################################################
 
 message( "DONE TESTING Locale::KeyedText" );
+
+######################################################################
+######################################################################
+
+package # hide this class name from PAUSE indexer
+t_Locale_KeyedText_C_L_Eng;
+
+sub get_text_by_key {
+	my %text_strings = (
+		'one' => "{fork} shore {spoon}",
+		'two' => "sky fly high",
+		'three' => "{knife} zot",
+	);
+	return( $text_strings{$_[1]} );
+}
 
 ######################################################################
 

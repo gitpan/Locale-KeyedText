@@ -50,7 +50,12 @@ support issues later, so that users of my modules can help each other with them.
 
 CREDITS
 
-None besides myself so far.
+Besides myself as the creator ...
+
+* Thanks to Jason Martin (jhmartin@toger.us) for suggesting a feature, along
+with providing sample usage and patch code, that supports embedding of Template
+class packages in the same files as program code, rather than requiring
+separate files.
 
 COPYRIGHT AND LICENSE
 

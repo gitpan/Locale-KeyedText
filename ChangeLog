@@ -1,3 +1,19 @@
+2004-07-26   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Release 0.05.
+
+	* This is a feature addition release; it is completely backwards compatible.
+
+	* Updated KeyedText.pm (now v0.05) to add a new feature to
+	Translator.translate_message() so that it first tests to see if a TEMPLATE
+	class package is already loaded before trying to load it with "require". 
+	As a result of this change, Locale::KeyedText should now work for
+	situations where you want to embed Template class package declarations in
+	your standard code files, rather than in separate files of their own.  Also
+	added new POD section AN ALTERNATIVE TO SEPARATED TEMPLATE FILES.  Thanks
+	to Jason Martin (jhmartin@toger.us) for suggesting the new feature.  Also 
+	added 4 more tests to Locale_KeyedText.t, for a total of 102.
+
 2004-06-26   Darren Duncan <perl@DarrenDuncan.net>
 
 	* Release 0.04.
