@@ -1,3 +1,24 @@
+2004-08-05   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Release 0.06.
+
+	* This is a small code bug fix release.  No POD or API changes were made.
+
+	* Updated all distribution code that makes use of UNIVERSAL::isa() to test
+	for valid objects so that it no longer incorrectly "passes" literal strings
+	whose string values match the class names of valid objects.  For each test,
+	"UNIVERSAL::isa($obj,'<class-name>')" was replaced with "ref($obj) and
+	UNIVERSAL::isa($obj,'<class-name>')".  Before the fixes, code that
+	UNIVERSAL::isa() was supposed to guard would eventually die with the
+	standard Perl error "Can't use string ('<class-name>') as a HASH ref",
+	rather than elegantly dealing with the bad input value.
+
+	* Updated KeyedText.pm (now v0.06) to fix one UNIVERSAL::isa() occurance in
+	Translator.translate_message().  Also added 1 test in Locale_KeyedText.t to
+	confirm that the bug was fixed.  
+
+	* Note that KeyedText 0.05 would die on (fail) 1 of the current 103 tests.
+
 2004-07-26   Darren Duncan <perl@DarrenDuncan.net>
 
 	* Release 0.05.

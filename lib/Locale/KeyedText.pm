@@ -11,7 +11,7 @@ use 5.006;
 use strict;
 use warnings;
 use vars qw($VERSION);
-$VERSION = '0.05';
+$VERSION = '0.06';
 
 ######################################################################
 
@@ -169,7 +169,7 @@ sub get_template_member_names {
 sub translate_message {
 	my ($translator, $message) = @_;
 
-	UNIVERSAL::isa( $message, 'Locale::KeyedText::Message' ) or return( undef );
+	ref($message) and UNIVERSAL::isa( $message, 'Locale::KeyedText::Message' ) or return( undef );
 
 	my $msg_key = $message->{$MPROP_MSG_KEY};
 	my $msg_vars = $message->{$MPROP_MSG_VARS};

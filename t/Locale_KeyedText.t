@@ -3,9 +3,9 @@
 
 ######################### We start with some black magic to print on failure.
 
-BEGIN { $| = 1; print "1..102\n"; }
+BEGIN { $| = 1; print "1..103\n"; }
 END {print "not ok 1\n" unless $loaded;}
-use Locale::KeyedText 0.05;
+use Locale::KeyedText 0.06;
 # see end of this file for loading of test Template modules
 $loaded = 1;
 print "ok 1\n";
@@ -349,6 +349,10 @@ message( "START TESTING Locale::KeyedText" );
 	$did = serialize( $trn1->translate_message( 'foo' ) );
 	$should = "undef, ";
 	result( $did eq $should, "trn1->translate_message( 'foo' ) returns '$did'" );
+
+	$did = serialize( $trn1->translate_message( 'Locale::KeyedText::Message' ) );
+	$should = "undef, ";
+	result( $did eq $should, "trn1->translate_message( 'Locale::KeyedText::Message' ) returns '$did'" );
 
 	$did = $trn1->translate_message( $msg1 );
 	$should = "AE - word {fork} { fork } {spoon} {{fork}}";
