@@ -8,7 +8,7 @@ BEGIN { $| = 1; print "1..102\n"; }
 # First ensure the modules to test will compile, are correct versions:
 
 use lib 't/lib';
-use Locale::KeyedText '1.01_1';
+use Locale::KeyedText '1.01';
 # see end of this file for loading of test Template modules
 
 ######################################################################

@@ -3,7 +3,7 @@
 use 5.008001; use utf8; use strict; use warnings;
 
 package Locale::KeyedText;
-our $VERSION = '1.01_2';
+our $VERSION = '1.01';
 
 ######################################################################
 
