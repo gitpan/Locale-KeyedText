@@ -5,7 +5,7 @@
 
 BEGIN { $| = 1; print "1..98\n"; }
 END {print "not ok 1\n" unless $loaded;}
-use Locale::KeyedText 0.03;
+use Locale::KeyedText 0.04;
 # see end of this file for loading of test Template modules
 $loaded = 1;
 print "ok 1\n";
@@ -141,11 +141,11 @@ message( "START TESTING Locale::KeyedText" );
 	$should = "foo: bar=baz";
 	result( $did eq $should, "on init msg1->as_string() returns '$did'" );
 
-	$msg1 = Locale::KeyedText->new_message( 'foo', { 'bar'=>'baz','c'=>'-','0'=>'1' } );
+	$msg1 = Locale::KeyedText->new_message( 'foo', { 'bar'=>'baz','c'=>'-','0'=>'1','z'=>'','y'=>'0' } );
 	result( UNIVERSAL::isa( $msg1, "Locale::KeyedText::Message" ), 
-		"msg1 = new_message( 'foo', { 'bar'=>'baz','c'=>'d','0'=>'1' } ) ret MSG obj" );
+		"msg1 = new_message( 'foo', { 'bar'=>'baz','c'=>'d','0'=>'1','z'=>'','y'=>'0' } ) ret MSG obj" );
 	$did = $msg1->as_string();
-	$should = "foo: 0=1, bar=baz, c=-";
+	$should = "foo: 0=1, bar=baz, c=-, y=0, z=";
 	result( $did eq $should, "on init msg1->as_string() returns '$did'" );
 
 	$did = serialize( $msg1->get_message_key() );
@@ -177,7 +177,7 @@ message( "START TESTING Locale::KeyedText" );
 	result( $did eq $should, "on init msg1->get_message_variable( 'bar' ) returns '$did'" );
 
 	$did = serialize( $msg1->get_message_variables() );
-	$should = "{ '0' => '1', 'bar' => 'baz', 'c' => '-', }, ";
+	$should = "{ '0' => '1', 'bar' => 'baz', 'c' => '-', 'y' => '0', 'z' => '', }, ";
 	result( $did eq $should, "on init msg1->get_message_variables() returns '$did'" );
 }
 
@@ -329,8 +329,8 @@ message( "START TESTING Locale::KeyedText" );
 	$msg1 = Locale::KeyedText->new_message( 'one' );
 	result( 1, "msg1 = new_message( 'one' ) contains '".$msg1->as_string()."'" );
 
-	$msg2 = Locale::KeyedText->new_message( 'one', {'spoon'=>'lift','fork'=>'poke'} );
-	result( 1, "msg2 = new_message( 'one', {'spoon'=>'lift','fork'=>'poke'} ) contains '".$msg2->as_string()."'" );
+	$msg2 = Locale::KeyedText->new_message( 'one', {'spoon'=>'lift','fork'=>'0'} );
+	result( 1, "msg2 = new_message( 'one', {'spoon'=>'lift','fork'=>'0'} ) contains '".$msg2->as_string()."'" );
 
 	$msg3 = Locale::KeyedText->new_message( 'one', {'spoon'=> undef,'fork'=>''} );
 	result( 1, "msg3 = new_message( 'one', {'spoon'=> undef,'fork'=>''} ) contains '".$msg3->as_string()."'" );
@@ -354,7 +354,7 @@ message( "START TESTING Locale::KeyedText" );
 	result( $did eq $should, "trn1->translate_message( msg1 ) returns '$did'" );
 
 	$did = $trn1->translate_message( $msg2 );
-	$should = "AE - word poke { fork } lift {poke}";
+	$should = "AE - word 0 { fork } lift {0}";
 	result( $did eq $should, "trn1->translate_message( msg2 ) returns '$did'" );
 
 	$did = $trn1->translate_message( $msg3 );

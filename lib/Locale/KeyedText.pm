@@ -11,7 +11,7 @@ use 5.006;
 use strict;
 use warnings;
 use vars qw($VERSION);
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 ######################################################################
 
@@ -122,7 +122,9 @@ sub as_string {
 	my ($message) = @_;
 	my $msg_key = $message->{$MPROP_MSG_KEY};
 	my $msg_vars = $message->{$MPROP_MSG_VARS};
-	return( $msg_key.': '.join( ', ', map { $_.'='.($msg_vars->{$_}||'') } sort keys %{$msg_vars} ) );
+	return( $msg_key.': '.join( ', ', map { 
+			$_.'='.(defined($msg_vars->{$_}) ? $msg_vars->{$_} : '') 
+		} sort keys %{$msg_vars} ) );
 }
 
 ######################################################################
@@ -186,7 +188,7 @@ sub translate_message {
 			$@ and next SET;
 			$text or next SET;
 			foreach my $var_name (keys %{$msg_vars}) {
-				my $var_value = $msg_vars->{$var_name} || '';
+				my $var_value = defined( $msg_vars->{$var_name} ) ? $msg_vars->{$var_name} : '';
 				$text =~ s/\{$var_name\}/$var_value/g; # assumes msg props cleaned on input
 			}
 			last MEMBER;

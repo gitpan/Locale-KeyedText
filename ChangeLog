@@ -1,3 +1,16 @@
+2004-06-26   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Release 0.04.
+
+	* This is a small code bug fix release.  No POD or API changes were made.
+
+	* Updated KeyedText.pm (now v0.04) to fix Message.as_string() and
+	Translator.translate_message() so that each outputs interpolated message
+	key values of zero as '0' and not ''.  Also updated 4 tests in
+	Locale_KeyedText.t to confirm that the bugs were fixed.
+
+	* Note that KeyedText 0.03 would fail 2 of the current 98 tests.
+
 2004-03-05   Darren Duncan <perl@DarrenDuncan.net>
 
 	* Release 0.03.
