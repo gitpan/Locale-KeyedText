@@ -3,7 +3,7 @@
 use 5.008001; use utf8; use strict; use warnings;
 
 package Locale::KeyedText;
-our $VERSION = '1.01_1';
+our $VERSION = '1.01_2';
 
 ######################################################################
 
@@ -256,9 +256,9 @@ the one with the program also adds support to the library.
 	package MyLib::L::Fre;
 
 	my %text_strings = (
-		'MYLIB_MYINV_NO_ARG' => "my_invert(): parametre NUMBER est manquant",
-		'MYLIB_MYINV_BAD_ARG' => "my_invert(): parametre NUMBER est ne nombre, il est '{GIVEN_VALUE}'",
-		'MYLIB_MYINV_RES_INF' => "my_invert(): aboutir a est infini parce que parametre NUMBER est zero",
+		'MYLIB_MYINV_NO_ARG' => "my_invert(): paramètre NUMBER est manquant",
+		'MYLIB_MYINV_BAD_ARG' => "my_invert(): paramètre NUMBER est ne nombre, il est '{GIVEN_VALUE}'",
+		'MYLIB_MYINV_RES_INF' => "my_invert(): aboutir a est infini parce que paramètre NUMBER est zero",
 	);
 
 	sub get_text_by_key { return( $text_strings{$_[1]} ); }
@@ -324,9 +324,9 @@ the one with the program also adds support to the library.
 	package MyApp::L::Fre;
 
 	my %text_strings = (
-		'MYAPP_HELLO' => 'Bienvenue alle MyApp.',
+		'MYAPP_HELLO' => 'Bienvenue allé MyApp.',
 		'MYAPP_GOODBYE' => 'Salut!',
-		'MYAPP_PROMPT' => 'Fournir nombre etre inverser, ou appuyer sur ENTER etre arreter.',
+		'MYAPP_PROMPT' => 'Fournir nombre être inverser, ou appuyer sur ENTER être arrêter.',
 		'MYAPP_RESULT' => "Renversement '{ORIGINAL}' est '{INVERTED}'.",
 	);
 
@@ -759,9 +759,9 @@ Actually, it shows both methods together, with 4 embedded, 1 separate.
 	package MyLib::L::Fre;
 
 	my %text_strings = (
-		'MYLIB_MYINV_NO_ARG' => "my_invert(): parametre NUMBER est manquant",
-		'MYLIB_MYINV_BAD_ARG' => "my_invert(): parametre NUMBER est ne nombre, il est '{GIVEN_VALUE}'",
-		'MYLIB_MYINV_RES_INF' => "my_invert(): aboutir a est infini parce que parametre NUMBER est zero",
+		'MYLIB_MYINV_NO_ARG' => "my_invert(): paramètre NUMBER est manquant",
+		'MYLIB_MYINV_BAD_ARG' => "my_invert(): paramètre NUMBER est ne nombre, il est '{GIVEN_VALUE}'",
+		'MYLIB_MYINV_RES_INF' => "my_invert(): aboutir a est infini parce que paramètre NUMBER est zero",
 	);
 
 	sub get_text_by_key { return( $text_strings{$_[1]} ); }
@@ -774,7 +774,7 @@ Actually, it shows both methods together, with 4 embedded, 1 separate.
 	main( grep { $_ =~ m/^[a-zA-Z]+$/ } @ARGV ); # user indicates language as command line argument
 
 	sub main {
-		my @user_lang_prefs = @_ || 'Eng';
+		my @user_lang_prefs = @_ ? @_ : 'Eng';
 		my $translator = Locale::KeyedText->new_translator( 
 			['MyApp::L::', 'MyLib::L::'], \@user_lang_prefs );
 
@@ -823,9 +823,9 @@ Actually, it shows both methods together, with 4 embedded, 1 separate.
 	package MyApp::L::Fre;
 
 	my %text_strings = (
-		'MYAPP_HELLO' => 'Bienvenue alle MyApp.',
+		'MYAPP_HELLO' => 'Bienvenue allé MyApp.',
 		'MYAPP_GOODBYE' => 'Salut!',
-		'MYAPP_PROMPT' => 'Fournir nombre etre inverser, ou appuyer sur ENTER etre arreter.',
+		'MYAPP_PROMPT' => 'Fournir nombre être inverser, ou appuyer sur ENTER être arrêter.',
 		'MYAPP_RESULT' => "Renversement '{ORIGINAL}' est '{INVERTED}'.",
 	);
 
@@ -852,9 +852,7 @@ Actually, it shows both methods together, with 4 embedded, 1 separate.
 I only have superficial memory recall of non-English languages.  I made the
 French language example in the SYNOPSIS by manually translating the English one
 with a printed on paper English to French dictionary; it probably contains
-multiple grammatical errors (not that the English was well-formed either). 
-Also, some of the French characters should actually have accents over them, but
-I didn't enter those as they weren't standard ASCII characters.
+multiple grammatical errors (not that the English was well-formed either).
 
 =head1 CAVEATS
 
