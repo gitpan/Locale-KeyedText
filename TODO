@@ -1,0 +1,5 @@
+Nothing specific has been planned yet, aside from improving the tests or
+examples.  On the other hand, I anticipate that some users may want more
+granulated methods in place of translate_message(), such as to debug which
+Template files are being tried.  If that describes you, or you have other needs 
+that are reasonably within the scope of this module's purpose, then tell me!

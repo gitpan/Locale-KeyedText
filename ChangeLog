@@ -1,0 +1,32 @@
+2004-01-15   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Release 0.01.
+
+	* This is the initial release of Locale::KeyedText.  The module is feature
+	complete and has complete POD documentation and a complete test suite.  The
+	module is officially in beta development status, but should move quickly to
+	Released status once it starts getting used in production.  The module is 
+	licensed under the GNU Lesser General Public License Version 2.1.
+
+	* This distribution is the first one that I am creating with MakeMaker's 
+	"make dist" command; previously I used "tar -cz ..." to make distros.
+
+2003-09-29   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Began active code development on the prophecied Locale::KeyedText module.
+
+	* Module based on a template created by h2xs 1.18.
+
+2000-05-17 thru 2003-09-26
+
+	* Worked on precursor to, and CPAN release versions of, modules such as
+	'Rosetta' and 'SQL::SyntaxModel', which as part of their functioning may
+	generate human-readable messages, such as for error conditions.  While
+	working on these, it was intended to create a proper separation of the
+	human-readable text from the code, and that text would go in one or more of
+	its own files, with a separate version for each human language (such as
+	with Mac OS X localized resource files).  A module dedicated to making this
+	task easy was to be developed and called 'Locale::KeyedText'.  Some design
+	details were thought up and included in the 'Rosetta' distribution file
+	'Rosetta::Framework'.  It will be released independantly, due to its 
+	expected usefulness outside of the aforementioned database modules.

@@ -1,0 +1,83 @@
+                   REFER TO USER MESSAGES BY KEYS
+----------------------------------------------------------------------
+
+by Darren Duncan <perl@DarrenDuncan.net>
+
+CONTENTS
+
+* Preface
+* Keeping Up To Date
+* Dependencies
+* Support
+* Credits
+* Copyright And License
+
+PREFACE
+
+This distribution features the Perl 5 module named "Locale::KeyedText"; see the
+file lib/Locale/KeyedText.pm for the main documentation, which is in POD
+format.  The distribution also includes a ChangeLog file to say what changes
+already happened, and a TODO file to say what changes have yet to happen.  The
+file INSTALL should help with installation issues.  Read below for how to get
+support or keep up to date, know this distribution's dependencies, or read the
+credits or copyright and license.
+
+KEEPING UP TO DATE
+
+My module set is constantly under development.  You should be able to find the
+newest versions at my website, "http://www.DarrenDuncan.net", on the page called
+"Perl Libraries I Made" (name subject to change).  They can also be found on CPAN
+under the author name of "DUNCAND".  
+
+I am inclined to update the copies on my web site more often, but those
+intermediate versions are more likely to have been tested less, and the modules
+may be updated day by day without increasing the version numbers.  However, the
+copies on CPAN are guaranteed to have unique version numbers when the module has
+changed.
+
+DEPENDENCIES
+
+Perl Version: 5.006
+
+This module doesn't require anything else.
+
+SUPPORT
+
+Currently I don't have any support arranged with other people, lists, newsgroups,
+or otherwise.  Feel free to ask me if you can't figure things out on your own, or
+another person whom you know has used this.  I may start a mailing list for 
+support issues later, so that users of my modules can help each other with them.
+
+CREDITS
+
+None besides myself so far.
+
+COPYRIGHT AND LICENSE
+
+Locale::KeyedText is Copyright (c) 1999-2004, Darren R. Duncan.  All rights
+reserved.  Address comments, suggestions, and bug reports to
+B<perl@DarrenDuncan.net>, or visit "http://www.DarrenDuncan.net" for more
+information.
+
+Locale::KeyedText is free software; you can redistribute it and/or modify it
+under the terms of the GNU Lesser General Public License (LGPL) version 2.1 as
+published by the Free Software Foundation (http://www.fsf.org/).  You should
+have received a copy of the LGPL as part of the Locale::KeyedText distribution,
+in the file named "LICENSE"; if not, write to the Free Software Foundation,
+Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+
+Any versions of Locale::KeyedText that you modify and distribute must carry
+prominent notices stating that you changed the files and the date of any
+changes, in addition to preserving this original copyright notice and other
+credits. Locale::KeyedText is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.  See the LGPL for more details.
+
+While it is by no means required, the copyright holders of Locale::KeyedText
+would appreciate being informed any time you create a modified version of
+Locale::KeyedText that you are willing to distribute, because that is a
+practical way of suggesting improvements to the standard version.
+
+FIN
+
+Share and Enjoy!

@@ -1,0 +1,14 @@
+ChangeLog
+INSTALL
+lib/Locale/KeyedText.pm
+lib/t_Locale_KeyedText_A_L_Eng.pm
+lib/t_Locale_KeyedText_A_L_Fre.pm
+lib/t_Locale_KeyedText_B_L_Eng.pm
+lib/t_Locale_KeyedText_B_L_Fre.pm
+LICENSE
+Makefile.PL
+MANIFEST
+ReadMe
+t/Locale_KeyedText.t
+TODO
+META.yml                                Module meta-data (added by MakeMaker)
