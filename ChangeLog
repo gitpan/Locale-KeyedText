@@ -1,12 +1,62 @@
+2005-04-03   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Locale-KeyedText Release 1.03.
+
+	* New code file versions are: KeyedText.pm v1.03.
+
+	* Added new external dependency on Test::More v0.47 (bundled with Perl
+	5.8.x); this distribution's test suite has been re-factored to use it rather
+	than rolling its own equivalent functionality, which is more in line with
+	CPAN best practices.  The new dependency does not extend to this
+	distribution's core modules (everything in /lib), which do not use it.
+
+	* Updated every 'use' statement in this distribution so that the module
+	version is formatted as a number rather than a string; this fixes a problem
+	where Perl was not asserting that the installed modules were new enough.
+
+	* In order to help ease the transition to Perl 6, updated every in-code
+	function and method which made direct references to @_ elements so that they
+	explicitly declare argument variables instead with "my (...) = @_;";
+	moreover, any functions that don't use their invocant use "undef" for it in
+	the above list.  These 6 KeyedText.pm code routines were affected:
+	new_message(), new_translator(), Message.get_message_[key|variables](),
+	Translator.get_template_[set|member]_names().  Also, every in-code (test
+	suite) or in-POD (KeyedText.pm) Template class declaration was affected.
+
+	* Multiple KeyedText.pm POD updates: 1. Wrote a brand new and much shorter
+	SYNOPSIS, which should be much easier to learn quickly than the old one; 2.
+	Renamed the old SYNOPSIS to EXAMPLE PROGRAM WITH ENTIRELY SEPARATED TEMPLATE
+	MODULE FILES and moved it further down; 3. Wrote a brand new and much more
+	accessible DESCRIPTION that should be much more suited to explaining the
+	benefits and purpose of the module; 4. Renamed the old DESCRIPTION to HOW IT
+	WORKS, moved it further down, and edited it a bit more; 5. Renamed AN
+	ALTERNATIVE TO SEPARATED TEMPLATE FILES to ALTERNATE EXAMPLE PROGRAM WITH
+	MOSTLY INTEGRATED TEMPLATE MODULES; 6. Demoted all the =head2 in the 2
+	EXAMPLE sections to ordinary one-line paragraphs and reduced whitespace.
+
+	* Added a dated credit notice to Stevan Little in the ReadMe and
+	KeyedText.pm; also copied an older credit notice to Jason Martin from the
+	ReadMe to KeyedText.pm, adding dates; now credits are in both files.  In 
+	KeyedText.pm, these live in a new POD section called CREDITS.
+
+	* Stripped this ChangeLog of release entries that were specific to its
+	separately distributed Perl 6 version (in Perl6-Pugs), dated 2005-03-07 thru
+	2005-03-13; those details will appear in the ChangeLog of a separate
+	distribution of my own that contains just my Perl 6 modules.
+
+	* NOTICE: This release v1.03 is the last one to contain detailed ChangeLog
+	entries for releases v1.00 thru v1.03; release v1.04 will truncate the
+	ChangeLog so it only shows details for v1.04 and later.
+
 2005-03-13   Darren Duncan <perl@DarrenDuncan.net>
 
-	* Release 1.02.
+	* Locale-KeyedText Release 1.02.
 
 	* New code file versions are: KeyedText.pm v1.02.
 
 	* This release primarily fixes bugs or makes code style improvements in this
 	current Perl 5 version that were simultaneously performed on the brand new
-	Perl 6 version, for the .
+	Perl 6 version in time for its Pugs v6.0.11 release.
 
 	* Corrected a few spelling mistakes in the KeyedText.pm documentation.
 
@@ -43,32 +93,9 @@
 
 	* Updated the TODO file re supporting plain-text Template files.
 
-2005-03-13   Darren Duncan <perl@DarrenDuncan.net>
-
-	* Perl6-Pugs-6.0.11, the first version of any distribution to contain the
-	Perl 6 version of Locale::KeyedText, was released on CPAN.  It lives under
-	the /modules directory in that distribution.  This Perl 6 port has a release
-	number of v0.0.1, and corresponds to the Perl 5 release number of v1.02.
-
-2005-03-07 thru 2005-03-10
-
-	* Created a new development branch of Locale::KeyedText that is written
-	entirely in Perl 6 (rather than Perl 5), including the module proper, all of
-	its POD, and its entire test suite; it matches the current mainline Perl 5
-	distribution feature-wise.  This new Perl 6 version has been committed into
-	the version control system (under /modules) for Autrijus Tang's new "Pugs"
-	distribution, which will be the runtime engine that it runs under; later it
-	will run under the "Parrot" engine.  The Perl 6 Locale::KeyedText is
-	currently at version 0.0.1 and has not actually been executed yet, due to
-	Pugs currently not supporting some of the Perl 6 language features that it
-	needs; it probably contains a few bugs, and also may stand to be revised as
-	the not yet finalized Perl 6 spec shifts underneath it.  The new LKT port
-	can be used by the developers of Pugs as a feature integration test that
-	helps them know they are implementing the Perl 6 spec correctly.
-
 2004-12-15   Darren Duncan <perl@DarrenDuncan.net>
 
-	* Release 1.01.
+	* Locale-KeyedText Release 1.01.
 
 	* New code file versions are: KeyedText.pm v1.01.
 
@@ -76,7 +103,7 @@
 
 2004-12-14   Darren Duncan <perl@DarrenDuncan.net>
 
-	* Release 1.01_2.
+	* Locale-KeyedText Release 1.01_2.
 
 	* New code file versions are: KeyedText.pm v1.01_2.
 
@@ -90,7 +117,7 @@
 
 2004-12-13   Darren Duncan <perl@DarrenDuncan.net>
 
-	* Release 1.01_1.
+	* Locale-KeyedText Release 1.01_1.
 
 	* This distribution now requires Perl 5.008001 or higher; it was 5.006.
 
@@ -115,7 +142,7 @@
 
 2004-09-23   Darren Duncan <perl@DarrenDuncan.net>
 
-	* Release 1.00.
+	* Locale-KeyedText Release 1.00.
 
 	* New code file versions are: KeyedText.pm v1.00.
 

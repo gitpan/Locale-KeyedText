@@ -39,7 +39,11 @@ DEPENDENCIES
 
 Perl Version: 5.008001
 
-This module doesn't require anything else.
+Core Modules:
+
+	Test::More 0.47 (but only for the test suite)
+
+Non-Core Modules: none
 
 SUPPORT
 
@@ -52,10 +56,15 @@ CREDITS
 
 Besides myself as the creator ...
 
-* Thanks to Jason Martin (jhmartin@toger.us) for suggesting a feature, along
-with providing sample usage and patch code, that supports embedding of Template
-class packages in the same files as program code, rather than requiring
-separate files.
+* 2004.07.26 - Thanks to Jason Martin (jhmartin@toger.us) for suggesting a
+feature, along with providing sample usage and patch code, that supports
+embedding of Template class packages in the same files as program code, rather
+than requiring separate files.
+
+* 2005.03.21 - Thanks to Stevan Little (stevan@iinteractive.com) for feedback
+towards improving this module's documentation, particularly towards using a much
+shorter SYNOPSIS, so that it is easier for newcomers to understand the module at
+a glance, and not be intimidated by large amounts of detailed information.
 
 COPYRIGHT AND LICENSE
 
