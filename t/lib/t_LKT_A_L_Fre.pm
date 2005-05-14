@@ -2,9 +2,9 @@
 use 5.008001; use utf8; use strict; use warnings;
 
 package # hide this class name from PAUSE indexer
-t_Locale_KeyedText_A_L_Eng;
+t_LKT_A_L_Fre;
 
-my $xy = 'AE';
+my $xy = 'AF';
 my %text_strings = (
 	'one' => $xy.' - word {fork} { fork } {spoon} {{fork}}',
 	'two' => $xy.' - sky pie rye',

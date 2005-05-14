@@ -1,0 +1,127 @@
+2005-05-13   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Locale-KeyedText Release 1.04.
+
+	* New code file versions are: KeyedText.pm v1.04.
+
+	* Updated every instance of the COPYRIGHT AND LICENSE documentation in this
+	distribution to correct the declared date range in which the core
+	Locale::KeyedText files were created.  The new dates are 2003 thru 2005,
+	which is when I actually committed documentation describing or code
+	implementing what became the Locale::KeyedText core.  The old dates were
+	1999 thru 2005, which goes back to the time that I started conceiving a
+	larger project which the aforementioned module started out being related to;
+	however, those earlier years did not contain any work on what specifically
+	became the aforementioned module, so they are now excluded.
+
+	* Updated every instance of the COPYRIGHT AND LICENSE documentation in this
+	distribution so that you may now choose between licensing it under the LGPL
+	version 2.1 or any later LGPL version, rather than only under version 2.1.
+
+	* Renamed the "LICENSE" file to "LGPL", and correspondingly updated all
+	references to it in this distribution, most of them being in COPYRIGHT AND
+	LICENSE statements.  This change was made to reduce user confusion in
+	situations where files from this distribution may be aggregated with other
+	files that have different licenses; the old name was too generic.
+
+	* This release saw a large reorganization of the test suite.  The file
+	t/Locale_KeyedText.t was split-up into these 5 parts (numbers in parens are
+	the portion of the original 102 numbered tests that each part got):
+	t/lib/t_LKT_Util.pm (zero), t/LKT_00_Compile.t (4), t/LKT_10_MsgProps.t
+	(29), t/LKT_20_TrnProps.t (34), t/LKT_30_TrnMsg.t (35).  The test utility
+	module t_LKT_Util.pm contains the message() and serialize() functions used
+	by most of the other test scripts; the message() function also received a
+	minor update such that its output is prefixed with '#' rather than '--',
+	like Test::More does for comments.  Also renamed the 4
+	t_Locale_KeyedText_*.pm files to t_LKT_*.pm.
+
+	* Updated the new test script t/LKT_00_Compile.t to add 9 brand new numbered
+	tests for a total of 13; 6 of these 13 use Test::More's use_ok() function to
+	cleanly test that the 1 core module and 5 test modules will load without
+	errors; 1 of these tests, with cmp_ok(), that the 1 core module is of the
+	correct version; 6 of these test, with can_ok(), that the 5 test modules
+	declare the required functions.  This new script runs prior to all of the
+	others.  Before this change, the original test script would simply die
+	without any ok/not ok.
+
+	* Renamed this file to 'Changes' from 'ChangeLog'; the new name is more
+	descriptive to its free-form structure, and more consistent with CPAN (which
+	uses both names but 'Changes' seems to be more common these days).  Also
+	truncated this Changes file to remove all detail entries for releases v1.00
+	thru v1.03; in their place was added a change summary for releases v0.01
+	thru v1.03 that mainly just said what the names and versions of all the
+	predecessor distributions and modules are.
+
+2005-04-03   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Locale-KeyedText Release 1.03, containing Locale::KeyedText v1.03, was
+	released on CPAN.
+
+2004-09-23   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Locale-KeyedText Release 1.00, containing Locale::KeyedText v1.00, was
+	released on CPAN.  This is the first release of this module following its
+	official registration on the Perl 5 Module List.
+
+2004-09-23   Darren Duncan <perl@DarrenDuncan.net>
+
+	The next version of the Module List will list the following module:
+
+	  modid:       Locale::KeyedText
+	  DSLIP:       RdpOl
+	  description: Refer to user messages in programs by keys
+	  userid:      DUNCAND (Darren Duncan)
+	  chapterid:   13 (Internationalization_Locale)
+	  enteredby:   KSTAR (Kurt D. Starsinic)
+	  enteredon:   Thu Sep 23 18:35:01 2004 GMT
+
+	The resulting entry will be:
+
+	Locale::
+	::KeyedText       RdpOl Refer to user messages in programs by keys   DUNCAND
+
+2004-08-31   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Locale-KeyedText Release 0.07, containing Locale::KeyedText v0.07, was
+	released on CPAN.  This is the last release of this module prior to its
+	official registration on the Perl 5 Module List.
+
+2004-01-15   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Locale-KeyedText Release 0.01, containing Locale::KeyedText v0.01, was
+	released on CPAN.  This is the first release of any distribution to contain
+	Locale::KeyedText.  This is the first release of any distribution for which
+	some of the existing work that became the Locale-KeyedText distribution was
+	in the form of executable code, and not just design documentation.
+
+2003-09-29   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Began active code development on the proposed Locale::KeyedText module.
+
+	* Module based on a template created by h2xs 1.18.
+
+2003-06-03   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Rosetta Release 0.11 was released on CPAN.  This is the first release of
+	any distribution where the proposal documentation for Locale::KeyedText uses
+	that name for it; it was renamed from Rosetta::Locale.
+
+2003-05-28   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Rosetta Release 0.10 was released on CPAN.  This is the last release of
+	any distribution for which the documented name of the proposed module that
+	became Locale::KeyedText was given the name Rosetta::Locale.
+
+2003-03-04   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Rosetta Release 0.05 was released on CPAN.  This is the first release of
+	any distribution to contain design documentation that became the
+	Locale-KeyedText distribution, specifically in the STRUCTURE and BRIEF
+	MODULE LIST portions of the documentation file Rosetta::Framework.  It
+	described an upcoming new module to make it easy to separate human-readable
+	messages from code, intending that each user language can have their own
+	separate human text file.  The proposed core module name is Rosetta::Locale.
+
+	* Given that I started publishing details about what became
+	Locale::KeyedText here, 2003 is the start of my declared copyright date
+	range for Locale::KeyedText.

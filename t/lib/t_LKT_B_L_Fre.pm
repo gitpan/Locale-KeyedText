@@ -2,7 +2,7 @@
 use 5.008001; use utf8; use strict; use warnings;
 
 package # hide this class name from PAUSE indexer
-t_Locale_KeyedText_B_L_Fre;
+t_LKT_B_L_Fre;
 
 my $xy = 'BF';
 my %text_strings = (

@@ -1,14 +1,18 @@
-ChangeLog
+Changes
 INSTALL
+LGPL
 lib/Locale/KeyedText.pm
-LICENSE
 Makefile.PL
 MANIFEST
 META.yml                                Module meta-data (added by MakeMaker)
 ReadMe
-t/lib/t_Locale_KeyedText_A_L_Eng.pm
-t/lib/t_Locale_KeyedText_A_L_Fre.pm
-t/lib/t_Locale_KeyedText_B_L_Eng.pm
-t/lib/t_Locale_KeyedText_B_L_Fre.pm
-t/Locale_KeyedText.t
+t/lib/t_LKT_A_L_Eng.pm
+t/lib/t_LKT_A_L_Fre.pm
+t/lib/t_LKT_B_L_Eng.pm
+t/lib/t_LKT_B_L_Fre.pm
+t/lib/t_LKT_Util.pm
+t/LKT_00_Compile.t
+t/LKT_10_MsgProps.t
+t/LKT_20_TrnProps.t
+t/LKT_30_TrnMsg.t
 TODO

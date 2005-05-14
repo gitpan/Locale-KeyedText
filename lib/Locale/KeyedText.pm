@@ -2,7 +2,7 @@
 use 5.008001; use utf8; use strict; use warnings;
 
 package Locale::KeyedText;
-our $VERSION = '1.03';
+our $VERSION = '1.04';
 
 ######################################################################
 
@@ -22,17 +22,20 @@ Non-Core Modules: I<none>
 
 =head1 COPYRIGHT AND LICENSE
 
-Locale::KeyedText is Copyright (c) 1999-2005, Darren R. Duncan.  All rights
+This file is part of the Locale::KeyedText library.
+
+Locale::KeyedText is Copyright (c) 2003-2005, Darren R. Duncan.  All rights
 reserved.  Address comments, suggestions, and bug reports to
-B<perl@DarrenDuncan.net>, or visit "http://www.DarrenDuncan.net" for more
+perl@DarrenDuncan.net, or visit http://www.DarrenDuncan.net/ for more
 information.
 
 Locale::KeyedText is free software; you can redistribute it and/or modify it
-under the terms of the GNU Lesser General Public License (LGPL) version 2.1 as
-published by the Free Software Foundation (http://www.fsf.org/).  You should
-have received a copy of the LGPL as part of the Locale::KeyedText distribution,
-in the file named "LICENSE"; if not, write to the Free Software Foundation,
-Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+under the terms of the GNU Lesser General Public License (LGPL) as published by
+the Free Software Foundation (http://www.fsf.org/); either version 2.1 of the
+License, or (at your option) any later version.  You should have received a copy
+of the LGPL as part of the Locale::KeyedText distribution, in the file named
+"LGPL"; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+Suite 330, Boston, MA 02111-1307 USA.
 
 Any versions of Locale::KeyedText that you modify and distribute must carry
 prominent notices stating that you changed the files and the date of any
