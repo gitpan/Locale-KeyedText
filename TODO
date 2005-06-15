@@ -1,3 +1,9 @@
+* Add official policy for accomodating literal '{' or '}' in Message variable
+names; for example, that translate_message() will escape any found with a '\\'
+prior to the search'n'replace, and expect that any Template modules/files will
+likewise have a '\\{' or '\\}' in them for such variable names to match for
+interpolation.
+
 * Add support for Template files to be a format other than Pure Perl, such as 
 plain vanilla tab delimited text files (2 columns: key + string) or XML files.
 

@@ -3,7 +3,7 @@ use 5.008001; use utf8; use strict; use warnings;
 
 use Test::More 0.47;
 
-plan( 'tests' => 29 );
+plan( 'tests' => 24 );
 
 use lib 't/lib';
 use t_LKT_Util;
@@ -13,29 +13,16 @@ t_LKT_Util->message( 'testing new_message() and Message object methods' );
 
 my ($did, $should, $msg1);
 
-$did = t_LKT_Util->serialize( Locale::KeyedText->new_message() );
-$should = 'undef, ';
-is( $did, $should, "Locale::KeyedText->new_message() returns '$did'" );
-
 $did = t_LKT_Util->serialize( Locale::KeyedText->new_message( undef ) );
 $should = 'undef, ';
 is( $did, $should, "Locale::KeyedText->new_message( undef ) returns '$did'" );
 
-$did = t_LKT_Util->serialize( Locale::KeyedText->new_message( '' ) );
-$should = 'undef, ';
-is( $did, $should, "Locale::KeyedText->new_message( '' ) returns '$did'" );
-
-$did = t_LKT_Util->serialize( Locale::KeyedText->new_message( '0 ' ) );
-$should = 'undef, ';
-is( $did, $should, "Locale::KeyedText->new_message( '0 ' ) returns '$did'" );
-
-$did = t_LKT_Util->serialize( Locale::KeyedText->new_message( 'x-' ) );
-$should = 'undef, ';
-is( $did, $should, "Locale::KeyedText->new_message( 'x-' ) returns '$did'" );
-
-$did = t_LKT_Util->serialize( Locale::KeyedText->new_message( 'x:' ) );
-$should = 'undef, ';
-is( $did, $should, "Locale::KeyedText->new_message( 'x:' ) returns '$did'" );
+$msg1 = Locale::KeyedText->new_message( '' );
+isa_ok( $msg1, "Locale::KeyedText::Message", 
+	"msg1 = new_message( '' ) ret MSG obj" );
+$did = $msg1->as_string();
+$should = ': ';
+is( $did, $should, "on init msg1->as_string() returns '$did'" );
 
 $msg1 = Locale::KeyedText->new_message( '0' );
 isa_ok( $msg1, "Locale::KeyedText::Message", 
@@ -51,18 +38,6 @@ $did = $msg1->as_string();
 $should = 'zZ9: ';
 is( $did, $should, "on init msg1->as_string() returns '$did'" );
 
-$did = t_LKT_Util->serialize( Locale::KeyedText->new_message( 'foo', [] ) );
-$should = 'undef, ';
-is( $did, $should, "Locale::KeyedText->new_message( 'foo', [] ) returns '$did'" );
-
-$did = t_LKT_Util->serialize( Locale::KeyedText->new_message( 'foo', { ' '=>'g' } ) );
-$should = 'undef, ';
-is( $did, $should, "Locale::KeyedText->new_message( 'foo', { ' '=>'g' } ) returns '$did'" );
-
-$did = t_LKT_Util->serialize( Locale::KeyedText->new_message( 'foo', { ':'=>'g' } ) );
-$should = 'undef, ';
-is( $did, $should, "Locale::KeyedText->new_message( 'foo', { ':'=>'g' } ) returns '$did'" );
-
 $msg1 = Locale::KeyedText->new_message( 'foo', undef );
 isa_ok( $msg1, "Locale::KeyedText::Message", 
 	"msg1 = new_message( 'foo', undef ) ret MSG obj" );
@@ -75,6 +50,13 @@ isa_ok( $msg1, "Locale::KeyedText::Message",
 	"msg1 = new_message( 'foo', {} ) ret MSG obj" );
 $did = $msg1->as_string();
 $should = 'foo: ';
+is( $did, $should, "on init msg1->as_string() returns '$did'" );
+
+$msg1 = Locale::KeyedText->new_message( 'foo', { '' => 'g' } );
+isa_ok( $msg1, "Locale::KeyedText::Message", 
+	"msg1 = new_message( 'foo', { '' => 'g' } ) ret MSG obj" );
+$did = $msg1->as_string();
+$should = 'foo: =g';
 is( $did, $should, "on init msg1->as_string() returns '$did'" );
 
 $msg1 = Locale::KeyedText->new_message( 'foo', { 'bar' => 'baz' } );
@@ -94,10 +76,6 @@ is( $did, $should, "on init msg1->as_string() returns '$did'" );
 $did = t_LKT_Util->serialize( $msg1->get_message_key() );
 $should = '\'foo\', ';
 is( $did, $should, "on init msg1->get_message_key() returns '$did'" );
-
-$did = t_LKT_Util->serialize( $msg1->get_message_variable() );
-$should = 'undef, ';
-is( $did, $should, "on init msg1->get_message_variable() returns '$did'" );
 
 $did = t_LKT_Util->serialize( $msg1->get_message_variable( undef ) );
 $should = 'undef, ';

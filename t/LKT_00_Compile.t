@@ -6,7 +6,7 @@ use Test::More 0.47;
 plan( 'tests' => 13 );
 
 use_ok( 'Locale::KeyedText' );
-cmp_ok( $Locale::KeyedText::VERSION, '==', 1.04, "Locale::KeyedText is the correct version" );
+cmp_ok( $Locale::KeyedText::VERSION, '==', 1.05, "Locale::KeyedText is the correct version" );
 
 use lib 't/lib';
 

@@ -1,4 +1,4 @@
-                   REFER TO USER MESSAGES BY KEYS
+                          Locale-KeyedText
 ----------------------------------------------------------------------
 
 by Darren Duncan <perl@DarrenDuncan.net>
@@ -80,8 +80,8 @@ under the terms of the GNU Lesser General Public License (LGPL) as published by
 the Free Software Foundation (http://www.fsf.org/); either version 2.1 of the
 License, or (at your option) any later version.  You should have received a copy
 of the LGPL as part of the Locale::KeyedText distribution, in the file named
-"LGPL"; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-Suite 330, Boston, MA 02111-1307 USA.
+"LGPL"; if not, write to the Free Software Foundation, Inc., 51 Franklin St,
+Fifth Floor, Boston, MA  02110-1301, USA.
 
 Any versions of Locale::KeyedText that you modify and distribute must carry
 prominent notices stating that you changed the files and the date of any

@@ -1,3 +1,61 @@
+2005-06-14   Darren Duncan <perl@DarrenDuncan.net>
+
+	* Locale-KeyedText Release 1.05.
+
+	* New code file versions are: KeyedText.pm v1.05.
+
+	* This release contains a large batch of changes that were done
+	simultaneously in the Perl 5 and Perl 6 versions of Locale::KeyedText; the
+	Perl 6 versions can be seen on CPAN in the upcoming Perl6-Pugs-6.2.8
+	distribution beneath its /ext/Locale-KeyedText directory.
+
+	* Updated all files in this distribution that display the physical address
+	of the Free Software Foundation, Inc. so it uses their current address of
+	"51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA" rather than their
+	previous address of "59 Temple Place, Suite 330, Boston, MA 02111-1307 USA";
+	this affects every COPYRIGHT AND LICENSE statement in the core files and the
+	'ReadMe' file, plus any 'GPL' or 'LGPL' license file.
+
+	* Updated the INSTALL file so that it is more generic, and all of my
+	distributions now use an identical copy of it.
+
+	* Updated the main heading in the ReadMe file to state the distribution's
+	name rather than a terse description of it.
+
+	* Updated KeyedText.pm to remove superfluous input restrictions that were
+	present for all Message and Translator properties.  Now each element of said
+	properties can be any defined value, including the empty string, and there
+	are no invalid characters.  Previously you could mainly just use
+	alphanumeric characters for them.  Updated methods Message.new() and
+	Translator.new() to implement the change, and also updated the POD sections
+	that overview the Message and Translator classes concerning this.
+
+	* Added a restriction to the Translator class such that each of its array
+	properties must have at least 1 element (which can be the empty string);
+	previously, zero elements were allowed.  Corresponding POD update in the 
+	Translator class overview.
+
+	* Removed the translate_message() code comment about an assumption of
+	properties being previously cleaned.  Added an item in the TODO file
+	concerning a future policy change being required to handle literal '{' and
+	'}' in Message Variable Names.
+
+	* Removed the BUGS documentation in KeyedText.pm; it simply referred to the
+	quality of the French user-text examples in the POD.
+
+	* A few other minor POD bug fixes or updates.
+
+	* In t_LKT_Util.pm, reorganized the serialize() function's dispatch order.
+
+	* Large updates to the 2 LKT_[10_Msg|20_Trn]Props.t files where about half
+	of the tests were added and/or removed, and some otherwise edited.  In
+	summary, there are a lot fewer tests that dealt with expected failure cases
+	and some extra that deal with expected success cases.  LKT_10_MsgProps.t now
+	has 5 fewer tests, LKT_20_TrnProps.t has the same number, and
+	LKT_30_TrnMsg.t now has 1 fewer.  
+
+	* Zero changes were made to the 4 t_LKT_[A|B]_L_[Eng|Fre].pm files.
+
 2005-05-13   Darren Duncan <perl@DarrenDuncan.net>
 
 	* Locale-KeyedText Release 1.04.

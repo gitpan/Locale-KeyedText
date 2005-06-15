@@ -3,7 +3,7 @@ use 5.008001; use utf8; use strict; use warnings;
 
 use Test::More 0.47;
 
-plan( 'tests' => 35 );
+plan( 'tests' => 34 );
 
 use lib 't/lib';
 use t_LKT_Util;
@@ -33,10 +33,6 @@ pass( "trn1 = new_translator( [$AS],['Eng'] ) contains '".$trn1->as_string()."'"
 
 $trn2 = Locale::KeyedText->new_translator( [$BS],['Eng'] );
 pass( "trn2 = new_translator( [$BS],['Eng'] ) contains '".$trn2->as_string()."'" );
-
-$did = t_LKT_Util->serialize( $trn1->translate_message() );
-$should = 'undef, ';
-is( $did, $should, "trn1->translate_message() returns '$did'" );
 
 $did = t_LKT_Util->serialize( $trn1->translate_message( 'foo' ) );
 $should = 'undef, ';
@@ -152,13 +148,13 @@ package # hide this class name from PAUSE indexer
 t_LKT_C_L_Eng;
 
 sub get_text_by_key {
-my (undef, $msg_key) = @_;
-my %text_strings = (
-	'one' => '{fork} shore {spoon}',
-	'two' => 'sky fly high',
-	'three' => '{knife} zot',
-);
-return $text_strings{$msg_key};
+	my (undef, $msg_key) = @_;
+	my %text_strings = (
+		'one' => '{fork} shore {spoon}',
+		'two' => 'sky fly high',
+		'three' => '{knife} zot',
+	);
+	return $text_strings{$msg_key};
 }
 
 1;

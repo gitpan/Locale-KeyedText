@@ -2,7 +2,7 @@
 use 5.008001; use utf8; use strict; use warnings;
 
 package Locale::KeyedText;
-our $VERSION = '1.04';
+our $VERSION = '1.05';
 
 ######################################################################
 
@@ -34,8 +34,8 @@ under the terms of the GNU Lesser General Public License (LGPL) as published by
 the Free Software Foundation (http://www.fsf.org/); either version 2.1 of the
 License, or (at your option) any later version.  You should have received a copy
 of the LGPL as part of the Locale::KeyedText distribution, in the file named
-"LGPL"; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-Suite 330, Boston, MA 02111-1307 USA.
+"LGPL"; if not, write to the Free Software Foundation, Inc., 51 Franklin St,
+Fifth Floor, Boston, MA  02110-1301, USA.
 
 Any versions of Locale::KeyedText that you modify and distribute must carry
 prominent notices stating that you changed the files and the date of any
@@ -86,12 +86,10 @@ package Locale::KeyedText::Message;
 sub new {
 	my ($class, $msg_key, $msg_vars) = @_;
 
-	defined( $msg_key ) and $msg_key =~ m/^\w+$/ or return;
+	defined( $msg_key ) or return;
 	defined( $msg_vars ) or $msg_vars = {};
 	ref($msg_vars) eq 'HASH' or return;
-	foreach my $var_name (keys %{$msg_vars}) {
-		$var_name =~ m/^\w+$/ or return; # hash key never undef (?)
-	}
+	# we are assuming that hash keys never undef, so aren't testing them
 
 	my $message = bless( {}, ref($class) || $class );
 
@@ -142,12 +140,14 @@ sub new {
 	my ($class, $set_names, $member_names) = @_;
 
 	$set_names = ref($set_names) eq 'ARRAY' ? [@{$set_names}] : [$set_names];
+	@{$set_names} > 0 or return;
 	foreach my $set_name (@{$set_names}) {
-		defined( $set_name ) and $set_name =~ m/^[a-zA-Z0-9_:]+$/ or return;
+		defined( $set_name ) or return;
 	}
 	$member_names = (ref($member_names) eq 'ARRAY') ? [@{$member_names}] : [$member_names];
+	@{$member_names} > 0 or return;
 	foreach my $member_name (@{$member_names}) {
-		defined( $member_name ) and $member_name =~ m/^[a-zA-Z0-9_:]+$/ or return;
+		defined( $member_name ) or return;
 	}
 
 	my $translator = bless( {}, ref($class) || $class );
@@ -200,7 +200,7 @@ sub translate_message {
 			$text or next SET;
 			foreach my $var_name (keys %{$msg_vars}) {
 				my $var_value = defined( $msg_vars->{$var_name} ) ? $msg_vars->{$var_name} : '';
-				$text =~ s/\{$var_name\}/$var_value/g; # assumes msg props cleaned on input
+				$text =~ s/\{$var_name\}/$var_value/g;
 			}
 			last MEMBER;
 		}
@@ -459,9 +459,9 @@ value should be a scalar of some kind.
 
 =back
 
-Both a Message object's Message Key property and each of the keys in its
-Message Variables property must not be an empty string and may only contain
-Perl "word" (\w) characters.
+Both a Message object's Message Key property and each of the keys in its Message
+Variables property must be a defined value, though those values can be '' or
+'0' if you want.  Each Message Variables value is allowed to be undefined.
 
 =head1 TEMPLATE OBJECT PROPERTIES
 
@@ -508,7 +508,7 @@ that; and so on.
 
 I<For the present, Locale::KeyedText expects its Template objects to come from
 Perl modules, but in the future they may alternately be something else, such as
-XML files.>
+XML or tab-delimited plain text files.>
 
 =head1 TRANSLATOR OBJECT PROPERTIES
 
@@ -543,10 +543,9 @@ in found in the most preferred language is used.
 
 =back
 
-Each of a Translator object's Template Sets and Template Members property
-elements must not be an empty string and may only contain characters that are
-valid in a Perl package name; the code presently disallows any characters that
-are not in [a-zA-Z0-9_:].
+Each of a Translator object's Template Sets and Template Members properties must
+contain 1 or more elements each, and each element must be a defined value,
+though those values can be '' or '0' if you want.
 
 =head1 SYNTAX
 
@@ -646,7 +645,7 @@ This method returns all Template Sets elements in this object as an array ref.
 
 =head2 get_template_member_names()
 
-	my $ra_set_names = $translator->get_template_member_names();
+	my $ra_member_names = $translator->get_template_member_names();
 
 This method returns all Template Members elements in this object as an array ref.
 
@@ -913,13 +912,6 @@ Content of alternate text Template file 'MyApp/L/Homer.pm':
 		'MYLIB_MYINV_RES_INF' => 'Don\'t you give me a big donut!',
 	);
 	sub get_text_by_key { my (undef, $msg_key) = @_; return $text_strings{$msg_key}; }
-
-=head1 BUGS
-
-I only have superficial memory recall of non-English languages.  I made the
-French language example in the SYNOPSIS by manually translating the English one
-with a printed on paper English to French dictionary; it probably contains
-multiple grammatical errors (not that the English was well-formed either).
 
 =head1 CAVEATS
 
