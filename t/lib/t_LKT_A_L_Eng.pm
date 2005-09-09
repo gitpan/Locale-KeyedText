@@ -6,13 +6,13 @@ t_LKT_A_L_Eng;
 
 my $xy = 'AE';
 my %text_strings = (
-	'one' => $xy.' - word {fork} { fork } {spoon} {{fork}}',
-	'two' => $xy.' - sky pie rye',
+    'one' => $xy.' - word {fork} { fork } {spoon} {{fork}}',
+    'two' => $xy.' - sky pie rye',
 );
 
 sub get_text_by_key {
-	my (undef, $msg_key) = @_;
-	return $text_strings{$msg_key};
+    my (undef, $msg_key) = @_;
+    return $text_strings{$msg_key};
 }
 
 1;

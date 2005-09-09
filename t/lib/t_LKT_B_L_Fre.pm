@@ -6,13 +6,13 @@ t_LKT_B_L_Fre;
 
 my $xy = 'BF';
 my %text_strings = (
-	'two' => $xy.' - sky pie rye',
-	'three' => $xy.' - eat {knife}',
+    'two' => $xy.' - sky pie rye',
+    'three' => $xy.' - eat {knife}',
 );
 
 sub get_text_by_key {
-	my (undef, $msg_key) = @_;
-	return $text_strings{$msg_key};
+    my (undef, $msg_key) = @_;
+    return $text_strings{$msg_key};
 }
 
 1;

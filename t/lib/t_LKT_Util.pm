@@ -10,27 +10,27 @@ t_LKT_Util;
 ######################################################################
 
 sub message {
-	my (undef, $detail) = @_;
-	print "# $detail\n";
+    my (undef, $detail) = @_;
+    print "# $detail\n";
 }
 
 ######################################################################
 
 sub serialize {
-	my (undef, $input, $is_key) = @_;
-	return join( '', 
-		!defined($input) ?
-			'undef'.($is_key ? ' => ' : ', ')
-		: ref($input) eq 'ARRAY' ? 
-			( '[ ', ( map { 
-				( t_LKT_Util->serialize( $_ ) ) 
-			} @{$input} ), '], ' ) 
-		: ref($input) eq 'HASH' ? 
-			( '{ ', ( map { 
-				( t_LKT_Util->serialize( $_, 1 ), t_LKT_Util->serialize( $input->{$_} ) ) 
-			} sort keys %{$input} ), '}, ' ) 
-		: '\''.$input.'\''.($is_key ? ' => ' : ', ')
-	);
+    my (undef, $input, $is_key) = @_;
+    return join( '', 
+        !defined($input) ?
+            'undef'.($is_key ? ' => ' : ', ')
+        : ref($input) eq 'ARRAY' ? 
+            ( '[ ', ( map { 
+                ( t_LKT_Util->serialize( $_ ) ) 
+            } @{$input} ), '], ' ) 
+        : ref($input) eq 'HASH' ? 
+            ( '{ ', ( map { 
+                ( t_LKT_Util->serialize( $_, 1 ), t_LKT_Util->serialize( $input->{$_} ) ) 
+            } sort keys %{$input} ), '}, ' ) 
+        : '\''.$input.'\''.($is_key ? ' => ' : ', ')
+    );
 }
 
 ######################################################################

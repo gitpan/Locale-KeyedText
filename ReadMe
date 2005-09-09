@@ -9,8 +9,8 @@ CONTENTS
 * Keeping Up To Date
 * Dependencies
 * Support
-* Credits
-* Copyright And License
+* License And Copyright
+* Acknowledgements
 
 PREFACE
 
@@ -24,26 +24,38 @@ credits or copyright and license.
 
 KEEPING UP TO DATE
 
-My module set is constantly under development.  You should be able to find the
-newest versions at my website, "http://www.DarrenDuncan.net", on the page called
-"Perl Libraries I Made" (name subject to change).  They can also be found on CPAN
-under the author name of "DUNCAND".  
+My module set is constantly under development.  The canonical copies are all
+linked to through my website, "http://www.DarrenDuncan.net/", on the page called
+"Perl Libraries I Made" (name subject to change).
 
-I am inclined to update the copies on my web site more often, but those
-intermediate versions are more likely to have been tested less, and the modules
-may be updated day by day without increasing the version numbers.  However, the
-copies on CPAN are guaranteed to have unique version numbers when the module has
-changed.
+For those of you that are interested in the bleeding edge, I now have a public
+Subversion repository at "http://svn.utsl.gen.nz/trunk/Rosetta/"; this
+repository contains all of my newer modules (whose problem domain is databases),
+but not my older modules (which are not about databases).
+
+You can download slightly older but more stable versions of all of my modules in
+standard tarred and gzipped distributions, either from the public CPAN archives,
+"http://www.cpan.org/authors/id/D/DU/DUNCAND/", or from my own web server,
+"http://www.DarrenDuncan.net/d/perl/".
+
+CPAN also extracts the POD from modules and maintains that documentation in an
+organized and searchable fashion.  Their main search site is
+"http://search.cpan.org/", and my own DUNCAND author page is
+"http://search.cpan.org/~duncand/"; distributions are also there.
+
+You can download my oldest distributions from BACKPAN, at
+"http://history.perl.org/backpan/authors/id/D/DU/DUNCAND/", or from my web
+server, at "http://www.DarrenDuncan.net/d/perl/archives/".
 
 DEPENDENCIES
 
-Perl Version: 5.008001
+This distribution requires any version of Perl 5.x.y that is at least 5.8.1.
 
-Core Modules:
+It also requires the Perl module 'version', which would
+conceptually be built-in to Perl, but isn't, so it is on CPAN instead.
 
-	Test::More 0.47 (but only for the test suite)
-
-Non-Core Modules: none
+This distribution also requires Test::More for its test suite, and that module
+is bundled with Perl.
 
 SUPPORT
 
@@ -52,21 +64,7 @@ or otherwise.  Feel free to ask me if you can't figure things out on your own, o
 another person whom you know has used this.  I may start a mailing list for 
 support issues later, so that users of my modules can help each other with them.
 
-CREDITS
-
-Besides myself as the creator ...
-
-* 2004.07.26 - Thanks to Jason Martin (jhmartin@toger.us) for suggesting a
-feature, along with providing sample usage and patch code, that supports
-embedding of Template class packages in the same files as program code, rather
-than requiring separate files.
-
-* 2005.03.21 - Thanks to Stevan Little (stevan@iinteractive.com) for feedback
-towards improving this module's documentation, particularly towards using a much
-shorter SYNOPSIS, so that it is easier for newcomers to understand the module at
-a glance, and not be intimidated by large amounts of detailed information.
-
-COPYRIGHT AND LICENSE
+LICENCE AND COPYRIGHT
 
 This file is part of the Locale::KeyedText library.
 
@@ -94,6 +92,20 @@ While it is by no means required, the copyright holders of Locale::KeyedText
 would appreciate being informed any time you create a modified version of
 Locale::KeyedText that you are willing to distribute, because that is a
 practical way of suggesting improvements to the standard version.
+
+ACKNOWLEDGEMENTS
+
+Besides myself as the creator ...
+
+* 2004.07.26 - Thanks to Jason Martin (jhmartin@toger.us) for suggesting a
+feature, along with providing sample usage and patch code, that supports
+embedding of Template class packages in the same files as program code, rather
+than requiring separate files.
+
+* 2005.03.21 - Thanks to Stevan Little (stevan@iinteractive.com) for feedback
+towards improving this module's documentation, particularly towards using a much
+shorter SYNOPSIS, so that it is easier for newcomers to understand the module at
+a glance, and not be intimidated by large amounts of detailed information.
 
 FIN
 

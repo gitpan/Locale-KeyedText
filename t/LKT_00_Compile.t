@@ -1,12 +1,13 @@
 #!perl
 use 5.008001; use utf8; use strict; use warnings;
 
-use Test::More 0.47;
+use Test::More;
+use version;
 
 plan( 'tests' => 13 );
 
 use_ok( 'Locale::KeyedText' );
-cmp_ok( $Locale::KeyedText::VERSION, '==', 1.05, "Locale::KeyedText is the correct version" );
+is( $Locale::KeyedText::VERSION, qv('1.6.0'), "Locale::KeyedText is the correct version" );
 
 use lib 't/lib';
 

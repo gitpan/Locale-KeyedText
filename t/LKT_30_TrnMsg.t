@@ -1,7 +1,7 @@
 #!perl
 use 5.008001; use utf8; use strict; use warnings;
 
-use Test::More 0.47;
+use Test::More;
 
 plan( 'tests' => 34 );
 
@@ -148,13 +148,13 @@ package # hide this class name from PAUSE indexer
 t_LKT_C_L_Eng;
 
 sub get_text_by_key {
-	my (undef, $msg_key) = @_;
-	my %text_strings = (
-		'one' => '{fork} shore {spoon}',
-		'two' => 'sky fly high',
-		'three' => '{knife} zot',
-	);
-	return $text_strings{$msg_key};
+    my (undef, $msg_key) = @_;
+    my %text_strings = (
+        'one' => '{fork} shore {spoon}',
+        'two' => 'sky fly high',
+        'three' => '{knife} zot',
+    );
+    return $text_strings{$msg_key};
 }
 
 1;
