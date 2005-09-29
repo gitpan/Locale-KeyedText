@@ -6,8 +6,8 @@ t_LKT_B_L_Fre;
 
 my $xy = 'BF';
 my %text_strings = (
-    'two' => $xy.' - sky pie rye',
-    'three' => $xy.' - eat {knife}',
+    'two' => $xy . q[ - sky pie rye],
+    'three' => $xy . q[ - eat {knife}],
 );
 
 sub get_text_by_key {

@@ -7,7 +7,7 @@ use version;
 plan( 'tests' => 13 );
 
 use_ok( 'Locale::KeyedText' );
-is( $Locale::KeyedText::VERSION, qv('1.6.1'), "Locale::KeyedText is the correct version" );
+is( $Locale::KeyedText::VERSION, qv('1.6.2'), 'Locale::KeyedText is the correct version' );
 
 use lib 't/lib';
 

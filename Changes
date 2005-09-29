@@ -1,11 +1,89 @@
                           Locale-KeyedText
 ----------------------------------------------------------------------
 
+2005-09-28   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Locale-KeyedText Release 1.6.2 (SVN r878).
+
+    * New code file versions are: KeyedText.pm 1.6.2.
+
+    * From now on, any ordinary 'use [|only ]Foo' statements that appear
+    within *.pm files will be located in different places than before; the
+    'use' statements for modules that do not export anything, particularly
+    object oriented modules, will appear near the top of the file, above
+    all package declarations, but just below the use-pragma statements; the
+    'use' statements for modules whose exported functions we are using will
+    be placed just below the declarations of each package in which the
+    relevant exported functions are used.
+
+    * Removed any line-trailing whitespace from all distribution files.
+
+    * Reformatted all code by swapping various string quoting delimiters.
+
+    * Updated KeyedText.pm to replace all of its 'unless' conditionals with
+    equivalent 'if' conditionals.
+
+    * Updated KeyedText.pm to rename all of its 'foreach' loops to 'for'.
+
+    * Updated KeyedText.pm to move its 2 for-loop labels upwards to their
+    own lines, and likewise with 2 switch statement labels.
+
+    * Updated KeyedText.pm to reformat all 5 regular expressions so that
+    they use the /x flag.
+
+    * Reformatted all code to change any "if( ... ) {" to "if (...) {".
+
+    * Added named constant $EMPTY_STR to KeyedText.pm.
+
+    * In KeyedText.pm, renamed 2 code labels from LOOP to INPUT_LINE.
+
+    * Reformatted all code so that any uses of the named unary operators
+    [defined|ref] no longer have parenthesis around their argument.
+
+    * In KeyedText.pm, split up 3 multi-statement lines so each statement
+    is on its own line.
+
+    * Updated KeyedText.pm to replace 8 "<condition> or return ...;" each
+    with "return ... if <complement-condition>;".
+
+    * Updated KeyedText.pm to replace 4 "<condition> [and|or] [next|last]
+    ...;" with "[next|last] ... if ..." like with 'return'.
+
+    * Updated KeyedText.pm to rearrange 7 conditional 'die' statements so
+    they have postfix-if conditionals.
+
+    * Reformatted all code, in KeyedText.pm and t_LKT_Util.pm, so that any
+    uses of the built-in operators or functions named [bless|chomp|join] no
+    longer have parenthesis around their argument lists; either the parens
+    were just removed, or they were moved to surround both the
+    operator/function name and its arguments.
+
+    * Reformatted all code so that every occurance of the string
+    concatenation operator (.) has a space between the operator and each of
+    its 2 arguments, rather than their all being in contact.  Also
+    reformatted any lines that are split on this operator so the operator
+    appears at the start of the second line, rather than the end of the
+    first line.
+
+    * Reformatted all of the code comments at the top of KeyedText.pm,
+    where its object property names, and constant values, are declared,
+    so that all comment lines don't exceed the 75 character line length.
+
+    * In KeyedText.pm and t_LKT_Util.pm, reformatted (3,1) cascading
+    ternary statements into aligned columns.
+
+    * In KeyedText.pm split up every remaining code, code comment, and POD
+    line that exceeded 75 characters, so they now all fit in that space,
+    with the sole exception being the example code in the 2 'EXAMPLE
+    PROGRAM' POD sections, which are still too wide.
+
+    * Other miscellaneous code line alignments and splitting.
+
 2005-09-12   Darren Duncan <perl@DarrenDuncan.net>
 
     * Locale-KeyedText Release 1.6.1 (SVN r808).
 
-    * New code file versions are: KeyedText.pm 1.6.0.
+    * New code file versions are: KeyedText.pm 1.6.1.
 
     * Updated all POD-containing files to re-wrap any non-indented POD
     paragraphs to a 75 character width, which is 5 less than the 80

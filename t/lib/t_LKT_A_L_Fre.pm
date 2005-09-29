@@ -6,8 +6,8 @@ t_LKT_A_L_Fre;
 
 my $xy = 'AF';
 my %text_strings = (
-    'one' => $xy.' - word {fork} { fork } {spoon} {{fork}}',
-    'two' => $xy.' - sky pie rye',
+    'one' => $xy . q[ - word {fork} { fork } {spoon} {{fork}}],
+    'two' => $xy . q[ - sky pie rye],
 );
 
 sub get_text_by_key {
