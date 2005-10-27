@@ -1,196 +1,202 @@
 #!perl
-use 5.008001; use utf8; use strict; use warnings;
+use 5.008001;
+use utf8;
+use strict;
+use warnings;
 
-package Locale::KeyedText;
-use version; our $VERSION = qv('1.6.2');
+# External packages used by packages in this file, that don't export symbols:
+# (None Yet)
 
-######################################################################
-######################################################################
+###########################################################################
+###########################################################################
 
-# Names of properties for objects of the Locale::KeyedText::Message class
-# are declared here:
-my $MPROP_MSG_KEY = 'msg_key';
-    # str - the machine-readable key that uniquely ident this message
-my $MPROP_MSG_VARS = 'msg_vars';
-    # hash (str,str) - named variables for messages, if any, go here
+# Constant values used by packages in this file:
+use only 'Readonly' => '1.03-';
+Readonly my $EMPTY_STR => q{};
 
-# Names of properties for objects of the Locale::KeyedText::Translator
-# class are declared here:
-my $TPROP_TMPL_SET_NMS = 'tmpl_set_nms';
-    # array of str - list of Template module Set Names to search
-my $TPROP_TMPL_MEM_NMS = 'tmpl_mem_nms';
-    # array of str - list of Template module Member Names to search
+###########################################################################
+###########################################################################
 
-# These are constant values used by this module.
-my $EMPTY_STR = q{};
+package Locale::KeyedText; { # package
+    use version; our $VERSION = qv('1.6_3');
+    # Note: This given version applies to all of this file's packages.
+} # package Locale::KeyedText
 
-######################################################################
+###########################################################################
+###########################################################################
 
-sub new_message {
-    my (undef, $msg_key, $msg_vars) = @_;
-    return Locale::KeyedText::Message->new( $msg_key, $msg_vars );
+package Locale::KeyedText::Message; { # class
+
+    # External packages used by the Locale::KeyedText::Message class, that do export symbols:
+    use only 'Class::Std' => '0.0.4-';
+    use only 'Class::Std::Utils' => '0.0.2-';
+
+    # Attributes of every Locale::KeyedText::Message object:
+    my %msg_key_of  :ATTR;
+        # Str
+        # The machine-readable key that uniquely ident this message.
+    my %msg_vars_of :ATTR;
+        # Hash(Str) of Any
+        # Named variables for messages, if any, go here.
+
+###########################################################################
+
+sub BUILD {
+    my ($self, $ident, $arg_ref) = @_;
+    my $msg_key = $arg_ref->{'msg_key'};
+    my $msg_vars_ref = $arg_ref->{'msg_vars'};
+
+    die 'invalid arg'
+        if !defined $msg_key or $msg_key eq '';
+
+    die 'invalid arg'
+        if !defined $msg_vars_ref or ref $msg_vars_ref ne 'HASH'
+            or exists $msg_vars_ref->{''};
+
+    $msg_key_of{$ident}  = $msg_key;
+    $msg_vars_of{$ident} = {%{$msg_vars_ref}};
+
+    return;
 }
 
-######################################################################
+###########################################################################
 
-sub new_translator {
-    my (undef, $set_names, $member_names) = @_;
-    return Locale::KeyedText::Translator->new( $set_names, $member_names );
+sub get_msg_key {
+    my ($self) = @_;
+    return $msg_key_of{ident $self};
 }
 
-######################################################################
-######################################################################
-
-package Locale::KeyedText::Message;
-
-######################################################################
-
-sub new {
-    my ($class, $msg_key, $msg_vars) = @_;
-
-    return
-        if !defined $msg_key;
-    defined $msg_vars or $msg_vars = {};
-    return
-        if ref $msg_vars ne 'HASH';
-    # we are assuming that hash keys never undef, so aren't testing them
-
-    my $message = bless {}, ref $class || $class;
-
-    $message->{$MPROP_MSG_KEY} = $msg_key;
-    $message->{$MPROP_MSG_VARS} = {%{$msg_vars}};
-
-    return $message;
+sub get_msg_var {
+    my ($self, $var_name) = @_;
+    die 'invalid arg'
+        if !defined $var_name or $var_name eq '';
+    return $msg_vars_of{ident $self}->{$var_name};
 }
 
-######################################################################
-
-sub get_message_key {
-    my ($message) = @_;
-    return $message->{$MPROP_MSG_KEY};
+sub get_msg_vars {
+    my ($self) = @_;
+    return {%{$msg_vars_of{ident $self}}};
 }
 
-sub get_message_variable {
-    my ($message, $var_name) = @_;
-    return
-        if !defined $var_name;
-    return $message->{$MPROP_MSG_VARS}->{$var_name};
-}
+###########################################################################
 
-sub get_message_variables {
-    my ($message) = @_;
-    return {%{$message->{$MPROP_MSG_VARS}}};
-}
+} # class Locale::KeyedText::Message
 
-######################################################################
+###########################################################################
+###########################################################################
 
-sub as_string {
-    # This method is intended for debugging use only.
-    my ($message) = @_;
-    my $msg_key = $message->{$MPROP_MSG_KEY};
-    my $msg_vars = $message->{$MPROP_MSG_VARS};
-    return $msg_key . ': ' . join ', ', map {
-            $_ . '='
-            . (defined $msg_vars->{$_} ? $msg_vars->{$_} : $EMPTY_STR)
-        } sort keys %{$msg_vars};
-}
+package Locale::KeyedText::Translator; { # class
 
-######################################################################
-######################################################################
+    # External packages used by the Locale::KeyedText::Translator class, that do export symbols:
+    use only 'Class::Std' => '0.0.4-';
+    use only 'Class::Std::Utils' => '0.0.2-';
 
-package Locale::KeyedText::Translator;
+    # Attributes of every Locale::KeyedText::Translator object:
+    my %set_names_of    :ATTR;
+        # Array of Str
+        # List of Template module Set Names to search.
+    my %member_names_of :ATTR;
+        # Array of Str
+        # List of Template module Member Names to search.
 
-######################################################################
+###########################################################################
 
-sub new {
-    my ($class, $set_names, $member_names) = @_;
+sub BUILD {
+    my ($self, $ident, $arg_ref) = @_;
+    my $set_names_ref = $arg_ref->{'set_names'};
+    my $member_names_ref = $arg_ref->{'member_names'};
 
-    $set_names
-        = ref $set_names eq 'ARRAY' ? [@{$set_names}]
-        :                             [$set_names]
-        ;
-    return
-        if @{$set_names} == 0;
-    for my $set_name (@{$set_names}) {
-        return
-            if !defined $set_name;
-    }
-    $member_names
-        = (ref $member_names eq 'ARRAY') ? [@{$member_names}]
-        :                                  [$member_names]
-        ;
-    return
-        if @{$member_names} == 0;
-    for my $member_name (@{$member_names}) {
-        return
-            if !defined $member_name;
+    die 'invalid arg'
+        if !defined $set_names_ref or ref $set_names_ref ne 'ARRAY'
+            or @{$set_names_ref} == 0;
+    for my $set_name (@{$set_names_ref}) {
+        die 'invalid arg'
+            if !defined $set_name or $set_name eq '';
     }
 
-    my $translator = bless {}, ref $class || $class;
+    die 'invalid arg'
+        if !defined $member_names_ref or ref $member_names_ref ne 'ARRAY'
+            or @{$member_names_ref} == 0;
+    for my $member_name (@{$member_names_ref}) {
+        die 'invalid arg'
+            if !defined $member_name or $member_name eq '';
+    }
 
-    $translator->{$TPROP_TMPL_SET_NMS} = $set_names;
-    $translator->{$TPROP_TMPL_MEM_NMS} = $member_names;
+    $set_names_of{$ident}    = [@{$set_names_ref}];
+    $member_names_of{$ident} = [@{$member_names_ref}];
 
-    return $translator;
+    return;
 }
 
-######################################################################
+###########################################################################
 
-sub get_template_set_names {
-    my ($translator) = @_;
-    return [@{$translator->{$TPROP_TMPL_SET_NMS}}];
+sub get_set_names {
+    my ($self) = @_;
+    return [@{$set_names_of{ident $self}}];
 }
 
-sub get_template_member_names {
-    my ($translator) = @_;
-    return [@{$translator->{$TPROP_TMPL_MEM_NMS}}];
+sub get_member_names {
+    my ($self) = @_;
+    return [@{$member_names_of{ident $self}}];
 }
 
 ######################################################################
 
 sub translate_message {
-    my ($translator, $message) = @_;
+    my ($self, $message) = @_;
 
-    return
-        if !ref $message
+    die 'invalid arg'
+        if !defined $message or !ref $message
             or !UNIVERSAL::isa( $message, 'Locale::KeyedText::Message' );
-
-    my $msg_key = $message->{$MPROP_MSG_KEY};
-    my $msg_vars = $message->{$MPROP_MSG_VARS};
-    my $set_names = $translator->{$TPROP_TMPL_SET_NMS};
-    my $member_names = $translator->{$TPROP_TMPL_MEM_NMS};
 
     my $text = undef;
     MEMBER:
-    for my $member_name (@{$member_names}) {
+    for my $member_name (@{$member_names_of{ident $self}}) {
         SET:
-        for my $set_name (@{$set_names}) {
-            my $template_module_name = $set_name . $member_name;
+        for my $set_name (@{$set_names_of{ident $self}}) {
+            my $module_name = $set_name . $member_name;
+
+            # Determine if requested template module is already loaded.
+            # It may have been embedded in a core program file and hence
+            # should never be loaded by translate_message().
+            no strict 'refs';
+            my $module_is_loaded = defined %{$module_name . '::'};
+            use strict 'refs';
+
+            # Try to load an external Perl template module; on a require
+            # failure, we assume that module intentionally doesn't exist,
+            # and so skip to the next candidate module name.
+            if (!$module_is_loaded) {
+                # Note: We have to invoke this 'require' in an eval string
+                # because we need the bareword semantics, where 'require'
+                # will munge the package name into file system paths.
+                eval "require $module_name;";
+                next SET
+                    if $@;
+            }
+
+            # Try to fetch template text for the given message key from the
+            # successfully loaded template module; on a function call
+            # death, assume module is damaged and say so; an undefined
+            # ret val means module doesn't define key, skip to next module.
             eval {
-                no strict 'refs';
-                my $package_is_loaded
-                    = defined %{$template_module_name . '::'};
-                use strict 'refs';
-                if (!$package_is_loaded) {
-                    # a bare "require $template_module_name;"
-                    # yields "can't find module in @INC" error in Perl 5.6
-                    eval "require $template_module_name;";
-                    die $@
-                        if $@;
-                }
-                $text = $template_module_name->get_text_by_key( $msg_key );
+                $text = $module_name->get_text_by_key(
+                    $message->get_msg_key() );
             };
-            next SET
+            die "damaged template '$module_name': $@"
                 if $@;
             next SET
-                if !$text;
-            for my $var_name (keys %{$msg_vars}) {
-                my $var_value
-                    = defined $msg_vars->{$var_name}
-                      ? $msg_vars->{$var_name}
-                      : $EMPTY_STR
-                      ;
-                $text =~ s/ \{ $var_name \} /$var_value/xg;
+                if !defined $text;
+
+            # We successfully got template text for the message key, so
+            # interpolate the message vars into it and return that.
+            while (my ($var_name, $var_value)
+                    = each %{$message->get_msg_vars()}) {
+                my $var_value_as_str
+                    = defined $var_value ? "$var_value"
+                    :                      $EMPTY_STR
+                    ;
+                $text =~ s/ \{ $var_name \} /$var_value_as_str/xg;
             }
             last MEMBER;
         }
@@ -199,22 +205,17 @@ sub translate_message {
     return $text;
 }
 
-######################################################################
+###########################################################################
 
-sub as_string {
-    # This method is intended for debugging use only.
-    my ($translator) = @_;
-    my $set_names = $translator->{$TPROP_TMPL_SET_NMS};
-    my $member_names = $translator->{$TPROP_TMPL_MEM_NMS};
-    return 'SETS: ' . (join ', ', @{$set_names}) . '; '
-         . 'MEMBERS: ' . (join ', ', @{$member_names});
-}
+} # class Locale::KeyedText::Translator
 
-######################################################################
-######################################################################
+###########################################################################
+###########################################################################
 
-1;
+1; # Magic true value required at end of a reuseable file's code.
 __END__
+
+=pod
 
 =encoding utf8
 
@@ -224,7 +225,16 @@ Locale::KeyedText - Refer to user messages in programs by keys
 
 =head1 VERSION
 
-This document describes Locale::KeyedText version 1.6.2.
+This document describes Locale::KeyedText version 1.6_3.
+
+It also describes the same-number versions of Locale::KeyedText::Message
+("Message") and Locale::KeyedText::Translator ("Translator").
+
+I<Note that the "Locale::KeyedText" package serves only as the name-sake
+representative for this whole file, which can be referenced as a unit by
+documentation or 'use' statements or Perl archive indexes.  Aside from
+'use' statements, you should never refer directly to "Locale::KeyedText" in
+your code; instead refer to other above-named packages in this file.>
 
 =head1 SYNOPSIS
 
@@ -234,17 +244,18 @@ This document describes Locale::KeyedText version 1.6.2.
 
     sub main {
         # Create a translator.
-        my $translator = Locale::KeyedText->new_translator(
-            ['MyLib::Lang::', 'MyApp::Lang::'],
+        my $translator = Locale::KeyedText::Translator->new({
+            'set_names' => ['MyLib::Lang::', 'MyApp::Lang::'],
                 # set package prefixes for localized app components
-            ['Eng', 'Fr', 'De', 'Esp']
+            'member_names' => ['Eng', 'Fr', 'De', 'Esp'],
                 # set list of available languages in order of preference
-        );
+        });
 
         # This will print 'Enter 2 Numbers' in the first of the four
         # languages that has a matching template available.
         print $translator->translate_message(
-            Locale::KeyedText->new_message( 'MYAPP_PROMPT' ) );
+            Locale::KeyedText::Message->new({
+                'msg_key' => 'MYAPP_PROMPT' }) );
 
         # Read two numbers from the user.
         my ($first, $second) = <STDIN>;
@@ -253,29 +264,26 @@ This document describes Locale::KeyedText version 1.6.2.
         MyLib->add_two( $first, $second, $translator );
     }
 
-    package MyLib;
+    package MyLib; # module
 
     sub add_two {
         my (undef, $first, $second, $translator) = @_;
         my $sum = $first + $second;
 
         # This will print '<FIRST> plus <SECOND> equals <RESULT>' in
-        # the first possible language.
-        # For example, if the user inputs '3' and '4', it the output will
-        # be '3 plus 4 equals 7'.
+        # the first possible language.  For example, if the user
+        # inputs '3' and '4', it the output will be '3 plus 4 equals 7'.
         print $translator->translate_message(
-            Locale::KeyedText->new_message( 'MYLIB_RESULT',
-            { 'FIRST' => $first, 'SECOND' => $second,
-            'RESULT' => $sum } ) );
+            Locale::KeyedText::Message->new({ 'msg_key' => 'MYLIB_RESULT',
+                'msg_vars' => { 'FIRST' => $first, 'SECOND' => $second,
+                'RESULT' => $sum } }) );
     }
-
-I<Note that the above example only shows off a few of Locale::KeyedText's
-features; for a larger and more complete example, see the EXAMPLE PROGRAM
-documentation sections further below.>
 
 =head1 DESCRIPTION
 
-Many times during a program's operation, the program (or a module it uses)
+=head2 Introduction
+
+Many times during a program's operation, the program (or a package it uses)
 will need to display a message to the user, or generate a message to be
 shown to the user.  Sometimes this is an error message of some kind, but it
 could also be a prompt or response message for interactive systems.
@@ -296,10 +304,10 @@ application may handle it internally, while another one displays it to the
 user instead.
 
 Locale::KeyedText provides a simple but effective mechanism for
-applications and modules that empowers single binaries to support N locales
-or user types simultaneously, and that allows any end users to add support
-for new languages easily and without a recompile (such as by simply copying
-files), often even while the program is executing.
+applications and packages that empowers single binaries to support N
+locales or user types simultaneously, and that allows any end users to add
+support for new languages easily and without a recompile (such as by simply
+copying files), often even while the program is executing.
 
 Locale::KeyedText gives your application the maximum amount of control as
 to what the user sees; it never outputs anything by itself to the user, but
@@ -307,39 +315,19 @@ rather returns its results for calling code to output as it sees fit.  It
 also does not make direct use of environment variables, which can aid in
 portability.
 
-Locale::KeyedText itself is trivially easy to install, since it is written
-in pure Perl and it has few external dependencies.
-
 Practically speaking, Locale::KeyedText doesn't actually do a lot
 internally; it exists mainly to document a certain localization methodology
 in an easily accessable manner, such that would not be possible if its
-functionality was subsumed into a larger module that would otherwise use
-it.  Hereafter, if any other module or application says that it uses
+functionality was subsumed into a larger package that would otherwise use
+it.  Hereafter, if any other package or application says that it uses
 Locale::KeyedText, that is a terse way of saying that it subscribes to the
 localization methodology that is described here, and hence provides these
 benefits to developers and users alike.
 
 For some practical examples of Locale::KeyedText in use, see my dependent
-CPAN modules whose problem domain is databases and/or SQL.
+CPAN packages whose problem domain is databases and/or SQL.
 
-=head1 CLASSES IN THIS MODULE
-
-This module is implemented by several object-oriented Perl 5 packages, each
-of which is referred to as a class.  They are: B<Locale::KeyedText> (the
-module's name-sake), B<Locale::KeyedText::Message> (aka B<Message>), and
-B<Locale::KeyedText::Translator> (aka B<Translator>).
-
-I<While all 3 of the above classes are implemented in one module for
-convenience, you should consider all 3 names as being "in use"; do not
-create any modules or packages yourself that have the same names.>
-
-The Message and Translator classes do most of the work and are what you
-mainly use.  The name-sake class mainly exists to guide CPAN in indexing
-the whole module, but it also provides a few wrapper functions over the
-other classes for your convenience; you never instantiate an object of
-Locale::KeyedText itself.
-
-=head1 HOW IT WORKS
+=head2 How It Works
 
 Modern programs or database systems often refer to an error condition by an
 internal code which is guaranteed to be unique for a situation, and this is
@@ -358,12 +346,12 @@ for users, we still get the best results by having a human being write out
 that text themselves.
 
 What Locale::KeyedText does is associate each member in a set of key-codes,
-which are hard-coded into your application or module, with one or more text
-strings to show human users.  This association would normally be stored in
-a Perl file that defines and returns an anonymous hash definition.  While
-it is obvious that people who would be writing the text would have to know
-how to edit Perl files, this shouldn't be a problem because
-Locale::KeyedText is only meant to be used with user text that is
+which are hard-coded into your application or package, with one or more
+text strings to show human users.  This association would normally be
+stored in a Perl file that defines and returns an anonymous hash
+definition.  While it is obvious that people who would be writing the text
+would have to know how to edit Perl files, this shouldn't be a problem
+because Locale::KeyedText is only meant to be used with user text that is
 associated with hard-coded program conditions.  In other words, this user
 text is *part of the program*, and not the program's users' own data; only
 someone already involved in making the program would be editing them.  At
@@ -372,11 +360,11 @@ program, so that if you wanted to upgrade or localize what text the user
 sees, you only have to update said separate resource files, and not change
 your main program.
 
-I<Note that an update is planned for this module that will enable user text
-to be stored in non-Perl external files, such as a 2-column plain-text
-format that will be much easier for a non-programmer to edit.  But the
-current Perl-based solution will also be kept due to its more dynamic
-capabilities.>
+I<Note that an update is planned for Locale::KeyedText that will enable
+user text to be stored in non-Perl external files, such as a 2-column
+plain-text format that will be much easier for a non-programmer to edit.
+But the current Perl-based solution will also be kept due to its more
+dynamic capabilities.>
 
 I was inspired to have this organization partly by how Mac OS X manages its
 resources.  It is the standard practice for Mac OS X programs, including
@@ -395,18 +383,18 @@ program using keys.  Mac OS X (and the previous non-Unix Mac OS) handles
 lots of other program resources as data files as well, making them easy to
 upgrade.
 
-Locale::KeyedText aims to bring this sort of functionality to Perl modules
-or programs.  Your module or program can be distributed with one or more
+Locale::KeyedText aims to bring this sort of functionality to Perl packages
+or programs.  Your package or program can be distributed with one or more
 resource files containing text for users, and your program would use
 associated keys internally.
 
-It is strongly suggested (but not required) that each Perl module which
-uses this would come up with keys which are unique across all Perl modules
-(perhaps the key name can start with the module name?).  An advantage of
-this is that, for example, your module could come with a set of user
-messages, but another module or program which uses yours may wish to
+It is strongly suggested (but not required) that each Perl package which
+uses this would come up with keys which are unique across all Perl packages
+(perhaps the key name can start with the package name?).  An advantage of
+this is that, for example, your package could come with a set of user
+messages, but another package or program which uses yours may wish to
 override some of your messages, showing other messages instead which are
-more appropriate to the context in which they are using your module.  One
+more appropriate to the context in which they are using your package.  One
 can override simply by using the same key code with a new user message in
 one of their own resource files.  At some appropriate place, usually in the
 main program, Locale::KeyedText can be given input that says what resource
@@ -414,11 +402,11 @@ files it should use and in what order they should be consulted.  When
 Locale::KeyedText is told to fetch the user message for a certain code, it
 returns the first one it finds.  This also works for the multiple language
 or permissions issue; simply order the files appropriately in the search
-list.  The analogy is similar to inheriting from multiple modules which
+list.  The analogy is similar to inheriting from multiple packages which
 have the same method names as you or each other, or having multiple search
-directories in your path that modules could be installed in.
+directories in your path that packages could be installed in.
 
-Generally, when a program module would return a code-key to indicate a
+Generally, when a program package would return a code-key to indicate a
 condition, often it will also provide some variable values to be
 interpolated into the user strings; Locale::KeyedText would also handle
 this.
@@ -428,15 +416,17 @@ that each Template can optionally use them; but often a template will
 choose to show less than all of the available details depending on the
 intended viewer.
 
-One of the main distinctions of this approach over similar modules is that
+=head2 Compared to Other Solutions
+
+One of the main distinctions of this approach over similar packages is that
 text is always looked up by a key which is not meant to be meaningful for a
-user. Whereas, with the other modules like "gettext" it looks like you are
-supposed to pass in english text and they translate it, which could produce
-ambiguous results or associations.  Or alternately, the other modules
-require your text data to be stored in a format other than Perl files.  Or
-alternately they have a compiled C component or otherwise have external
-dependencies; Locale::KeyedText has no external dependencies (it is very
-simple).
+user.  Whereas, with the other packages like "gettext" it looks like you
+are supposed to pass in english text and they translate it, which could
+produce ambiguous results or associations.  Or alternately, the other
+packages require your text data to be stored in a format other than Perl
+files.  Or alternately they have a compiled C component or otherwise have
+external dependencies; Locale::KeyedText has no external dependencies (it
+is very simple).
 
 There are other differences.  Where other solutions take variables, they
 seem to be positional (like with 'sprintf'); whereas, Locale::KeyedText has
@@ -451,51 +441,151 @@ language into the program code itself, so it then becomes a version of that
 language.  By contrast, Locale::KeyedText does no compile time binding and
 will support multiple languages or locales simultaneously at run time.
 
-=head1 MESSAGE OBJECT PROPERTIES
+=head1 INTERFACE
 
-One object type that this module implements is the B<Message>.  It is a
-simple container which stores data to be used or displayed by your program.
- Using it has no side effects on your program's environment or its globals;
-it also has no external dependencies.
+The interface of Locale::KeyedText is entirely object-oriented; you use it
+by creating objects from its member classes, usually invoking C<new()> on
+the appropriate class name, and then invoking methods on those objects.
+All of their attributes are private, so you must use accessor methods.
+Locale::KeyedText does not declare any subroutines or export such.
 
-A B<Message> object has two main properties:
+The usual way that Locale::KeyedText indicates a failure is to throw an
+exception; most often this is due to invalid input.  If an invoked routine
+simply returns, you can assume that it has succeeded, even if the return
+value is undefined.
 
-=over 4
+=head2 The Locale::KeyedText::Message Class
 
-=item
+A Message object is a simple container which stores data to be used or
+displayed by your program.  The Message class is pure and deterministic,
+such that all of its submethods and object methods will each return the
+same result and/or make the same change to an object when the permutation
+of its arguments and any invocant object's attributes is identical; they do
+not interact with the outside environment at all.
 
-B<Message Key> - A short string which identifies what base message (or type
-of message) this object is an instance of.  The key is intended to be read
-by a machine and mapped to a user-readable message; the key itself is not
-meant to be meaningful to a user.  Alternately, if you decide to use
-Message objects like Exceptions, then the key would indicate what condition
-is being reported.
+A Message object has two main attributes:
 
-=item
+=over
 
-B<Message Variables> - An associative array (hash ref) containing variable
-names and values that are associated with this Message instance, and can be
-interpolated into the human-readable version.  Each variable name is a
-machine-readable short string; the allowed variable names you can have
-depend on the Message Key it is being used with (others are ignored).  Each
-variable value should be a scalar of some kind.
+=item C<$:msg_key> - B<Message Key>
+
+Str - This uniquely identifies the type of message that the object
+represents (or gives the name of a condition being reported, if it is used
+as an exception payload).  The key is intended to be read by a machine and
+mapped to a user-readable message; the key itself is not meant to be
+meaningful to a user.  The Message Key can be any defined and non-empty
+string.
+
+=item C<%:msg_vars> - B<Message Variables>
+
+Hash(Str) of Any - This contains zero or more variable names and values
+that are associated with the message, and can be interpolated into the
+human-readable version.  Each variable name is a machine-readable short
+string; the allowed variable names you can have depend on the Message Key
+it is being used with (others are ignored).  Each variable name can be any
+defined and non-empty string, and each variable value can be anything at
+all.  Note that while the Hash itself is copied on input and output, any
+variable values which are references will be passed by reference, so you
+may store references to other objects in them if you wish.
 
 =back
 
-Both a Message object's Message Key property and each of the keys in its
-Message Variables property must be a defined value, though those values can
-be '' or '0' if you want.  Each Message Variables value is allowed to be
-undefined.
+This is the main Message constructor submethod:
 
-=head1 TEMPLATE OBJECT PROPERTIES
+=over
 
-Locale::KeyedText doesn't define any "Template" objects, but it expects you
+=item C<new( { $msg_key, ?%msg_vars } )>
+
+This submethod creates and returns a new Locale::KeyedText::Message object.
+The Message Key attribute of the new object is set from the named argument
+$msg_key (a string); the optional named argument %msg_vars (a hash ref)
+sets the "Message Variables" attribute if provided (it defaults to empty if
+the argument is undefined).
+
+Some example usage:
+
+    my $message = Locale::KeyedText::Message->new({
+        'msg_key' => 'FOO_GOT_NO_ARGS' });
+    my $message2 = Locale::KeyedText::Message->new({
+        'msg_key' => 'TABLE_COL_NO_EXIST',
+        'msg_vars' => {
+            'GIVEN_TABLE_NAME' => $table_name,
+            'GIVEN_COL_NAME' => $col_name,
+        } });
+
+Note that a Message object does not permit changes to its attributes; they
+must all be set when the object is constructed.  If you want to
+conceptually change an existing Message object, you must create a new
+object that is a clone of the first but for the changes.
+
+=back
+
+A Message object has these methods:
+
+=over
+
+=item C<get_msg_key()>
+
+This method returns the Message Key attribute of its object.
+
+=item C<get_msg_var( $var_name )>
+
+This method returns the Message Variable value (a string) associated with
+the variable name specified in the positional argument $var_name (a
+string).
+
+=item C<get_msg_vars()>
+
+This method returns all Message Variable names and values of this object as
+a hash ref.
+
+=back
+
+=head2 The Template Modules
+
+Locale::KeyedText doesn't define any "Template" modules, but it expects you
 to make modules having a specific simple API that will serve their role.
-See the SYNOPSIS POD for examples of valid Template modules.
+
+For example, inside the text Template file "MyApp/L/Eng.pm" you can have:
+
+    use Readonly;
+    Readonly my %text_strings => (
+        'MYAPP_HELLO' => q[Welcome to MyApp.],
+        'MYAPP_GOODBYE' => q[Goodbye!],
+        'MYAPP_PROMPT'
+            => q[Enter a number to be inverted, or press ENTER to quit.],
+        'MYAPP_RESULT' => q[The inverse of "{ORIGINAL}" is "{INVERTED}".],
+    );
+
+    package MyApp::L::Eng; { # module
+        sub get_text_by_key {
+            my (undef, $msg_key) = @_;
+            return $text_strings{$msg_key};
+        }
+    } # module MyApp::L::Eng
+
+And inside the text Template file "MyApp/L/Fre.pm" you can have:
+
+    use Readonly;
+    Readonly my %text_strings => (
+        'MYAPP_HELLO' => q[Bienvenue allé MyApp.],
+        'MYAPP_GOODBYE' => q[Salut!],
+        'MYAPP_PROMPT'
+            => q[Fournir nombre être inverser, ou appuyer sur]
+               . q[ ENTER être arrêter.],
+        'MYAPP_RESULT' => q[Renversement "{ORIGINAL}" est "{INVERTED}".],
+    );
+
+    package MyApp::L::Fre; { # module
+        sub get_text_by_key {
+            my (undef, $msg_key) = @_;
+            return $text_strings{$msg_key};
+        }
+    } # module MyApp::L::Fre
 
 A Template module is very simple, consisting mainly of a data-stuffed hash
 and an accessor method to read values from it by key.  Each template hash
-key corresponds to the Message Key property of a Message object, and each
+key corresponds to the Message Key attribute of a Message object, and each
 hash value contains the user-readable message text associated with the
 Message; this user string may also contain variable names that correspond
 to Message Variables, which will be substituted at run-time before the text
@@ -532,437 +622,121 @@ each that corresponds to language A, looking for a match to said error
 message.  If it finds one, then that is displayed; if not, it then checks
 each set's member for language B and displays that; and so on.
 
-I<For the present, Locale::KeyedText expects its Template objects to come
+I<For the present, Locale::KeyedText expects its Template modules to come
 from Perl modules, but in the future they may alternately be something
 else, such as XML or tab-delimited plain text files.>
 
-=head1 TRANSLATOR OBJECT PROPERTIES
+=head2 The Locale::KeyedText::Translator Class
 
-Another object type that this module implements is the B<Translator>.
-While it stores some properties for configuration, its main purpose is to
-convert Message objects on demand into user-readable message strings, using
-data from external Template objects as a template.
+While a Translator object stores some attributes for configuration, its
+main purpose is to convert Message objects on demand into user-readable
+message strings, using data from external Template modules as a template.
+Except for the C<translate_message()> method, which does that conversion,
+the Translator class is pure and deterministic container.
 
-A B<Translator> object has 2 main properties:
+A Translator object has 2 main attributes:
 
-=over 4
+=over
 
-=item
+=item C<@:set_names> - B<Set Names>
 
-B<Template Sets> - An ordered array where each element is a Template module
-Set Name.  When we have to translate a message, the corresponding Template
-modules will be searched in the order they appear in this array until a
-match for that message is found.  Since a program or library may wish to
-override the user text of another library which it uses, the Template
-module for the program or first library should appear first in the array.
-This property is analogous to Perl's @ISA package variable.
+Array of Str - This stores an ordered list of one or more elements where
+each element is a Template module Set Name.  When we have to translate a
+message, the corresponding Template modules will be searched in the order
+they appear in this array until a match for that message is found.  Since a
+program or library may wish to override the user text of another library
+which it uses, the Template module for the program or first library should
+appear first in the array.  Each Set Name can be any defined and non-empty
+string.
 
-=item
+=item C<@:member_names> - B<Member Names>
 
-B<Template Members> - An ordered array where each element is a Template
-module Member Name and usually corresponds to a language like English or
-French.  The order of these items corresponds to an individual user's (or
-user role's) preferences such that each says what language they prefer to
-communicate in, and what their backup choices are, in order, if preferred
-ones aren't supported by a program or its libraries.  When translating a
-message, a match in found in the most preferred language is used.
+Array of Str - This stores an ordered list one or more elements where each
+element is a Template module Member Name and usually corresponds to a
+language like English or French.  The order of these items corresponds to
+an individual user's (or user role's) preferences such that each says what
+language they prefer to communicate in, and what their backup choices are,
+in order, if preferred ones aren't supported by a program or its libraries.
+When translating a message, a match in found in the most preferred language
+is used.  Each Set Name can be any defined and non-empty string.
 
 =back
 
-Each of a Translator object's Template Sets and Template Members properties
-must contain 1 or more elements each, and each element must be a defined
-value, though those values can be '' or '0' if you want.
+This is the main Translator constructor submethod:
 
-=head1 CONSTRUCTOR WRAPPER FUNCTIONS
+=over
 
-These functions are stateless and can be invoked only off of the module
-name; they are thin wrappers over other methods and exist strictly for
-convenience.
+=item C<new( { @set_names, @member_names } )>
 
-=head2 new_message( MSG_KEY[, MSG_VARS] )
+This submethod creates and returns a new Locale::KeyedText::Translator
+object.  The Set Names property of the new object is set from the named
+argument @set_names (an array ref), and Member Names is set from the named
+argument @member_names (an array ref).
 
-    my $message = Locale::KeyedText->new_message( 'INVALID_FOO_ARG',
-        { 'ARG_NAME' => 'BAR', 'GIVEN_VAL' => $bar_value } );
+Some example usage:
 
-This function wraps Locale::KeyedText::Message->new( MSG_KEY[, MSG_VARS] ).
+    my $translator = Locale::KeyedText::Translator->new({
+        'set_names' => ['Foo::L::','Bar::L::'],
+        'member_names' => ['Eng', 'Fre', 'Ger'] });
+    my $translator2 = Locale::KeyedText::Translator->new({
+        'set_names' => ['Foo::L::'], 'member_names' => ['Eng'] });
 
-=head2 new_translator( SET_NAMES, MEMBER_NAMES )
+Note that a Translator object does not permit changes to its attributes;
+they must all be set when the object is constructed.  If you want to
+conceptually change an existing Translator object, you must create a new
+object that is a clone of the first but for the changes.
 
-    my $translator = Locale::KeyedText->new_translator(
-        ['Foo::L::','Bar::L::'], ['Eng', 'Fre', 'Ger'] );
+=back
 
-This function wraps Locale::KeyedText::Translator->new( SET_NAMES,
-MEMBER_NAMES ).
+A Translator object has these methods:
 
-=head1 MESSAGE CONSTRUCTOR FUNCTIONS
+=over
 
-This function is stateless and can be invoked off of either the Message
-class name or an existing Message object, with the same result.
+=item C<get_set_names()>
 
-=head2 new( MSG_KEY[, MSG_VARS] )
+This method returns all Set Names elements in this object as an array ref.
 
-    my $message = Locale::KeyedText::Message->new( 'FOO_GOT_NO_ARGS' );
-    my $message2 = Locale::KeyedText::Message->new( 'INVALID_FOO_ARG',
-        { 'ARG_NAME' => 'BAR', 'GIVEN_VAL' => $bar_value } );
-    my $message3 = $message->new( 'TABLE_NO_EXIST',
-        { 'GIVEN_TABLE_NAME' => $table_name } );
-    my $message4 = Locale::KeyedText::Message->new( 'TABLE_COL_NO_EXIST',
-        { 'GIVEN_TABLE_NAME' => $table_name,
-        'GIVEN_COL_NAME' => $col_name } );
+=item C<get_member_names()>
 
-This function creates a new Locale::KeyedText::Message object and returns
-it, assuming the method arguments are valid; if they are not, it returns
-undef. The Message Key property of the new object is set from the MSG_KEY
-string argument; the optional MSG_VARS hash ref argument sets the "Message
-Variables" property if provided (it defaults to empty if the argument is
-undefined).
-
-=head1 MESSAGE OBJECT METHODS
-
-These methods are stateful and may only be invoked off of Message objects.
-
-=head2 get_message_key()
-
-    my $msg_key = $message->get_message_key();
-
-This method returns the Message Key property of this object.
-
-=head2 get_message_variable( VAR_NAME )
-
-    my $value = $message->get_message_variable( 'GIVEN_COL_NAME' );
-
-This method returns the Message Variable value associated with the variable
-name specified in VAR_NAME.
-
-=head2 get_message_variables()
-
-    my $rh_msg_vars = $message->get_message_variables();
-
-This method returns all Message Variable names and values in this object as
-a hash ref.
-
-=head1 TRANSLATOR CONSTRUCTOR FUNCTIONS
-
-This function is stateless and can be invoked off of either the Translator
-class name or an existing Translator object, with the same result.
-
-=head2 new_translator( SET_NAMES, MEMBER_NAMES )
-
-    my $translator = Locale::KeyedText::Translator->new(
-        ['Foo::L::','Bar::L::'], ['Eng', 'Fre', 'Ger'] );
-    my $translator2 = $translator->new( 'Foo::L::', 'Eng' );
-
-This function creates a new Locale::KeyedText::Translator object and
-returns it, assuming the method arguments are valid; if they are not, it
-returns undef. The Template Sets property of the new object is set from the
-SET_NAMES array ref (or string) argument, and Template Members is set from
-MEMBER_NAMES.
-
-=head1 TRANSLATOR OBJECT METHODS
-
-These methods are stateful and may only be invoked off of Message objects.
-
-=head2 get_template_set_names()
-
-    my $ra_set_names = $translator->get_template_set_names();
-
-This method returns all Template Sets elements in this object as an array
+This method returns all Member Names elements in this object as an array
 ref.
 
-=head2 get_template_member_names()
+=item C<translate_message( $message )>
 
-    my $ra_member_names = $translator->get_template_member_names();
+This method takes a (machine-readable) Message object as its positional
+argument $message and returns an equivalent human readable text message
+string; this assumes that a Template corresponding to the Message could be
+found using the Translator object's Set and Member properties; if none
+could be matched, this method returns undef.  This method could be
+considered to implement the 'main' functionality of Locale::KeyedText.
 
-This method returns all Template Members elements in this object as an
-array ref.
-
-=head2 translate_message( MESSAGE )
+Some example usage:
 
     my $user_text_string = $translator->translate_message( $message );
 
-This method takes a (machine-readable) Message object as its MESSAGE
-argument and returns an equivalent human readable text message string; this
-assumes that a Template corresponding to the Message could be found using
-the Translator object's Set and Member properties; if none could be
-matched, this method returns undef.  This method could be considered to
-implement the 'main' functionality of Locale::KeyedText.
+=back
 
-=head1 METHODS FOR DEBUGGING
+=head1 DIAGNOSTICS
 
-These methods are stateful and may only be invoked off of either Message or
-Translator objects.
+I<This documentation is pending.>
 
-=head2 as_string()
+=head1 CONFIGURATION AND ENVIRONMENT
 
-    my $dump_string = $message->as_string();
-    my $dump_string = $translator->as_string();
-
-This method returns a stringified version of this object which is suitable
-for debugging purposes (such as to test that the object's contents look
-good at a glance); no property values are escaped and you shouldn't try to
-extract them.
-
-=head1 EXAMPLE PROGRAM WITH ENTIRELY SEPARATED TEMPLATE MODULE FILES
-
-The following demonstrates a simple library and a simple program that uses
-it; both are N-multi-lingual and ship with English and French support
-files.  While there is no support file specific to the library for a
-certain third language, the one with the program also adds support to the
-library.
-
-Content of shared library file 'MyLib.pm':
-
-    use Locale::KeyedText;
-
-    package MyLib;
-
-    sub my_invert {
-        my (undef, $number) = @_;
-        die Locale::KeyedText->new_message( 'MYLIB_MYINV_NO_ARG' )
-            if !defined $number;
-        die Locale::KeyedText->new_message(
-            'MYLIB_MYINV_BAD_ARG', { 'GIVEN_VALUE' => $number } )
-            if $number !~ m/\d/x;
-        die Locale::KeyedText->new_message( 'MYLIB_MYINV_RES_INF' )
-            if $number == 0;
-        return 1 / $number;
-    }
-
-Content of English language Template file 'MyLib/L/Eng.pm':
-
-    package MyLib::L::Eng;
-    my %text_strings = (
-        'MYLIB_MYINV_NO_ARG' => q[my_invert(): argument NUMBER is missing],
-        'MYLIB_MYINV_BAD_ARG' => q[my_invert(): argument NUMBER is not a number, it is "{GIVEN_VALUE}"],
-        'MYLIB_MYINV_RES_INF' => q[my_invert(): result is infinite because argument NUMBER is zero],
-    );
-    sub get_text_by_key { my (undef, $msg_key) = @_; return $text_strings{$msg_key}; }
-
-Content of French language (rough manual translation) Template file 'MyLib/L/Fre.pm':
-
-    package MyLib::L::Fre;
-    my %text_strings = (
-        'MYLIB_MYINV_NO_ARG' => q[my_invert(): paramètre NUMBER est manquant],
-        'MYLIB_MYINV_BAD_ARG' => q[my_invert(): paramètre NUMBER est ne nombre, il est "{GIVEN_VALUE}"],
-        'MYLIB_MYINV_RES_INF' => q[my_invert(): aboutir a est infini parce que paramètre NUMBER est zero],
-    );
-    sub get_text_by_key { my (undef, $msg_key) = @_; return $text_strings{$msg_key}; }
-
-Content of main program 'MyApp.pl':
-
-    use MyLib;
-    use Locale::KeyedText;
-
-    main( grep { $_ =~ m/^[a-zA-Z]+$/x } @ARGV ); # user indicates language as command line argument
-
-    sub main {
-        my @user_lang_prefs = @_ ? @_ : 'Eng';
-        my $translator = Locale::KeyedText->new_translator(
-            ['MyApp::L::', 'MyLib::L::'], \@user_lang_prefs );
-        show_message( $translator, Locale::KeyedText->new_message( 'MYAPP_HELLO' ) );
-        INPUT_LINE:
-        {
-            show_message( $translator, Locale::KeyedText->new_message( 'MYAPP_PROMPT' ) );
-            my $user_input = <STDIN>;
-            chomp $user_input;
-            last INPUT_LINE
-                if !$user_input; # user chose to exit program
-            eval {
-                my $result = MyLib->my_invert( $user_input );
-                show_message( $translator, Locale::KeyedText->new_message( 'MYAPP_RESULT',
-                    { 'ORIGINAL' => $user_input, 'INVERTED' => $result } ) );
-            };
-            $@ and show_message( $translator, $@ ); # input error, detected by library
-            redo INPUT_LINE;
-        }
-        show_message( $translator, Locale::KeyedText->new_message( 'MYAPP_GOODBYE' ) );
-    }
-
-    sub show_message {
-        my ($translator, $message) = @_;
-        my $user_text = $translator->translate_message( $message );
-        if (!$user_text) {
-            print STDERR "internal error: can't find user text for a message:\n"
-                . '   ' . $message->as_string() . "\n"
-                . '   ' . $translator->as_string() . "\n";
-            exit;
-        }
-        print STDOUT $user_text . "\n";
-    }
-
-Content of English language Template file 'MyApp/L/Eng.pm':
-
-    package MyApp::L::Eng;
-    my %text_strings = (
-        'MYAPP_HELLO' => q[Welcome to MyApp.],
-        'MYAPP_GOODBYE' => q[Goodbye!],
-        'MYAPP_PROMPT' => q[Enter a number to be inverted, or press ENTER to quit.],
-        'MYAPP_RESULT' => q[The inverse of "{ORIGINAL}" is "{INVERTED}".],
-    );
-    sub get_text_by_key { my (undef, $msg_key) = @_; return $text_strings{$msg_key}; }
-
-Content of French language (rough manual translation) Template file 'MyApp/L/Fre.pm':
-
-    package MyApp::L::Fre;
-    my %text_strings = (
-        'MYAPP_HELLO' => q[Bienvenue allé MyApp.],
-        'MYAPP_GOODBYE' => q[Salut!],
-        'MYAPP_PROMPT' => q[Fournir nombre être inverser, ou appuyer sur ENTER être arrêter.],
-        'MYAPP_RESULT' => q[Renversement "{ORIGINAL}" est "{INVERTED}".],
-    );
-    sub get_text_by_key { my (undef, $msg_key) = @_; return $text_strings{$msg_key}; }
-
-Content of alternate text Template file 'MyApp/L/Homer.pm':
-
-    package MyApp::L::Homer;
-    my %text_strings = (
-        'MYAPP_HELLO' => q[Light goes on!],
-        'MYAPP_GOODBYE' => q[Light goes off!],
-        'MYAPP_PROMPT' => q[Give me a county thingy, or push that big button instead.],
-        'MYAPP_RESULT' => q[Turn "{ORIGINAL}" upside down and get "{INVERTED}", not "{ORIGINAL}".],
-        'MYLIB_MYINV_NO_ARG' => q[Why you little ...!],
-        'MYLIB_MYINV_BAD_ARG' => q["{GIVEN_VALUE}" isn't a county thingy!],
-        'MYLIB_MYINV_RES_INF' => q[Don't you give me a big donut!],
-    );
-    sub get_text_by_key { my (undef, $msg_key) = @_; return $text_strings{$msg_key}; }
-
-=head1 ALTERNATE EXAMPLE PROGRAM WITH MOSTLY INTEGRATED TEMPLATE MODULES
-
-A feature extension to Locale::KeyedText allows you to store your Template
-class packages inside the same files as your other program code, rather
-than the Templates being in their own files.  This feature is in
-recognition to developers that want to reduce as much as possible the
-number of separate files in their program distribution, at the cost of not
-being able to update user text or add support for new languages separately
-from updating the program code files themselves (one of Locale::KeyedText's
-original design principles).
-
-Keep in mind that both methods of storing Template class packages can be
-used at the same time.  Translator.translate_message() will first check for
-an embedded package by the appropriate name and use that if it exists; if
-one does not then it will try to use the external file, as is standard
-practice.
-
-The following is an altered version of the SYNOPSIS documentation that
-shows Template class packages for MyLib and MyApp embedded in the code
-files rather than being separate; this example totals 3 files instead of
-the old 7 files. Actually, it shows both methods together, with 4 embedded,
-1 separate.
-
-Content of shared library file 'MyLib.pm':
-
-    use Locale::KeyedText;
-
-    package MyLib;
-
-    sub my_invert {
-        my (undef, $number) = @_;
-        die Locale::KeyedText->new_message( 'MYLIB_MYINV_NO_ARG' )
-            if !defined $number;
-        die Locale::KeyedText->new_message(
-            'MYLIB_MYINV_BAD_ARG', { 'GIVEN_VALUE' => $number } )
-            if $number !~ m/\d/x;
-        die Locale::KeyedText->new_message( 'MYLIB_MYINV_RES_INF' )
-            if $number == 0;
-        return 1 / $number;
-    }
-
-    package MyLib::L::Eng;
-    my %text_strings = (
-        'MYLIB_MYINV_NO_ARG' => q[my_invert(): argument NUMBER is missing],
-        'MYLIB_MYINV_BAD_ARG' => q[my_invert(): argument NUMBER is not a number, it is "{GIVEN_VALUE}"],
-        'MYLIB_MYINV_RES_INF' => q[my_invert(): result is infinite because argument NUMBER is zero],
-    );
-    sub get_text_by_key { my (undef, $msg_key) = @_; return $text_strings{$msg_key}; }
-
-    package MyLib::L::Fre;
-    my %text_strings = (
-        'MYLIB_MYINV_NO_ARG' => q[my_invert(): paramètre NUMBER est manquant],
-        'MYLIB_MYINV_BAD_ARG' => q[my_invert(): paramètre NUMBER est ne nombre, il est "{GIVEN_VALUE}"],
-        'MYLIB_MYINV_RES_INF' => q[my_invert(): aboutir a est infini parce que paramètre NUMBER est zero],
-    );
-    sub get_text_by_key { my (undef, $msg_key) = @_; return $text_strings{$msg_key}; }
-
-Content of main program 'MyApp.pl':
-
-    use MyLib;
-    use Locale::KeyedText;
-
-    main( grep { $_ =~ m/^[a-zA-Z]+$/x } @ARGV ); # user indicates language as command line argument
-
-    sub main {
-        my @user_lang_prefs = @_ ? @_ : 'Eng';
-        my $translator = Locale::KeyedText->new_translator(
-            ['MyApp::L::', 'MyLib::L::'], \@user_lang_prefs );
-        show_message( $translator, Locale::KeyedText->new_message( 'MYAPP_HELLO' ) );
-        INPUT_LINE:
-        {
-            show_message( $translator, Locale::KeyedText->new_message( 'MYAPP_PROMPT' ) );
-            my $user_input = <STDIN>;
-            chomp $user_input;
-            last INPUT_LINE
-                if !$user_input; # user chose to exit program
-            eval {
-                my $result = MyLib->my_invert( $user_input );
-                show_message( $translator, Locale::KeyedText->new_message( 'MYAPP_RESULT',
-                    { 'ORIGINAL' => $user_input, 'INVERTED' => $result } ) );
-            };
-            $@ and show_message( $translator, $@ ); # input error, detected by library
-            redo INPUT_LINE;
-        }
-        show_message( $translator, Locale::KeyedText->new_message( 'MYAPP_GOODBYE' ) );
-    }
-
-    sub show_message {
-        my ($translator, $message) = @_;
-        my $user_text = $translator->translate_message( $message );
-        if (!$user_text) {
-            print STDERR "internal error: can't find user text for a message:\n"
-                . '   ' . $message->as_string() . "\n"
-                . '   ' . $translator->as_string() . "\n";
-            exit;
-        }
-        print STDOUT $user_text . "\n";
-    }
-
-    package MyApp::L::Eng;
-    my %text_strings = (
-        'MYAPP_HELLO' => q[Welcome to MyApp.],
-        'MYAPP_GOODBYE' => q[Goodbye!],
-        'MYAPP_PROMPT' => q[Enter a number to be inverted, or press ENTER to quit.],
-        'MYAPP_RESULT' => q[The inverse of "{ORIGINAL}" is "{INVERTED}".],
-    );
-    sub get_text_by_key { my (undef, $msg_key) = @_; return $text_strings{$msg_key}; }
-
-    package MyApp::L::Fre;
-    my %text_strings = (
-        'MYAPP_HELLO' => q[Bienvenue allé MyApp.],
-        'MYAPP_GOODBYE' => q[Salut!],
-        'MYAPP_PROMPT' => q[Fournir nombre être inverser, ou appuyer sur ENTER être arrêter.],
-        'MYAPP_RESULT' => q[Renversement "{ORIGINAL}" est "{INVERTED}".],
-    );
-    sub get_text_by_key { my (undef, $msg_key) = @_; return $text_strings{$msg_key}; }
-
-Content of alternate text Template file 'MyApp/L/Homer.pm':
-
-    package MyApp::L::Homer;
-    my %text_strings = (
-        'MYAPP_HELLO' => q[Light goes on!],
-        'MYAPP_GOODBYE' => q[Light goes off!],
-        'MYAPP_PROMPT' => q[Give me a county thingy, or push that big button instead.],
-        'MYAPP_RESULT' => q[Turn "{ORIGINAL}" upside down and get "{INVERTED}", not "{ORIGINAL}".],
-        'MYLIB_MYINV_NO_ARG' => q[Why you little ...!],
-        'MYLIB_MYINV_BAD_ARG' => q["{GIVEN_VALUE}" isn't a county thingy!],
-        'MYLIB_MYINV_RES_INF' => q[Don't you give me a big donut!],
-    );
-    sub get_text_by_key { my (undef, $msg_key) = @_; return $text_strings{$msg_key}; }
+I<This documentation is pending.>
 
 =head1 DEPENDENCIES
 
-This module requires any version of Perl 5.x.y that is at least 5.8.1.
+This file requires any version of Perl 5.x.y that is at least 5.8.1.
 
-It also requires the Perl module L<version>, which would
-conceptually be built-in to Perl, but isn't, so it is on CPAN instead.
+It also requires the Perl 5 packages L<version> and L<only>, which would
+conceptually be built-in to Perl, but aren't, so they are on CPAN instead.
+
+It also requires these Perl 5 packages that are on CPAN:
+L<Readonly-(1.03...)|Readonly>.
+
+It also requires these Perl 5 packages that are on CPAN:
+L<Class::Std-(0.0.4...)|Class::Std>,
+L<Class::Std::Utils-(0.0.2...)|Class::Std::Utils>.
 
 =head1 INCOMPATIBILITIES
 
@@ -970,29 +744,11 @@ None reported.
 
 =head1 SEE ALSO
 
-L<Locale::Maketext>, L<Locale::gettext>, L<Locale::PGetText>,
-L<DBIx::BabelKit>.
+I<This documentation is pending.>
 
 =head1 BUGS AND LIMITATIONS
 
-All Locale::KeyedText functions and methods currently will fail silently if
-they are given bad input; they will not throw any exceptions.  (At the same
-time, however, the objects will always be internally consistent and can
-continue to be used.)  This means, for example, if translate_message()
-fails because it tries to use a Template module (whose name you provide)
-that doesn't exist or that doesn't have the required API, it will return
-the same undef value that it returns if all named Template modules are
-correct but no match for the Message argument is found; it will do likewise
-if the given argument isn't a valid Message object.  Locale::KeyedText will
-not provide any specifics as to why it failed.  Depending on your usage,
-that may be exactly what you want, or it may not be.  A large part of the
-reason for this silence is that Locale::KeyedText itself is supposed to be
-very simple and internally language independent; a thrown plain Perl
-exception would contain some detail in a specific user language.  Likewise,
-a thrown Message object exception would require external files itself to
-resolve them, leading to recursive complexity. Suggestions for an alternate
-"proper" solution are welcome; meanwhile, the current solution seems best
-to me.
+I<This documentation is pending.>
 
 =head1 AUTHOR
 
@@ -1031,17 +787,6 @@ version.
 
 =head1 ACKNOWLEDGEMENTS
 
-Besides myself as the creator ...
-
-* 2004.07.26 - Thanks to Jason Martin (jhmartin@toger.us) for suggesting a
-feature, along with providing sample usage and patch code, that supports
-embedding of Template class packages in the same files as program code,
-rather than requiring separate files.
-
-* 2005.03.21 - Thanks to Stevan Little (stevan@iinteractive.com) for
-feedback towards improving this module's documentation, particularly
-towards using a much shorter SYNOPSIS, so that it is easier for newcomers
-to understand the module at a glance, and not be intimidated by large
-amounts of detailed information.
+None yet.
 
 =cut

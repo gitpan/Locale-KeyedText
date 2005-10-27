@@ -3,24 +3,15 @@
 
 by Darren Duncan <perl@DarrenDuncan.net>
 
-CONTENTS
-
-* Preface
-* Keeping Up To Date
-* Dependencies
-* Support
-* License And Copyright
-* Acknowledgements
-
 PREFACE
 
 This distribution features the Perl 5 module named "Locale::KeyedText"; see
 the file lib/Locale/KeyedText.pm for the main documentation, which is in
-POD format.  The distribution also includes a ChangeLog file to say what
-changes already happened, and a TODO file to say what changes have yet to
-happen.  The file INSTALL should help with installation issues.  Read below
-for how to get support or keep up to date, know this distribution's
-dependencies, or read the credits or copyright and license.
+POD format, plus the Dependencies and Copyright.  The distribution also
+includes a Changes file to say what changes already happened, and a TODO
+file to say what changes have yet to happen.  The file INSTALL should help
+with installation issues.  Read below for how to get support or keep up to
+date.
 
 KEEPING UP TO DATE
 
@@ -28,35 +19,31 @@ My module set is constantly under development.  The canonical copies are
 all linked to through my website, "http://www.DarrenDuncan.net/", on the
 page called "Perl Libraries I Made" (name subject to change).
 
-For those of you that are interested in the bleeding edge, I now have a
-public Subversion repository at "http://svn.utsl.gen.nz/trunk/Rosetta/";
-this repository contains all of my newer modules (whose problem domain is
-databases), but not my older modules (which are not about databases).
+For those of you that are interested in the bleeding edge of development,
+as of August 2005, I now have all of my newer modules (whose problem domain
+is databases) in one or more public Subversion repositories, but not my
+older modules (which are not about databases).  All of my development up to
+2005.09.28 is at "http://svn.utsl.gen.nz/trunk/Rosetta/", which is the
+result of incremental-change development since late 2002.  As of
+2005.09.29, I have begun a rewrite of those modules that includes parallel
+Perl 6 and Perl 5 versions, which is heavily inspired by the previous work,
+but is a new code base.  The new "rebirth" versions are available  at
+"http://svn.openfoundry.org/pugs/ext/Rosetta-Incubator/" (Perl 6) and at
+"http://svn.utsl.gen.nz/trunk/Rosetta-Incubator/" (Perl 5).
 
-You can download slightly older but more stable versions of all of my
-modules in standard tarred and gzipped distributions, either from the
-public CPAN archives, "http://www.cpan.org/authors/id/D/DU/DUNCAND/", or
-from my own web server, "http://www.DarrenDuncan.net/d/perl/".
+You can download slightly older versions of all of my modules from the
+public CPAN archives at "http://www.cpan.org/authors/id/D/DU/DUNCAND/", or
+on my own web server at "http://www.DarrenDuncan.net/d/perl".
 
 CPAN also extracts the POD from modules and maintains that documentation in
-an organized and searchable fashion.  Their main search site is
-"http://search.cpan.org/", and my own DUNCAND author page is
-"http://search.cpan.org/~duncand/"; distributions are also there.
+an organized and searchable fashion.  Their main search site is at
+"http://search.cpan.org", and my own DUNCAND author page is at
+"http://search.cpan.org/search?author=DUNCAND".
 
-You can download my oldest distributions from BACKPAN, at
-"http://history.perl.org/backpan/authors/id/D/DU/DUNCAND/", or from my web
-server, at "http://www.DarrenDuncan.net/d/perl/archives/".
-
-DEPENDENCIES
-
-This distribution requires any version of Perl 5.x.y that is at least
-5.8.1.
-
-It also requires the Perl module 'version', which would conceptually be
-built-in to Perl, but isn't, so it is on CPAN instead.
-
-This distribution also requires Test::More for its test suite, and that
-module is bundled with Perl.
+You can download my oldest tarred and gzipped distributions from BACKPAN,
+at "http://history.perl.org/backpan/authors/id/D/DU/DUNCAND/", or from my
+web server, at "http://www.DarrenDuncan.net/d/perl/archives/", right back
+to the libdwg 1.0, first released on 2000 July 23.
 
 SUPPORT
 
@@ -65,52 +52,6 @@ newsgroups, or otherwise.  Feel free to ask me if you can't figure things
 out on your own, or another person whom you know has used this.  I may
 start a mailing list for support issues later, so that users of my modules
 can help each other with them.
-
-LICENCE AND COPYRIGHT
-
-This file is part of the Locale::KeyedText library.
-
-Locale::KeyedText is Copyright (c) 2003-2005, Darren R. Duncan.  All rights
-reserved.  Address comments, suggestions, and bug reports to
-perl@DarrenDuncan.net, or visit http://www.DarrenDuncan.net/ for more
-information.
-
-Locale::KeyedText is free software; you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License (LGPL) as
-published by the Free Software Foundation (http://www.fsf.org/); either
-version 2.1 of the License, or (at your option) any later version.  You
-should have received a copy of the LGPL as part of the Locale::KeyedText
-distribution, in the file named "LGPL"; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301, USA.
-
-Any versions of Locale::KeyedText that you modify and distribute must carry
-prominent notices stating that you changed the files and the date of any
-changes, in addition to preserving this original copyright notice and other
-credits. Locale::KeyedText is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the LGPL for more
-details.
-
-While it is by no means required, the copyright holders of
-Locale::KeyedText would appreciate being informed any time you create a
-modified version of Locale::KeyedText that you are willing to distribute,
-because that is a practical way of suggesting improvements to the standard
-version.
-
-ACKNOWLEDGEMENTS
-
-Besides myself as the creator ...
-
-* 2004.07.26 - Thanks to Jason Martin (jhmartin@toger.us) for suggesting a
-feature, along with providing sample usage and patch code, that supports
-embedding of Template class packages in the same files as program code,
-rather than requiring separate files.
-
-* 2005.03.21 - Thanks to Stevan Little (stevan@iinteractive.com) for
-feedback towards improving this module's documentation, particularly
-towards using a much shorter SYNOPSIS, so that it is easier for newcomers
-to understand the module at a glance, and not be intimidated by large
-amounts of detailed information.
 
 FIN
 

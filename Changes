@@ -1,6 +1,68 @@
                           Locale-KeyedText
 ----------------------------------------------------------------------
 
+2005-10-27   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Locale-KeyedText Release 1.6_3 (SVN r996).
+
+    * This release exists only to test some large pending changes for this
+    and other distributions against the CPAN infrastructure, to ensure it
+    indexes properly and the documentation is extracted as expected.
+
+    * The core modules (KeyedText.pm) have been rewritten from scratch,
+    both code and documentation, though the new version was strongly
+    influenced by the the previous release, and a lot of the documentation
+    was copied over with few changes.  They are definitely incompatible
+    with previous releases 1.6.2 and below.  A few more unstable releases
+    may follow that are numbered 1.6_x, after which the 1.7.0 release will
+    be next stable one, still incompatible with 1.6.2.  It is anticipated
+    that all post-1.7.0 releases will be backwards compatible with 1.7.0.
+
+    * "Locale::KeyedText" no longer has any functions and exists just as
+    the namesake of this distribution; the new_message() and
+    new_translator() wrapper functions are gone.  You now just use the
+    previously-wrapped functions Locale::KeyedText::Message->new() and
+    Locale::KeyedText::Translator->new() instead.
+
+    * Both new() constructor functions now take named arguments instead of
+    positional ones, which should make it easier to add functionality to
+    Locale::KeyedText later if one wants to.  But all object methods still
+    take positional arguments like before.
+
+    * Changed what kinds of strings are valid to store in the Message Key,
+    names of Message Variables, and elements of Set Names and Member Names;
+    each can now be any defined and non-empty string.  Also, values of
+    Message Variables can be anything at all including references to
+    objects.  Also, the Translator constructor arguments must now always be
+    array refs, even if either has just a single element.
+
+    * All constructors and methods now throw exceptions on bad input,
+    rather than returning undef.
+
+    * Renamed all the accessor methods to be more terse, as follows:
+    get_message_key() -> get_msg_key(), get_message_variable[|s]() ->
+    get_msg_var[|s](), get_template_[set|member]_names() ->
+    get_[set|member]_names().
+
+    * Removed both as_string() methods; they will be replaced later.
+
+    * Added new external dependencies on 'only', 'Readonly', Class::Std,
+    Class::Std::Utils.
+
+    * Locale::KeyedText is now implemented as inside-out objects, so the
+    privacy of its attributes is now enforced.  Also, KeyedText.pm itself
+    now has BUILD() methods internally instead of new() functions.
+
+    * Removed the whole test suite but the compilation test; it will be
+    replaced later.  As such, the new Locale::KeyedTest has not yet been
+    proven to actually work.
+
+    * Chopped out all the ReadMe file parts that were redundant with
+    KeyedText.pm's own POD.  All that remains now is the PREFACE, KEEPING
+    UP TO DATE, and SUPPORT sections.  More changes may be pending.
+
+    * Rewrote the TODO file.  Most of its items will be addressed by 1.7.0.
+
 2005-09-28   Darren Duncan <perl@DarrenDuncan.net>
 
     * Locale-KeyedText Release 1.6.2 (SVN r878).

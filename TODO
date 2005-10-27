@@ -1,32 +1,23 @@
 TODO
 
-* Update the white space of this distribution to follow some best
-practices.  This includes having code lines not be longer than 75
-characters (like the POD lines).  This and other changes will be
-accomplished by running all the code files through perltidy (the first time
-I ever use that program, though I was a very consistent formatter before),
-which may alter a few other things towards best practices.
+* Split up translate_message() into more component methods, to make it
+easier to use piecemeal or debug.
 
-* Convert all class objects to be of the inside-out variety rather than
-hash-based, so to gain rigorous protection against external code directly
-accessing our object attributes, and to avoid related maintenance problems.
+* Update translate_message() to properly interpolate variables whose names
+include the same characters as variable markers in Template text strings.
 
-* Once the above are done, announce Rosetta/SQL::Routine Developer Release
-#4.
-
-* Add official policy for accomodating literal '{' or '}' in Message
-variable names; for example, that translate_message() will escape any found
-with a '\\' prior to the search'n'replace, and expect that any Template
-modules/files will likewise have a '\\{' or '\\}' in them for such variable
-names to match for interpolation.
+* Consider changing the variable marker format, such as from '{}' to '<>'.
 
 * Add support for Template files to be a format other than Pure Perl, such
 as plain vanilla tab delimited text files (2 columns: key + string) or XML
 files.
 
+* Add a new test suite.
+
+* Add /examples that execute.
+
+* Consider making Locale::KeyedText throw its own exceptions as Message
+objects.
+
 * No further updates are planned during the short term except in response
-to user requests.  In the long term, I anticipate that some users may want
-more granulated methods in place of translate_message(), such as to debug
-which Template files are being tried.  If that describes you, or you have
-other needs that are reasonably within the scope of this module's purpose,
-then tell me!
+to user requests.
