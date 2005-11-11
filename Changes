@@ -1,6 +1,53 @@
                           Locale-KeyedText
 ----------------------------------------------------------------------
 
+2005-11-11   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Locale-KeyedText Release 1.6_4 (SVN r1049).
+
+    * This distribution now reqires Perl versions >= 5.8.7, up from 5.8.1.
+
+    * Completed fundamental rewrite of KeyedText.pm, such that it can now
+    do everything that the pre-rewrite release 1.6.2 could, and has been
+    executed to confirm that it works.
+
+    * Restored the 2 as_string() methods that release 1.6_3 removed, under
+    the new names as_debug_string(); their output is now better formatted.
+
+    * Reworked translate_message() to use a single for-loop rather than 2
+    nested for-loops.
+
+    * Split up the translate_message() method 6 ways, into itself, and the
+    new get_set_member_combinations() method, and these Translator utility
+    submethods: template_module_is_loaded(), load_template_module(),
+    get_template_text_from_loaded_module(),
+    interpolate_vars_into_template_text().  This split should make it a lot
+    easier to test or extend a core functionality of Locale::KeyedText.
+
+    * Fixed a bug in BUILD() that caused a thrown exception when new() was
+    legitimately invoked without a 'msg_vars' argument.
+
+    * Reformatted all package declarations from 'package Foo; {' to '{
+    package Foo;', so the correct semantics occur where only declarations
+    inside the braces belong to the package.
+
+    * Changed how Text Templates work such that variable names to be
+    interpolated must now appear inside "<>" instead of "{}".
+
+    * Other small documentation updates.
+
+    * Added new /examples subdirectory in this distribution, which contains
+    2 example programs 'inverter1' and 'inverter2'.  The same code, sans
+    bug fixes and minor changes, had previously comprised the 'EXAMPLE
+    PROGRAM' POD sections of KeyedText.pm in release 1.6.2, that release
+    1.6_3 removed.  The examples are all executed and are known to work.
+
+    * Note that, while Locale::KeyedText can be proven to work by manually
+    executing the example programs, the automated test suite in /t still
+    does not yet execute anything; such a change is pending.
+
+    * Removed several TODO items, which are now satisfied.
+
 2005-10-27   Darren Duncan <perl@DarrenDuncan.net>
 
     * Locale-KeyedText Release 1.6_3 (SVN r996).

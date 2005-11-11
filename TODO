@@ -1,20 +1,13 @@
 TODO
 
-* Split up translate_message() into more component methods, to make it
-easier to use piecemeal or debug.
-
 * Update translate_message() to properly interpolate variables whose names
 include the same characters as variable markers in Template text strings.
-
-* Consider changing the variable marker format, such as from '{}' to '<>'.
 
 * Add support for Template files to be a format other than Pure Perl, such
 as plain vanilla tab delimited text files (2 columns: key + string) or XML
 files.
 
 * Add a new test suite.
-
-* Add /examples that execute.
 
 * Consider making Locale::KeyedText throw its own exceptions as Message
 objects.

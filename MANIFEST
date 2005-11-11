@@ -1,4 +1,14 @@
 Changes
+examples/inverter1/MyApp.pl
+examples/inverter1/MyApp/L/Eng.pm
+examples/inverter1/MyApp/L/Fre.pm
+examples/inverter1/MyApp/L/Homer.pm
+examples/inverter1/MyLib.pm
+examples/inverter1/MyLib/L/Eng.pm
+examples/inverter1/MyLib/L/Fre.pm
+examples/inverter2/MyApp.pl
+examples/inverter2/MyApp/L/Homer.pm
+examples/inverter2/MyLib.pm
 INSTALL
 LGPL
 lib/Locale/KeyedText.pm
