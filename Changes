@@ -1,6 +1,19 @@
                           Locale-KeyedText
 ----------------------------------------------------------------------
 
+2005-11-18   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Locale-KeyedText Release 1.6_5 (SVN r[pending]).
+
+    * This release has only small documentation updates and serves partly
+    to test CPAN's handling of a NAME split across multiple lines.
+
+    * In KeyedText.pm, updated the NAME and DESCRIPTION, and fleshed out
+    the SEE ALSO and ACKNOWLEDGEMENTS.  With the latter two, all the
+    details removed between releases 1.6.2 and 1.6_3 were restored.
+
+    * Renamed the ReadMe file to README and updated it also.
+
 2005-11-11   Darren Duncan <perl@DarrenDuncan.net>
 
     * Locale-KeyedText Release 1.6_4 (SVN r1049).

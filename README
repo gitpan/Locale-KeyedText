@@ -10,8 +10,9 @@ the file lib/Locale/KeyedText.pm for the main documentation, which is in
 POD format, plus the Dependencies and Copyright.  The distribution also
 includes a Changes file to say what changes already happened, and a TODO
 file to say what changes have yet to happen.  The file INSTALL should help
-with installation issues.  Read below for how to get support or keep up to
-date.
+with installation issues.  The examples/ directory contains several small
+programs you can try out and see what Locale::KeyedText can do.  Read below
+for how to get support or keep up to date.
 
 KEEPING UP TO DATE
 

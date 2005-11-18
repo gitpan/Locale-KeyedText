@@ -18,7 +18,7 @@ Readonly my $EMPTY_STR => q{};
 ###########################################################################
 
 { package Locale::KeyedText; # package
-    use version; our $VERSION = qv('1.6_4');
+    use version; our $VERSION = qv('1.6_5');
     # Note: This given version applies to all of this file's packages.
 } # package Locale::KeyedText
 
@@ -305,11 +305,12 @@ __END__
 
 =head1 NAME
 
-Locale::KeyedText - Refer to user messages in programs by keys
+Locale::KeyedText -
+Refer to user messages in programs by keys
 
 =head1 VERSION
 
-This document describes Locale::KeyedText version 1.6_4.
+This document describes Locale::KeyedText version 1.6_5.
 
 It also describes the same-number versions of Locale::KeyedText::Message
 ("Message") and Locale::KeyedText::Translator ("Translator").
@@ -408,8 +409,9 @@ Locale::KeyedText, that is a terse way of saying that it subscribes to the
 localization methodology that is described here, and hence provides these
 benefits to developers and users alike.
 
-For some practical examples of Locale::KeyedText in use, see my dependent
-CPAN packages whose problem domain is databases and/or SQL.
+For some practical examples of Locale::KeyedText in use, see the /examples
+directory of this distribution.  Or, see my dependent CPAN packages whose
+problem domain is databases and/or SQL.
 
 =head2 How It Works
 
@@ -509,8 +511,8 @@ are supposed to pass in english text and they translate it, which could
 produce ambiguous results or associations.  Or alternately, the other
 packages require your text data to be stored in a format other than Perl
 files.  Or alternately they have a compiled C component or otherwise have
-external dependencies; Locale::KeyedText has no external dependencies (it
-is very simple).
+non-trivial external dependencies; Locale::KeyedText has no non-trivial
+external dependencies (it is very simple).
 
 There are other differences.  Where other solutions take variables, they
 seem to be positional (like with 'sprintf'); whereas, Locale::KeyedText has
@@ -893,7 +895,12 @@ None reported.
 
 =head1 SEE ALSO
 
-I<This documentation is pending.>
+These Perl 5 packages are the initial main dependents of Locale::KeyedText:
+L<SQL::Routine>, L<Rosetta>.
+
+These Perl 5 packages work to solve similar problems as Locale::KeyedText:
+L<Locale::Maketext>, L<Locale::gettext>, L<Locale::PGetText>,
+L<DBIx::BabelKit>.
 
 =head1 BUGS AND LIMITATIONS
 
@@ -936,6 +943,20 @@ version.
 
 =head1 ACKNOWLEDGEMENTS
 
-None yet.
+=over
+
+=item Jason Martin (C<jhmartin@toger.us>)
+
+On 2004.07.26, suggested a feature, and provided sample usage and patch
+code, that supports embedding of Template modules into the same files as
+program code, rather than requiring separate files.
+
+=item Stevan Little (C<stevan@iinteractive.com>)
+
+On 2005.03.21, provided feedback towards improving this module's
+documentation, particularly towards using a much shorter and
+non-intimidating SYNOPSIS.
+
+=back
 
 =cut
