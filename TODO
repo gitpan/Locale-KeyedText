@@ -1,5 +1,8 @@
 TODO
 
+* Consider raising the version number to 2.x, considering the wide scale
+compatability breaks between the rewrite and previous stable releases.
+
 * Update translate_message() to properly interpolate variables whose names
 include the same characters as variable markers in Template text strings.
 

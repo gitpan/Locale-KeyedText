@@ -18,7 +18,7 @@ Readonly my $EMPTY_STR => q{};
 ###########################################################################
 
 { package Locale::KeyedText; # package
-    use version; our $VERSION = qv('1.6_5');
+    use version; our $VERSION = qv('1.70.0');
     # Note: This given version applies to all of this file's packages.
 } # package Locale::KeyedText
 
@@ -310,7 +310,7 @@ Refer to user messages in programs by keys
 
 =head1 VERSION
 
-This document describes Locale::KeyedText version 1.6_5.
+This document describes Locale::KeyedText version 1.70.0.
 
 It also describes the same-number versions of Locale::KeyedText::Message
 ("Message") and Locale::KeyedText::Translator ("Translator").
@@ -553,7 +553,7 @@ A Message object has two main attributes:
 
 =over
 
-=item C<$:msg_key> - B<Message Key>
+=item C<$!msg_key> - B<Message Key>
 
 Str - This uniquely identifies the type of message that the object
 represents (or gives the name of a condition being reported, if it is used
@@ -562,7 +562,7 @@ mapped to a user-readable message; the key itself is not meant to be
 meaningful to a user.  The Message Key can be any defined and non-empty
 string.
 
-=item C<%:msg_vars> - B<Message Variables>
+=item C<%!msg_vars> - B<Message Variables>
 
 Hash(Str) of Any - This contains zero or more variable names and values
 that are associated with the message, and can be interpolated into the
@@ -732,7 +732,7 @@ A Translator object has 2 main attributes:
 
 =over
 
-=item C<@:set_names> - B<Set Names>
+=item C<@!set_names> - B<Set Names>
 
 Array of Str - This stores an ordered list of one or more elements where
 each element is a Template module Set Name.  When we have to translate a
@@ -743,7 +743,7 @@ which it uses, the Template module for the program or first library should
 appear first in the array.  Each Set Name can be any defined and non-empty
 string.
 
-=item C<@:member_names> - B<Member Names>
+=item C<@!member_names> - B<Member Names>
 
 Array of Str - This stores an ordered list one or more elements where each
 element is a Template module Member Name and usually corresponds to a
@@ -853,7 +853,7 @@ is already loaded, it tries to invoke $module_name.get_text_by_key(
 $msg_key ) and return that subroutine's result, which is a Template text
 string if the module recognizes $msg_key, and the undefined value if not.
 
-=item <interpolate_vars_into_template_text( $text, %msg_vars )>
+=item C<interpolate_vars_into_template_text( $text, %msg_vars )>
 
 This submethod takes a defined (but possibly empty) Template text string in
 its positional argument $text (a string), and a Message Variables hash ref

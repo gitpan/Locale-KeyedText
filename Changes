@@ -1,9 +1,22 @@
                           Locale-KeyedText
 ----------------------------------------------------------------------
 
+2005-11-24   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Locale-KeyedText Release 1.70.0/1.070000 (SVN r1090).
+
+    * This release is identical to release 1.6_5 except for the version
+    change and a few minor documentation updates and fixes.
+
+    * Raised and multiplied the minor version number so that the current
+    X.Y.Z formatted version numbers are backwards compatible with the older
+    releases in X.YY format, with respect to determing which version
+    numbers are larger or smaller.  The new version 1.70.0 is equivalent to
+    1.07 under the old format, in which the last release was 1.05.
+
 2005-11-18   Darren Duncan <perl@DarrenDuncan.net>
 
-    * Locale-KeyedText Release 1.6_5 (SVN r[pending]).
+    * Locale-KeyedText Release 1.6_5/1.006_005 (SVN r1060).
 
     * This release has only small documentation updates and serves partly
     to test CPAN's handling of a NAME split across multiple lines.
@@ -16,7 +29,7 @@
 
 2005-11-11   Darren Duncan <perl@DarrenDuncan.net>
 
-    * Locale-KeyedText Release 1.6_4 (SVN r1049).
+    * Locale-KeyedText Release 1.6_4/1.006_004 (SVN r1049).
 
     * This distribution now reqires Perl versions >= 5.8.7, up from 5.8.1.
 
@@ -63,7 +76,7 @@
 
 2005-10-27   Darren Duncan <perl@DarrenDuncan.net>
 
-    * Locale-KeyedText Release 1.6_3 (SVN r996).
+    * Locale-KeyedText Release 1.6_3/1.006_003 (SVN r996).
 
     * This release exists only to test some large pending changes for this
     and other distributions against the CPAN infrastructure, to ensure it
@@ -125,7 +138,7 @@
 
 2005-09-28   Darren Duncan <perl@DarrenDuncan.net>
 
-    * Locale-KeyedText Release 1.6.2 (SVN r878).
+    * Locale-KeyedText Release 1.6.2/1.006002 (SVN r878).
 
     * New code file versions are: KeyedText.pm 1.6.2.
 
@@ -203,7 +216,7 @@
 
 2005-09-12   Darren Duncan <perl@DarrenDuncan.net>
 
-    * Locale-KeyedText Release 1.6.1 (SVN r808).
+    * Locale-KeyedText Release 1.6.1/1.006001 (SVN r808).
 
     * New code file versions are: KeyedText.pm 1.6.1.
 
@@ -222,7 +235,7 @@
 
 2005-09-08   Darren Duncan <perl@DarrenDuncan.net>
 
-    * Locale-KeyedText Release 1.6.0 (SVN r787), containing
+    * Locale-KeyedText Release 1.6.0/1.006000 (SVN r787), containing
     Locale::KeyedText 1.6.0, was released on CPAN.  This is the first
     release of this distribution and its modules for which they had 3-part
     version numbers, rather than floating point version numbers.
@@ -232,10 +245,10 @@
 
 2005-06-14   Darren Duncan <perl@DarrenDuncan.net>
 
-    * Locale-KeyedText Release 1.05, containing Locale::KeyedText 1.05, was
-    released on CPAN.  This is the last release of this distribution and
-    its modules for which they had floating point version numbers, rather
-    than 3-part version numbers.
+    * Locale-KeyedText Release 1.05/1.050000, containing Locale::KeyedText
+    1.05/1.050000, was released on CPAN.  This is the last release of this
+    distribution and its modules for which they had floating point version
+    numbers, rather than 3-part version numbers.
 
 2005-04-03   Darren Duncan <perl@DarrenDuncan.net>
 
