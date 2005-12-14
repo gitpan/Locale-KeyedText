@@ -1,5 +1,5 @@
 #!perl
-use 5.008007;
+use 5.008001;
 use utf8;
 use strict;
 use warnings;
@@ -25,7 +25,7 @@ sub main {
         'msg_key' => 'MYAPP_HELLO' }) );
 
     INPUT_LINE:
-    {
+    while (1) {
         show_message( $translator, Locale::KeyedText::Message->new({
             'msg_key' => 'MYAPP_PROMPT' }) );
 
@@ -48,8 +48,6 @@ sub main {
         };
         show_message( $translator, $@ )
             if $@; # input error, detected by library
-
-        redo INPUT_LINE;
     }
 
     show_message( $translator, Locale::KeyedText::Message->new({

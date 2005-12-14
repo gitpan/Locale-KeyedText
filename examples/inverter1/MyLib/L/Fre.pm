@@ -1,5 +1,5 @@
 #!perl
-use 5.008007;
+use 5.008001;
 use utf8;
 use strict;
 use warnings;

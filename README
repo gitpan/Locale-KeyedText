@@ -24,7 +24,7 @@ For those of you that are interested in the bleeding edge of development,
 as of August 2005, I now have all of my newer modules (whose problem domain
 is databases) in one or more public Subversion repositories, but not my
 older modules (which are not about databases).  All of my development up to
-2005.09.28 is at "http://svn.utsl.gen.nz/trunk/Rosetta/", which is the
+2005.09.28 is at "http://svn.utsl.gen.nz/trunk/Rosetta-old/", which is the
 result of incremental-change development since late 2002.  As of
 2005.09.29, I have begun a rewrite of those modules that includes parallel
 Perl 6 and Perl 5 versions, which is heavily inspired by the previous work,

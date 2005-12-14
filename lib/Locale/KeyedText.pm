@@ -1,5 +1,5 @@
 #!perl
-use 5.008007;
+use 5.008001;
 use utf8;
 use strict;
 use warnings;
@@ -18,7 +18,7 @@ Readonly my $EMPTY_STR => q{};
 ###########################################################################
 
 { package Locale::KeyedText; # package
-    use version; our $VERSION = qv('1.70.0');
+    use version; our $VERSION = qv('1.71.0');
     # Note: This given version applies to all of this file's packages.
 } # package Locale::KeyedText
 
@@ -104,6 +104,7 @@ sub as_debug_string {
     # External packages used by the Locale::KeyedText::Translator class, that do export symbols:
     use only 'Class::Std' => '0.0.4-';
     use only 'Class::Std::Utils' => '0.0.2-';
+    use Scalar::Util qw( blessed );
 
     # Attributes of every Locale::KeyedText::Translator object:
     my %set_names_of    :ATTR;
@@ -183,8 +184,8 @@ sub translate_message {
     my ($self, $message) = @_;
 
     die 'invalid arg'
-        if !defined $message or !ref $message
-            or !UNIVERSAL::isa( $message, 'Locale::KeyedText::Message' );
+        if !blessed $message
+            or !$message->isa( 'Locale::KeyedText::Message' );
 
     my $text = undef;
     SET_MEMBER:
@@ -310,7 +311,7 @@ Refer to user messages in programs by keys
 
 =head1 VERSION
 
-This document describes Locale::KeyedText version 1.70.0.
+This document describes Locale::KeyedText version 1.71.0.
 
 It also describes the same-number versions of Locale::KeyedText::Message
 ("Message") and Locale::KeyedText::Translator ("Translator").
@@ -877,7 +878,7 @@ I<This documentation is pending.>
 
 =head1 DEPENDENCIES
 
-This file requires any version of Perl 5.x.y that is at least 5.8.7.
+This file requires any version of Perl 5.x.y that is at least 5.8.1.
 
 It also requires the Perl 5 packages L<version> and L<only>, which would
 conceptually be built-in to Perl, but aren't, so they are on CPAN instead.
@@ -888,6 +889,9 @@ L<Readonly-(1.03...)|Readonly>.
 It also requires these Perl 5 packages that are on CPAN:
 L<Class::Std-(0.0.4...)|Class::Std>,
 L<Class::Std::Utils-(0.0.2...)|Class::Std::Utils>.
+
+It also requires these Perl 5 packages that are bundled with Perl:
+L<Scalar::Util>.
 
 =head1 INCOMPATIBILITIES
 
