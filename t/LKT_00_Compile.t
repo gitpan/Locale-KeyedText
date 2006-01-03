@@ -7,9 +7,14 @@ use warnings;
 use Test::More;
 use version;
 
-plan( 'tests' => 2 );
+plan( 'tests' => 4 );
 
 use_ok( 'Locale::KeyedText' );
-is( $Locale::KeyedText::VERSION, qv('1.71.0'), 'Locale::KeyedText is the correct version' );
+is( $Locale::KeyedText::VERSION, qv('1.72.0'),
+    'Locale::KeyedText is the correct version' );
+
+use_ok( 'Locale::KeyedText::L::en' );
+is( $Locale::KeyedText::L::en::VERSION, qv('1.0.0'),
+    'Locale::KeyedText::L::en is the correct version' );
 
 1; # Magic true value required at end of a reuseable file's code.

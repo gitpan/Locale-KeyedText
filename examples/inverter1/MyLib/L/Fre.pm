@@ -8,7 +8,7 @@ use warnings;
 ###########################################################################
 
 use Readonly;
-Readonly my %text_strings => (
+Readonly my %TEXT_STRINGS => (
     'MYLIB_MYINV_NO_ARG' => q[my_invert(): paramètre $number est manquant],
     'MYLIB_MYINV_BAD_ARG'
         => q[my_invert(): paramètre $number est ne nombre,]
@@ -21,7 +21,7 @@ Readonly my %text_strings => (
 { package MyLib::L::Fre; # module
     sub get_text_by_key {
         my (undef, $msg_key) = @_;
-        return $text_strings{$msg_key};
+        return $TEXT_STRINGS{$msg_key};
     }
 } # module MyLib::L::Fre
 

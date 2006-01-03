@@ -60,9 +60,8 @@ sub show_message {
     my ($translator, $message) = @_;
     my $user_text = $translator->translate_message( $message );
     if (!$user_text) {
-        print STDERR "internal error: can't find user text for a message:\n"
-            . '   ' . $message->as_debug_string() . "\n"
-            . '   ' . $translator->as_debug_string() . "\n";
+        print STDERR "internal error: can't find user text for a message:"
+            . "\n$message$translator"; # note: the objects will stringify
         return;
     }
     print STDOUT $user_text . "\n";

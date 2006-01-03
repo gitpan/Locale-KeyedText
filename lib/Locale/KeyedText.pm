@@ -18,7 +18,7 @@ Readonly my $EMPTY_STR => q{};
 ###########################################################################
 
 { package Locale::KeyedText; # package
-    use version; our $VERSION = qv('1.71.0');
+    use version; our $VERSION = qv('1.72.0');
     # Note: This given version applies to all of this file's packages.
 } # package Locale::KeyedText
 
@@ -47,12 +47,8 @@ sub BUILD {
     my $msg_vars_ref
         = exists $arg_ref->{'msg_vars'} ? $arg_ref->{'msg_vars'} : {};
 
-    die 'invalid arg'
-        if !defined $msg_key or $msg_key eq '';
-
-    die 'invalid arg'
-        if !defined $msg_vars_ref or ref $msg_vars_ref ne 'HASH'
-            or exists $msg_vars_ref->{''};
+    $self->_assert_arg_str( 'new', ':$msg_key!', $msg_key );
+    $self->_assert_arg_hash( 'new', ':%msg_vars?', $msg_vars_ref );
 
     $msg_key_of{$ident}  = $msg_key;
     $msg_vars_of{$ident} = {%{$msg_vars_ref}};
@@ -69,8 +65,7 @@ sub get_msg_key {
 
 sub get_msg_var {
     my ($self, $var_name) = @_;
-    die 'invalid arg'
-        if !defined $var_name or $var_name eq '';
+    $self->_assert_arg_str( 'get_msg_var', '$var_name!', $var_name );
     return $msg_vars_of{ident $self}->{$var_name};
 }
 
@@ -81,15 +76,52 @@ sub get_msg_vars {
 
 ######################################################################
 
-sub as_debug_string {
+sub as_debug_string : STRINGIFY {
     my ($self) = @_;
     my $msg_key = $msg_key_of{ident $self};
     my $msg_vars = $msg_vars_of{ident $self};
-    return '$msg_key: "' . $msg_key . '"; '
-         . '%msg_vars: {' . (join q{, }, map {
+    return '  Debug String of a Locale::KeyedText::Message object:'
+         . "\n"
+         . '    $msg_key: "' . $msg_key . '"'
+         . "\n"
+         . '    %msg_vars: {' . (join q{, }, map {
                '"' . $_ . '"="' . (defined $msg_vars->{$_}
                    ? $msg_vars->{$_} : $EMPTY_STR) . '"'
-           } sort keys %{$msg_vars}) . '}';
+           } sort keys %{$msg_vars}) . '}'
+         . "\n";
+}
+
+###########################################################################
+
+sub _die_with_msg : PRIVATE {
+    my ($self, $msg_key, $msg_vars_ref) = @_;
+    $msg_vars_ref ||= {};
+    $msg_vars_ref->{'CLASS'} = 'Locale::KeyedText::Message';
+    die Locale::KeyedText::Message->new({
+        'msg_key' => $msg_key, 'msg_vars' => $msg_vars_ref });
+}
+
+sub _assert_arg_str : PRIVATE {
+    my ($self, $meth, $arg, $val) = @_;
+    $self->_die_with_msg( 'LKT_ARG_UNDEF',
+            { 'METH' => $meth, 'ARG' => $arg } )
+        if !defined $val;
+    $self->_die_with_msg( 'LKT_ARG_EMP_STR',
+            { 'METH' => $meth, 'ARG' => $arg } )
+        if $val eq $EMPTY_STR;
+}
+
+sub _assert_arg_hash : PRIVATE {
+    my ($self, $meth, $arg, $val) = @_;
+    $self->_die_with_msg( 'LKT_ARG_UNDEF',
+            { 'METH' => $meth, 'ARG' => $arg } )
+        if !defined $val;
+    $self->_die_with_msg( 'LKT_ARG_NO_HASH',
+            { 'METH' => $meth, 'ARG' => $arg, 'VAL' => $val } )
+        if ref $val ne 'HASH';
+    $self->_die_with_msg( 'LKT_ARG_HASH_KEY_EMP_STR',
+            { 'METH' => $meth, 'ARG' => $arg } )
+        if exists $val->{$EMPTY_STR};
 }
 
 ###########################################################################
@@ -121,21 +153,8 @@ sub BUILD {
     my $set_names_ref = $arg_ref->{'set_names'};
     my $member_names_ref = $arg_ref->{'member_names'};
 
-    die 'invalid arg'
-        if !defined $set_names_ref or ref $set_names_ref ne 'ARRAY'
-            or @{$set_names_ref} == 0;
-    for my $set_name (@{$set_names_ref}) {
-        die 'invalid arg'
-            if !defined $set_name or $set_name eq '';
-    }
-
-    die 'invalid arg'
-        if !defined $member_names_ref or ref $member_names_ref ne 'ARRAY'
-            or @{$member_names_ref} == 0;
-    for my $member_name (@{$member_names_ref}) {
-        die 'invalid arg'
-            if !defined $member_name or $member_name eq '';
-    }
+    $self->_assert_arg_ary( 'new', ':@set_names!', $set_names_ref );
+    $self->_assert_arg_ary( 'new', ':@member_names!', $member_names_ref );
 
     $set_names_of{$ident}    = [@{$set_names_ref}];
     $member_names_of{$ident} = [@{$member_names_ref}];
@@ -157,12 +176,16 @@ sub get_member_names {
 
 ######################################################################
 
-sub as_debug_string {
+sub as_debug_string : STRINGIFY {
     my ($self) = @_;
     my $set_names = $set_names_of{ident $self};
     my $member_names = $member_names_of{ident $self};
-    return '@set_names: ["' . (join q{", "}, @{$set_names}) . '"]; '
-         . '@member_names: ["' . (join q{", "}, @{$member_names}) . '"]';
+    return '  Debug String of a Locale::KeyedText::Translator object:'
+         . "\n"
+         . '    @set_names: ["' . (join q{", "}, @{$set_names}) . '"]'
+         . "\n"
+         . '    @member_names: ["' . (join q{", "}, @{$member_names}) . '"]'
+         . "\n";
 }
 
 ###########################################################################
@@ -183,9 +206,7 @@ sub get_set_member_combinations {
 sub translate_message {
     my ($self, $message) = @_;
 
-    die 'invalid arg'
-        if !blessed $message
-            or !$message->isa( 'Locale::KeyedText::Message' );
+    $self->_assert_arg_msg( 'translate_message', '$message!', $message );
 
     my $text = undef;
     SET_MEMBER:
@@ -230,8 +251,8 @@ sub translate_message {
 
 sub template_module_is_loaded {
     my ($self, $module_name) = @_;
-    die 'invalid arg'
-        if !defined $module_name or $module_name eq '';
+    $self->_assert_arg_str( 'template_module_is_loaded',
+        '$module_name!', $module_name );
     no strict 'refs';
     return defined %{$module_name . '::'};
 }
@@ -239,14 +260,16 @@ sub template_module_is_loaded {
 sub load_template_module {
     my ($self, $module_name) = @_;
 
-    die 'invalid arg'
-        if !defined $module_name or $module_name eq '';
+    $self->_assert_arg_str( 'load_template_module',
+        '$module_name!', $module_name );
 
     # Note: We have to invoke this 'require' in an eval string
     # because we need the bareword semantics, where 'require'
     # will munge the package name into file system paths.
     eval "require $module_name;";
-    die "can't load template module '$module_name': $@"
+    $self->_die_with_msg( 'LKT_T_FAIL_LOAD_TMPL_MOD',
+            { 'METH' => 'load_template_module',
+            'TMPL_MOD_NAME' => $module_name, 'REASON' => $@ } )
         if $@;
 
     return;
@@ -255,16 +278,18 @@ sub load_template_module {
 sub get_template_text_from_loaded_module {
     my ($self, $module_name, $msg_key) = @_;
 
-    die 'invalid arg'
-        if !defined $module_name or $module_name eq '';
-    die 'invalid arg'
-        if !defined $msg_key or $msg_key eq '';
+    $self->_assert_arg_str( 'get_template_text_from_loaded_module',
+        '$module_name!', $module_name );
+    $self->_assert_arg_str( 'get_template_text_from_loaded_module',
+        '$msg_key!', $msg_key );
 
     my $text = undef;
     eval {
         $text = $module_name->get_text_by_key( $msg_key );
     };
-    die "can't invoke get_text_by_key() on '$module_name': $@"
+    $self->_die_with_msg( 'LKT_T_FAIL_GET_TMPL_TEXT',
+            { 'METH' => 'get_template_text_from_loaded_module',
+            'TMPL_MOD_NAME' => $module_name, 'REASON' => $@ } )
         if $@;
 
     return $text;
@@ -273,11 +298,12 @@ sub get_template_text_from_loaded_module {
 sub interpolate_vars_into_template_text {
     my ($self, $text, $msg_vars_ref) = @_;
 
-    die 'invalid arg'
+    $self->_die_with_msg( 'LKT_ARG_UNDEF',
+            { 'METH' => 'interpolate_vars_into_template_text',
+            'ARG' => '$text!' } )
         if !defined $text;
-    die 'invalid arg'
-        if !defined $msg_vars_ref or ref $msg_vars_ref ne 'HASH'
-            or exists $msg_vars_ref->{''};
+    $self->_assert_arg_hash( 'interpolate_vars_into_template_text',
+        '%msg_vars!', $msg_vars_ref );
 
     while (my ($var_name, $var_value) = each %{$msg_vars_ref}) {
         my $var_value_as_str
@@ -288,6 +314,71 @@ sub interpolate_vars_into_template_text {
     }
 
     return $text;
+}
+
+###########################################################################
+
+sub _die_with_msg : PRIVATE {
+    my ($self, $msg_key, $msg_vars_ref) = @_;
+    $msg_vars_ref ||= {};
+    $msg_vars_ref->{'CLASS'} = 'Locale::KeyedText::Translator';
+    die Locale::KeyedText::Message->new({
+        'msg_key' => $msg_key, 'msg_vars' => $msg_vars_ref });
+}
+
+sub _assert_arg_str : PRIVATE {
+    my ($self, $meth, $arg, $val) = @_;
+    $self->_die_with_msg( 'LKT_ARG_UNDEF',
+            { 'METH' => $meth, 'ARG' => $arg } )
+        if !defined $val;
+    $self->_die_with_msg( 'LKT_ARG_EMP_STR',
+            { 'METH' => $meth, 'ARG' => $arg } )
+        if $val eq $EMPTY_STR;
+}
+
+sub _assert_arg_ary : PRIVATE {
+    my ($self, $meth, $arg, $val) = @_;
+    $self->_die_with_msg( 'LKT_ARG_UNDEF',
+            { 'METH' => $meth, 'ARG' => $arg } )
+        if !defined $val;
+    $self->_die_with_msg( 'LKT_ARG_NO_ARY',
+            { 'METH' => $meth, 'ARG' => $arg, 'VAL' => $val } )
+        if ref $val ne 'ARRAY';
+    $self->_die_with_msg( 'LKT_ARG_ARY_NO_ELEMS',
+            { 'METH' => $meth, 'ARG' => $arg } )
+        if @{$val} == 0;
+    for my $val_elem (@{$val}) {
+        $self->_die_with_msg( 'LKT_ARG_ARY_ELEM_UNDEF',
+                { 'METH' => $meth, 'ARG' => $arg } )
+            if !defined $val_elem;
+        $self->_die_with_msg( 'LKT_ARG_ARY_ELEM_EMP_STR',
+                { 'METH' => $meth, 'ARG' => $arg } )
+            if $val_elem eq $EMPTY_STR;
+    }
+}
+
+sub _assert_arg_hash : PRIVATE {
+    my ($self, $meth, $arg, $val) = @_;
+    $self->_die_with_msg( 'LKT_ARG_UNDEF',
+            { 'METH' => $meth, 'ARG' => $arg } )
+        if !defined $val;
+    $self->_die_with_msg( 'LKT_ARG_NO_HASH',
+            { 'METH' => $meth, 'ARG' => $arg, 'VAL' => $val } )
+        if ref $val ne 'HASH';
+    $self->_die_with_msg( 'LKT_ARG_HASH_KEY_EMP_STR',
+            { 'METH' => $meth, 'ARG' => $arg } )
+        if exists $val->{$EMPTY_STR};
+}
+
+sub _assert_arg_msg : PRIVATE {
+    my ($self, $meth, $arg, $val) = @_;
+    $self->_die_with_msg( 'LKT_ARG_UNDEF',
+            { 'METH' => $meth, 'ARG' => $arg } )
+        if !defined $val;
+    $self->_die_with_msg( 'LKT_ARG_NO_EXP_TYPE', { 'METH' => $meth,
+            'ARG' => $arg, 'EXP_TYPE' => 'Locale::KeyedText::Message',
+            'VAL' => $val } )
+        if !blessed $val or !$val->isa( 'Locale::KeyedText::Message' );
 }
 
 ###########################################################################
@@ -311,7 +402,7 @@ Refer to user messages in programs by keys
 
 =head1 VERSION
 
-This document describes Locale::KeyedText version 1.71.0.
+This document describes Locale::KeyedText version 1.72.0.
 
 It also describes the same-number versions of Locale::KeyedText::Message
 ("Message") and Locale::KeyedText::Translator ("Translator").
@@ -545,10 +636,10 @@ value is undefined.
 
 A Message object is a simple container which stores data to be used or
 displayed by your program.  The Message class is pure and deterministic,
-such that all of its submethods and object methods will each return the
-same result and/or make the same change to an object when the permutation
-of its arguments and any invocant object's attributes is identical; they do
-not interact with the outside environment at all.
+such that all of its class and object methods will each return the same
+result and/or make the same change to an object when the permutation of its
+arguments and any invocant object's attributes is identical; they do not
+interact with the outside environment at all.
 
 A Message object has two main attributes:
 
@@ -577,17 +668,17 @@ may store references to other objects in them if you wish.
 
 =back
 
-This is the main Message constructor submethod:
+This is the main Message constructor method:
 
 =over
 
-=item C<new( { $msg_key, %msg_vars? } )>
+=item C<new( :$msg_key!, :%msg_vars? )>
 
-This submethod creates and returns a new Locale::KeyedText::Message object.
+This method creates and returns a new Locale::KeyedText::Message object.
 The Message Key attribute of the new object is set from the named argument
 $msg_key (a string); the optional named argument %msg_vars (a hash ref)
 sets the "Message Variables" attribute if provided (it defaults to empty if
-the argument is undefined).
+the argument is not provided).
 
 Some example usage:
 
@@ -615,7 +706,7 @@ A Message object has these methods:
 
 This method returns the Message Key attribute of its object.
 
-=item C<get_msg_var( $var_name )>
+=item C<get_msg_var( $var_name! )>
 
 This method returns the Message Variable value (a string) associated with
 the variable name specified in the positional argument $var_name (a
@@ -631,7 +722,8 @@ a hash ref.
 This method returns a stringified version of this object which is suitable
 for debugging purposes (such as to test that the object's contents look
 good at a glance); no attribute values are escaped and you shouldn't try to
-extract them.
+extract them.  This method is also defined as the implicit handler when
+coercing this object to a string.
 
 =back
 
@@ -643,7 +735,7 @@ to make modules having a specific simple API that will serve their role.
 For example, inside the text Template file "MyApp/L/Eng.pm" you can have:
 
     use Readonly;
-    Readonly my %text_strings => (
+    Readonly my %TEXT_STRINGS => (
         'MYAPP_HELLO' => q[Welcome to MyApp.],
         'MYAPP_GOODBYE' => q[Goodbye!],
         'MYAPP_PROMPT'
@@ -654,14 +746,14 @@ For example, inside the text Template file "MyApp/L/Eng.pm" you can have:
     { package MyApp::L::Eng; # module
         sub get_text_by_key {
             my (undef, $msg_key) = @_;
-            return $text_strings{$msg_key};
+            return $TEXT_STRINGS{$msg_key};
         }
     } # module MyApp::L::Eng
 
 And inside the text Template file "MyApp/L/Fre.pm" you can have:
 
     use Readonly;
-    Readonly my %text_strings => (
+    Readonly my %TEXT_STRINGS => (
         'MYAPP_HELLO' => q[Bienvenue allé MyApp.],
         'MYAPP_GOODBYE' => q[Salut!],
         'MYAPP_PROMPT'
@@ -673,7 +765,7 @@ And inside the text Template file "MyApp/L/Fre.pm" you can have:
     { package MyApp::L::Fre; # module
         sub get_text_by_key {
             my (undef, $msg_key) = @_;
-            return $text_strings{$msg_key};
+            return $TEXT_STRINGS{$msg_key};
         }
     } # module MyApp::L::Fre
 
@@ -757,16 +849,16 @@ is used.  Each Set Name can be any defined and non-empty string.
 
 =back
 
-This is the main Translator constructor submethod:
+This is the main Translator constructor method:
 
 =over
 
-=item C<new( { @set_names, @member_names } )>
+=item C<new( :@set_names!, :@member_names! )>
 
-This submethod creates and returns a new Locale::KeyedText::Translator
-object.  The Set Names property of the new object is set from the named
-argument @set_names (an array ref), and Member Names is set from the named
-argument @member_names (an array ref).
+This method creates and returns a new Locale::KeyedText::Translator object.
+The Set Names property of the new object is set from the named argument
+@set_names (an array ref), and Member Names is set from the named argument
+@member_names (an array ref).
 
 Some example usage:
 
@@ -801,7 +893,8 @@ ref.
 This method returns a stringified version of this object which is suitable
 for debugging purposes (such as to test that the object's contents look
 good at a glance); no attribute values are escaped and you shouldn't try to
-extract them.
+extract them.  This method is also defined as the implicit handler when
+coercing this object to a string.
 
 =item C<get_set_member_combinations()>
 
@@ -814,7 +907,7 @@ and Members of ['Eng','Fre'], the resulting list is
 internally by translate_message() to produce the list of Template module
 names that it will search.
 
-=item C<translate_message( $message )>
+=item C<translate_message( $message! )>
 
 This method takes a (machine-readable) Message object as its positional
 argument $message and returns an equivalent human readable text message
@@ -829,34 +922,34 @@ Some example usage:
 
 =back
 
-The Translator class also has these utility submethods, which are all used
-by translate_message() to handle the trickier parts of its work:
+The Translator class also has these utility methods, which are all used by
+translate_message() to handle the trickier parts of its work:
 
 =over
 
-=item C<template_module_is_loaded( $module_name )>
+=item C<template_module_is_loaded( $module_name! )>
 
-This submethod takes the name of a Perl package in its positional argument
+This method takes the name of a Perl package in its positional argument
 $module_name (a string) and checks whether or not it has already been
 loaded, returning true if so and false if not.
 
-=item C<load_template_module( $module_name )>
+=item C<load_template_module( $module_name! )>
 
-This submethod takes the name of a Perl package in its positional argument
+This method takes the name of a Perl package in its positional argument
 $module_name (a string) and tries to load it using 'require'.
 
-=item C<get_template_text_from_loaded_module( $module_name, $msg_key )>
+=item C<get_template_text_from_loaded_module( $module_name!, $msg_key! )>
 
-This submethod takes the name of a Perl package in its positional argument
+This method takes the name of a Perl package in its positional argument
 $module_name (a string), and a Message Key in its positional argument
 $msg_key (a string).  Assuming that a Perl module by the given module name
 is already loaded, it tries to invoke $module_name.get_text_by_key(
 $msg_key ) and return that subroutine's result, which is a Template text
 string if the module recognizes $msg_key, and the undefined value if not.
 
-=item C<interpolate_vars_into_template_text( $text, %msg_vars )>
+=item C<interpolate_vars_into_template_text( $text!, %msg_vars! )>
 
-This submethod takes a defined (but possibly empty) Template text string in
+This method takes a defined (but possibly empty) Template text string in
 its positional argument $text (a string), and a Message Variables hash ref
 in its positional argument %msg_vars.  It returns a copy of $text modified
 by interpolating the %msg_vars into it, where each variable value is
@@ -918,7 +1011,7 @@ Darren R. Duncan (C<perl@DarrenDuncan.net>)
 
 This file is part of the Locale::KeyedText library.
 
-Locale::KeyedText is Copyright (c) 2003-2005, Darren R. Duncan.  All rights
+Locale::KeyedText is Copyright (c) 2003-2006, Darren R. Duncan.  All rights
 reserved.  Address comments, suggestions, and bug reports to
 C<perl@DarrenDuncan.net>, or visit L<http://www.DarrenDuncan.net/> for more
 information.

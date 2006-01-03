@@ -60,9 +60,8 @@ sub show_message {
     my ($translator, $message) = @_;
     my $user_text = $translator->translate_message( $message );
     if (!$user_text) {
-        print STDERR "internal error: can't find user text for a message:\n"
-            . '   ' . $message->as_debug_string() . "\n"
-            . '   ' . $translator->as_debug_string() . "\n";
+        print STDERR "internal error: can't find user text for a message:"
+            . "\n$message$translator"; # note: the objects will stringify
         return;
     }
     print STDOUT $user_text . "\n";
@@ -73,7 +72,7 @@ sub show_message {
 ###########################################################################
 
 use Readonly;
-Readonly my %text_stringsE => (
+Readonly my %TEXT_STRINGS_E => (
     'MYAPP_HELLO' => q[Welcome to MyApp.],
     'MYAPP_GOODBYE' => q[Goodbye!],
     'MYAPP_PROMPT'
@@ -84,7 +83,7 @@ Readonly my %text_stringsE => (
 { package MyApp::L::Eng; # module
     sub get_text_by_key {
         my (undef, $msg_key) = @_;
-        return $text_stringsE{$msg_key};
+        return $TEXT_STRINGS_E{$msg_key};
     }
 } # module MyApp::L::Eng
 
@@ -92,7 +91,7 @@ Readonly my %text_stringsE => (
 ###########################################################################
 
 use Readonly;
-Readonly my %text_stringsF => (
+Readonly my %TEXT_STRINGS_F => (
     'MYAPP_HELLO' => q[Bienvenue allé MyApp.],
     'MYAPP_GOODBYE' => q[Salut!],
     'MYAPP_PROMPT'
@@ -104,7 +103,7 @@ Readonly my %text_stringsF => (
 { package MyApp::L::Fre; # module
     sub get_text_by_key {
         my (undef, $msg_key) = @_;
-        return $text_stringsF{$msg_key};
+        return $TEXT_STRINGS_F{$msg_key};
     }
 } # module MyApp::L::Fre
 

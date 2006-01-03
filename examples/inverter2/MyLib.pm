@@ -31,7 +31,7 @@ use Locale::KeyedText;
 ###########################################################################
 
 use Readonly;
-Readonly my %text_stringsE => (
+Readonly my %TEXT_STRINGS_E => (
     'MYLIB_MYINV_NO_ARG' => q[my_invert(): argument $number is missing],
     'MYLIB_MYINV_BAD_ARG'
         => q[my_invert(): argument $number is not a number,]
@@ -44,7 +44,7 @@ Readonly my %text_stringsE => (
 { package MyLib::L::Eng; # module
     sub get_text_by_key {
         my (undef, $msg_key) = @_;
-        return $text_stringsE{$msg_key};
+        return $TEXT_STRINGS_E{$msg_key};
     }
 } # module MyLib::L::Eng
 
@@ -52,7 +52,7 @@ Readonly my %text_stringsE => (
 ###########################################################################
 
 use Readonly;
-Readonly my %text_stringsF => (
+Readonly my %TEXT_STRINGS_F => (
     'MYLIB_MYINV_NO_ARG' => q[my_invert(): paramètre $number est manquant],
     'MYLIB_MYINV_BAD_ARG'
         => q[my_invert(): paramètre $number est ne nombre,]
@@ -65,7 +65,7 @@ Readonly my %text_stringsF => (
 { package MyLib::L::Fre; # module
     sub get_text_by_key {
         my (undef, $msg_key) = @_;
-        return $text_stringsF{$msg_key};
+        return $TEXT_STRINGS_F{$msg_key};
     }
 } # module MyLib::L::Fre
 

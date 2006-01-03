@@ -1,6 +1,57 @@
                           Locale-KeyedText
 ---------------------------------------------------------------------------
 
+2006-01-02   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Locale-KeyedText Release 1.72.0/1.072000 (SVN r1162).
+
+    * New code file versions are: KeyedText.pm 1.72.0.
+
+    * Added new module Locale::KeyedText::L::en, version 1.0.0, in
+    preparation for Locale::KeyedText to throw its own exceptions as
+    Message objects.  Updated t/LKT_00_Compile.t and MANIFEST accordingly.
+
+    * In KeyedText.pm, replaced all 10 occurances of the literal empty
+    string ('') with the already-defined constant $EMPTY_STR.
+
+    * In KeyedText.pm, reformatted all method/submethod signatures in the
+    pod so they look more Perl 6 like; named args are now indicated with
+    ":$foo" rather than "{ $foo }", and all args explicitly have trailing !
+    to indicate mandatory or ? for optional.  However, the way you invoke
+    them in code remains unchanged.
+
+    * In KeyedText.pm, updated all documentation to replace 'submethod'
+    with 'method', which is more accurate.
+
+    * Upgraded both as_debug_string() methods to return results that are
+    more self-explanitory and easier to read (and include linebreaks) when
+    simply dumped to a terminal, alone or embedded in a larger message.
+
+    * Gave both as_debug_string() methods the ": STRINGIFY" trait (provided
+    by Class::Std), which means that Locale::KeyedText objects will now
+    turn into something useful when simply used in a string context, such
+    as with Perl's default exception handler that prints it like a string.
+
+    * Updated all files declaring Text Templates, mainly the examples and
+    some POD, to rename the read-only %text_strings to %TEXT_STRINGS.
+
+    * Added initial complement of 20 user text messages to the new en.pm,
+    18 of which ('LKT_ARG_*') are generic (for use by any class) and relate
+    to bad input arguments, and 2 of which are specific to
+    Locale::KeyedText itself ('LKT_T_FAIL_GET_TMPL_TEXT',
+    'LKT_T_FAIL_LOAD_TMPL_MOD').  Of the 18 generic messages, 9 are
+    currently used by Locale::KeyedText itself (see next), and 9 are not.
+
+    * Updated KeyedText.pm to throw all of its own exceptions as specific
+    Message objects, rather than generic text strings.  To implement this,
+    added 3 private (enforced by Class::Std's ": PRIVATE" trait) methods to
+    Message, and 5 to Translator, which conditionally compose and/or throw
+    the new Message exceptions, and updated all of the other methods of
+    those classes to invoke them.  These new methods have names like
+    _die_with_msg() and _assert_arg_*().
+
+    * Multiple updates in the TODO file.
+
 2005-12-13   Darren Duncan <perl@DarrenDuncan.net>
 
     * Locale-KeyedText Release 1.71.0/1.071000 (SVN r1145).

@@ -8,7 +8,7 @@ use warnings;
 ###########################################################################
 
 use Readonly;
-Readonly my %text_strings => (
+Readonly my %TEXT_STRINGS => (
     'MYAPP_HELLO' => q[Welcome to MyApp.],
     'MYAPP_GOODBYE' => q[Goodbye!],
     'MYAPP_PROMPT'
@@ -19,7 +19,7 @@ Readonly my %text_strings => (
 { package MyApp::L::Eng; # module
     sub get_text_by_key {
         my (undef, $msg_key) = @_;
-        return $text_strings{$msg_key};
+        return $TEXT_STRINGS{$msg_key};
     }
 } # module MyApp::L::Eng
 

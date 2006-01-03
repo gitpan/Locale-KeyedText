@@ -12,6 +12,7 @@ examples/inverter2/MyLib.pm
 INSTALL
 LGPL
 lib/Locale/KeyedText.pm
+lib/Locale/KeyedText/L/en.pm
 Makefile.PL
 MANIFEST
 META.yml
