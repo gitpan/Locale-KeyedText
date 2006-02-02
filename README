@@ -1,5 +1,5 @@
-                          Locale-KeyedText
-----------------------------------------------------------------------
+                             Locale-KeyedText
+---------------------------------------------------------------------------
 
 by Darren Duncan <perl@DarrenDuncan.net>
 
@@ -20,17 +20,17 @@ My module set is constantly under development.  The canonical copies are
 all linked to through my website, "http://www.DarrenDuncan.net/", on the
 page called "Perl Libraries I Made" (name subject to change).
 
-For those of you that are interested in the bleeding edge of development,
-as of August 2005, I now have all of my newer modules (whose problem domain
-is databases) in one or more public Subversion repositories, but not my
-older modules (which are not about databases).  All of my development up to
-2005.09.28 is at "http://svn.utsl.gen.nz/trunk/Rosetta-old/", which is the
-result of incremental-change development since late 2002.  As of
-2005.09.29, I have begun a rewrite of those modules that includes parallel
-Perl 6 and Perl 5 versions, which is heavily inspired by the previous work,
-but is a new code base.  The new "rebirth" versions are available  at
-"http://svn.openfoundry.org/pugs/ext/Rosetta-Incubator/" (Perl 6) and at
-"http://svn.utsl.gen.nz/trunk/Rosetta-Incubator/" (Perl 5).
+For those of you that are interested in the bleeding edge of development, I
+have all parts of this "Locale-KeyedText" distribution in one or more
+public Subversion repositories; these repositories only contain revisions
+made in mid-2005 and later.  The "Locale-KeyedText" modules exist in 2
+distinct code major bases, separated by a ground-up rewrite process.  The
+first major code base, whose development had started in late 2003 and ended
+as of 2005.09.28, is at "http://svn.utsl.gen.nz/trunk/Rosetta-old/".  The
+second major code base, whose development had started on 2005.09.30 and
+continues thru to the present, is available in 2 parallel versions at
+"http://svn.openfoundry.org/pugs/ext/Locale-KeyedText/" (Perl 6) and at
+"http://svn.utsl.gen.nz/trunk/Locale-KeyedText/" (Perl 5).
 
 You can download slightly older versions of all of my modules from the
 public CPAN archives at "http://www.cpan.org/authors/id/D/DU/DUNCAND/", or

@@ -1,5 +1,33 @@
-                          Locale-KeyedText
+                             Locale-KeyedText
 ---------------------------------------------------------------------------
+
+2006-02-01   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Locale-KeyedText Release 1.72.1/1.072001 (SVN r1203).
+
+    * This release is concurrently available in both Perl 5 and Perl 6
+    versions.  The Perl 5 version is in the same distribution as this
+    Changes file.  The Perl 6 version is bundled with Pugs-6.2.11 (released
+    on 2006-02-01), in its ext/Locale-KeyedText/ subdirectory.
+
+    * New code file versions are: KeyedText.pm 1.72.1; unchanged code file
+    versions are: en.pm 1.0.0.
+
+    * In KeyedText.pm, updated the INTERFACE pod section to replaced many
+    occurances of 'argument' with 'parameter', which is the more
+    technically correct term in those situations.  Also corrected the SEE
+    ALSO pod, since the SQL::Routine namespace no longer exists.
+
+    * In the README file, rewrote the second paragraph of KEEPING UP TO
+    DATE so that it is more accurate and up to date; there is no longer a
+    Rosetta-Incubator pseudo distribution in my Subversion repositories.
+
+    * Minor Makefile.PL update to cite Perl 5.8.8 rather than 5.8.7 as the
+    newest existing version.
+
+    * Synchronized common headings for these files: Changes, README, TODO.
+
+    * There were no other changes of any kind.
 
 2006-01-02   Darren Duncan <perl@DarrenDuncan.net>
 
@@ -31,6 +59,10 @@
     by Class::Std), which means that Locale::KeyedText objects will now
     turn into something useful when simply used in a string context, such
     as with Perl's default exception handler that prints it like a string.
+
+    * Updated both example MyApp.pl so their show_message() assume that
+    Locale::KeyedText objects auto-stringify, rather than explicitly
+    calling as_debug_string() on them.
 
     * Updated all files declaring Text Templates, mainly the examples and
     some POD, to rename the read-only %text_strings to %TEXT_STRINGS.
@@ -79,7 +111,7 @@
 
     * Raised and multiplied the minor version number so that the current
     X.Y.Z formatted version numbers are backwards compatible with the older
-    releases in X.YY format, with respect to determing which version
+    releases in X.0Y format, with respect to determing which version
     numbers are larger or smaller.  The new version 1.70.0 is equivalent to
     1.07 under the old format, in which the last release was 1.05.
 
@@ -177,10 +209,10 @@
     previously-wrapped functions Locale::KeyedText::Message->new() and
     Locale::KeyedText::Translator->new() instead.
 
-    * Both new() constructor functions now take named arguments instead of
+    * Both new() constructor functions now have named parameters instead of
     positional ones, which should make it easier to add functionality to
     Locale::KeyedText later if one wants to.  But all object methods still
-    take positional arguments like before.
+    have positional parameters like before.
 
     * Changed what kinds of strings are valid to store in the Message Key,
     names of Message Variables, and elements of Set Names and Member Names;

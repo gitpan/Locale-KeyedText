@@ -10,7 +10,7 @@ use version;
 plan( 'tests' => 4 );
 
 use_ok( 'Locale::KeyedText' );
-is( $Locale::KeyedText::VERSION, qv('1.72.0'),
+is( $Locale::KeyedText::VERSION, qv('1.72.1'),
     'Locale::KeyedText is the correct version' );
 
 use_ok( 'Locale::KeyedText::L::en' );

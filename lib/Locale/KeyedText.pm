@@ -18,7 +18,7 @@ Readonly my $EMPTY_STR => q{};
 ###########################################################################
 
 { package Locale::KeyedText; # package
-    use version; our $VERSION = qv('1.72.0');
+    use version; our $VERSION = qv('1.72.1');
     # Note: This given version applies to all of this file's packages.
 } # package Locale::KeyedText
 
@@ -184,7 +184,8 @@ sub as_debug_string : STRINGIFY {
          . "\n"
          . '    @set_names: ["' . (join q{", "}, @{$set_names}) . '"]'
          . "\n"
-         . '    @member_names: ["' . (join q{", "}, @{$member_names}) . '"]'
+         . '    @member_names: ["'
+             . (join q{", "}, @{$member_names}) . '"]'
          . "\n";
 }
 
@@ -402,7 +403,7 @@ Refer to user messages in programs by keys
 
 =head1 VERSION
 
-This document describes Locale::KeyedText version 1.72.0.
+This document describes Locale::KeyedText version 1.72.1.
 
 It also describes the same-number versions of Locale::KeyedText::Message
 ("Message") and Locale::KeyedText::Translator ("Translator").
@@ -675,10 +676,10 @@ This is the main Message constructor method:
 =item C<new( :$msg_key!, :%msg_vars? )>
 
 This method creates and returns a new Locale::KeyedText::Message object.
-The Message Key attribute of the new object is set from the named argument
-$msg_key (a string); the optional named argument %msg_vars (a hash ref)
-sets the "Message Variables" attribute if provided (it defaults to empty if
-the argument is not provided).
+The Message Key attribute of the new object is set from the named parameter
+$msg_key (a string); the optional named parameter %msg_vars (a hash ref)
+sets the "Message Variables" attribute if the corresponding argument is
+provided (it defaults to empty if the argument is not provided).
 
 Some example usage:
 
@@ -709,7 +710,7 @@ This method returns the Message Key attribute of its object.
 =item C<get_msg_var( $var_name! )>
 
 This method returns the Message Variable value (a string) associated with
-the variable name specified in the positional argument $var_name (a
+the variable name specified in the positional parameter $var_name (a
 string).
 
 =item C<get_msg_vars()>
@@ -856,8 +857,8 @@ This is the main Translator constructor method:
 =item C<new( :@set_names!, :@member_names! )>
 
 This method creates and returns a new Locale::KeyedText::Translator object.
-The Set Names property of the new object is set from the named argument
-@set_names (an array ref), and Member Names is set from the named argument
+The Set Names property of the new object is set from the named parameter
+@set_names (an array ref), and Member Names is set from the named parameter
 @member_names (an array ref).
 
 Some example usage:
@@ -910,7 +911,7 @@ names that it will search.
 =item C<translate_message( $message! )>
 
 This method takes a (machine-readable) Message object as its positional
-argument $message and returns an equivalent human readable text message
+parameter $message and returns an equivalent human readable text message
 string; this assumes that a Template corresponding to the Message could be
 found using the Translator object's Set and Member properties; if none
 could be matched, this method returns undef.  This method could be
@@ -929,19 +930,19 @@ translate_message() to handle the trickier parts of its work:
 
 =item C<template_module_is_loaded( $module_name! )>
 
-This method takes the name of a Perl package in its positional argument
+This method takes the name of a Perl package in its positional parameter
 $module_name (a string) and checks whether or not it has already been
 loaded, returning true if so and false if not.
 
 =item C<load_template_module( $module_name! )>
 
-This method takes the name of a Perl package in its positional argument
+This method takes the name of a Perl package in its positional parameter
 $module_name (a string) and tries to load it using 'require'.
 
 =item C<get_template_text_from_loaded_module( $module_name!, $msg_key! )>
 
-This method takes the name of a Perl package in its positional argument
-$module_name (a string), and a Message Key in its positional argument
+This method takes the name of a Perl package in its positional parameter
+$module_name (a string), and a Message Key in its positional parameter
 $msg_key (a string).  Assuming that a Perl module by the given module name
 is already loaded, it tries to invoke $module_name.get_text_by_key(
 $msg_key ) and return that subroutine's result, which is a Template text
@@ -950,8 +951,8 @@ string if the module recognizes $msg_key, and the undefined value if not.
 =item C<interpolate_vars_into_template_text( $text!, %msg_vars! )>
 
 This method takes a defined (but possibly empty) Template text string in
-its positional argument $text (a string), and a Message Variables hash ref
-in its positional argument %msg_vars.  It returns a copy of $text modified
+its positional parameter $text (a string), and a Message Variables hash ref
+in its positional parameter %msg_vars.  It returns a copy of $text modified
 by interpolating the %msg_vars into it, where each variable value is
 substituted for any occurance of its corresponding variable name that is
 bounded by '<' and '>'.  For example, given "Hello <place>!" in $text and
@@ -993,7 +994,8 @@ None reported.
 =head1 SEE ALSO
 
 These Perl 5 packages are the initial main dependents of Locale::KeyedText:
-L<SQL::Routine>, L<Rosetta>.
+L<Rosetta::Model>, L<Rosetta>, L<Rosetta::Validator>,
+L<Rosetta::Engine::Native>.
 
 These Perl 5 packages work to solve similar problems as Locale::KeyedText:
 L<Locale::Maketext>, L<Locale::gettext>, L<Locale::PGetText>,
