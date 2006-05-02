@@ -4,19 +4,18 @@ use utf8;
 use strict;
 use warnings;
 
-if ($] < 5.008008) {
-    warn q{
+warn q{
 ---------------------------------------------------------------------------
-  This distribution prefers the newest Perl 5.x.y version, which is 5.8.8
-  at the time of this writing, but Perl versions down to 5.8.1 will not be
-  blocked and should likely continue to work for awhile.
+  Please ignore any test failures when installing the 'only' module, which
+  this distribution depends on; 'only' still works correctly for my needs.
+
   You can also ignore any warnings during installation about the use of
   "=encoding utf8" in the pod documentation.
+
   Continuing in 3 seconds...
 ---------------------------------------------------------------------------
 };
-    sleep 3;
-}
+sleep 3;
 
 use ExtUtils::MakeMaker;
 
@@ -28,12 +27,14 @@ WriteMakefile(
 #    'LICENSE' => 'lgpl',
     'PREREQ_PM' => {
         # These mainly add features to Perl 5 that are built-in to Perl 6.
-        'version' => 0,
+        'version' => 0.57,
         'only' => 0,
-        'Readonly' => '1.03',
-        'Class::Std' => '0.0.4',
-        'Class::Std::Utils' => '0.0.2',
+        'Readonly' => 1.03,
+        'Class::Std' => 0.000008,
+        'Class::Std::Utils' => 0.000002,
         'Scalar::Util' => 0,
+        # These are used in both the Perl 5 and Perl 6 versions.
+        #   (None yet, if ever.)
         # These mainly are for the test suite.
         'Test::More' => 0,
     },

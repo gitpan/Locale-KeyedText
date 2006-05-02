@@ -1,6 +1,37 @@
                              Locale-KeyedText
 ---------------------------------------------------------------------------
 
+2006-05-01   Darren Duncan <perl@DarrenDuncan.net>
+
+    * Locale-KeyedText Release 1.73.0/1.073000 (SVN r1261).
+
+    * New code file versions are: KeyedText.pm 1.73.0 and en.pm 1.0.1.
+
+    * Updated external dependency on Class::Std to v0.0.8 from v0.0.4.
+
+    * In the Makefile.PL only, specified that the minimum required
+    'version' version is v0.57.
+
+    * Added a warning to Makefile.PL so that it requests users would ignore
+    test failures of the depended-on 'only' module.  Also removed the
+    warning about preferring the latest Perl 5.8.x version.
+
+    * Changed the prerequisites list in Makefile.PL so that all minimum
+    versions are specified as floating point numbers, and none as strings;
+    as a result, the prerequisites check by MakeMaker should work correctly
+    with installed modules that satisfy the requirements but don't match
+    the specific versions mentioned.
+
+    * In KeyedText.pm, added a export_as_hash() method for each class, so
+    that there is a uniform way to either clone the objects or prepare them
+    for freezing such as with a serialization module, if one wanted to do
+    that; the thawed results can be fed directly as new() arguments.
+
+    * Minor fix to each MyApp.pl in examples/; changed a "+@foo == 0" to
+    "@foo == 0" in each; the actual behaviour didn't change, though.
+
+    * In KeyedText.pm and en.pm both, minor SEE ALSO update.
+
 2006-02-01   Darren Duncan <perl@DarrenDuncan.net>
 
     * Locale-KeyedText Release 1.72.1/1.072001 (SVN r1203).

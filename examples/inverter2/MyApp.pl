@@ -14,7 +14,7 @@ sub main {
     # user indicates language pref as command line argument
     my @user_lang_prefs = grep { $_ =~ m/^[a-zA-Z]+$/x } @ARGV;
     @user_lang_prefs = 'Eng'
-        if +@user_lang_prefs == 0;
+        if @user_lang_prefs == 0;
 
     my $translator = Locale::KeyedText::Translator->new({
         'set_names'    => ['MyApp::L::', 'MyLib::L::'],

@@ -90,7 +90,7 @@ Readonly my %TEXT_STRINGS => (
 ###########################################################################
 
 { package Locale::KeyedText::L::en; # module
-    use version; our $VERSION = qv('1.0.0');
+    use version; our $VERSION = qv('1.0.1');
     sub get_text_by_key {
         my (undef, $msg_key) = @_;
         return $TEXT_STRINGS{$msg_key};
@@ -114,7 +114,7 @@ Localization of Locale::KeyedText for English
 
 =head1 VERSION
 
-This document describes Locale::KeyedText::L::en version 1.0.0.
+This document describes Locale::KeyedText::L::en version 1.0.1.
 
 =head1 SYNOPSIS
 
@@ -152,7 +152,7 @@ None reported.
 
 =head1 SEE ALSO
 
-I<This documentation is pending.>
+Go to L<Locale::KeyedText> for the majority of references.
 
 =head1 BUGS AND LIMITATIONS
 

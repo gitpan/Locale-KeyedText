@@ -18,7 +18,7 @@ Readonly my $EMPTY_STR => q{};
 ###########################################################################
 
 { package Locale::KeyedText; # package
-    use version; our $VERSION = qv('1.72.1');
+    use version; our $VERSION = qv('1.73.0');
     # Note: This given version applies to all of this file's packages.
 } # package Locale::KeyedText
 
@@ -28,7 +28,7 @@ Readonly my $EMPTY_STR => q{};
 { package Locale::KeyedText::Message; # class
 
     # External packages used by the Locale::KeyedText::Message class, that do export symbols:
-    use only 'Class::Std' => '0.0.4-';
+    use only 'Class::Std' => '0.0.8-';
     use only 'Class::Std::Utils' => '0.0.2-';
 
     # Attributes of every Locale::KeyedText::Message object:
@@ -54,6 +54,16 @@ sub BUILD {
     $msg_vars_of{$ident} = {%{$msg_vars_ref}};
 
     return;
+}
+
+###########################################################################
+
+sub export_as_hash {
+    my ($self) = @_;
+    return {
+        'msg_key'  => $msg_key_of{ident $self},
+        'msg_vars' => {%{$msg_vars_of{ident $self}}},
+    };
 }
 
 ###########################################################################
@@ -134,7 +144,7 @@ sub _assert_arg_hash : PRIVATE {
 { package Locale::KeyedText::Translator; # class
 
     # External packages used by the Locale::KeyedText::Translator class, that do export symbols:
-    use only 'Class::Std' => '0.0.4-';
+    use only 'Class::Std' => '0.0.8-';
     use only 'Class::Std::Utils' => '0.0.2-';
     use Scalar::Util qw( blessed );
 
@@ -160,6 +170,16 @@ sub BUILD {
     $member_names_of{$ident} = [@{$member_names_ref}];
 
     return;
+}
+
+###########################################################################
+
+sub export_as_hash {
+    my ($self) = @_;
+    return {
+        'set_names'    => [@{$set_names_of{ident $self}}],
+        'member_names' => [@{$member_names_of{ident $self}}],
+    };
 }
 
 ###########################################################################
@@ -403,7 +423,7 @@ Refer to user messages in programs by keys
 
 =head1 VERSION
 
-This document describes Locale::KeyedText version 1.72.1.
+This document describes Locale::KeyedText version 1.73.0.
 
 It also describes the same-number versions of Locale::KeyedText::Message
 ("Message") and Locale::KeyedText::Translator ("Translator").
@@ -703,6 +723,11 @@ A Message object has these methods:
 
 =over
 
+=item C<export_as_hash()>
+
+This method returns a deep copy of this Message as a Hash ref of 2
+elements, which correspond to the 2 named parameters of new().
+
 =item C<get_msg_key()>
 
 This method returns the Message Key attribute of its object.
@@ -880,6 +905,11 @@ A Translator object has these methods:
 
 =over
 
+=item C<export_as_hash()>
+
+This method returns a deep copy of this Translator as a Hash ref of 2
+elements, which correspond to the 2 named parameters of new().
+
 =item C<get_set_names()>
 
 This method returns all Set Names elements in this object as an array ref.
@@ -981,7 +1011,7 @@ It also requires these Perl 5 packages that are on CPAN:
 L<Readonly-(1.03...)|Readonly>.
 
 It also requires these Perl 5 packages that are on CPAN:
-L<Class::Std-(0.0.4...)|Class::Std>,
+L<Class::Std-(0.0.8...)|Class::Std>,
 L<Class::Std::Utils-(0.0.2...)|Class::Std::Utils>.
 
 It also requires these Perl 5 packages that are bundled with Perl:
@@ -995,7 +1025,7 @@ None reported.
 
 These Perl 5 packages are the initial main dependents of Locale::KeyedText:
 L<Rosetta::Model>, L<Rosetta>, L<Rosetta::Validator>,
-L<Rosetta::Engine::Native>.
+L<Rosetta::Engine::Example>, L<Rosetta::Shell>.
 
 These Perl 5 packages work to solve similar problems as Locale::KeyedText:
 L<Locale::Maketext>, L<Locale::gettext>, L<Locale::PGetText>,
